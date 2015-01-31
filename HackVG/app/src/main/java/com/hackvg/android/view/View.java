@@ -5,5 +5,5 @@ package com.hackvg.android.view;
  */
 public interface View {
 
-    public void getContext ();
+    public android.content.Context getContext();
 }

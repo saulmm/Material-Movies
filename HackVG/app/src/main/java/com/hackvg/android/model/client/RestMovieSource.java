@@ -4,8 +4,7 @@ import android.util.Log;
 
 import com.hackvg.android.model.MediaDataSource;
 import com.hackvg.android.model.TheMovieDBApi;
-import com.hackvg.android.model.entities.PopularShowsResponse;
-import com.hackvg.android.model.entities.TvShow;
+import com.hackvg.android.model.entities.PopularMoviesResponse;
 import com.hackvg.android.utils.BusProvider;
 import com.hackvg.android.utils.Constants;
 
@@ -44,25 +43,28 @@ public class RestMovieSource implements MediaDataSource {
     @Override
     public void getShows() {
 
-        moviesDBApi.getPopularShows(Constants.API_KEY, new Callback<PopularShowsResponse>() {
-            @Override
-            public void success(PopularShowsResponse popularSeriesResponse, Response response) {
+//        moviesDBApi.getPopularShows(Constants.API_KEY, mediaResponseCallback);
+    }
 
-                for (TvShow show : popularSeriesResponse.getTvShows()) {
 
-                    Log.d("[DEBUG]", "RestMovieSource success - " + show.toString());
+    Callback<PopularMoviesResponse> mediaResponseCallback = new Callback<PopularMoviesResponse>() {
+        @Override
+        public void success(PopularMoviesResponse popularMoviesResponse, Response response) {
 
-                }
+            BusProvider.getBusInstance().post(popularMoviesResponse);
+        }
 
-                BusProvider.getBusInstance().post(popularSeriesResponse);
-            }
+        @Override
+        public void failure(RetrofitError error) {
 
-            @Override
-            public void failure(RetrofitError error) {
+            Log.e("[ERROR]", "RestMovieSource 60 Error:  - "+error.getMessage());
+        }
+    };
 
-                Log.e("[ERROR]", "RestMovieSource 60 Error:  - "+error.getMessage());
-            }
-        });
+    @Override
+    public void getMovies() {
+
+        moviesDBApi.getPopularMovies(Constants.API_KEY, mediaResponseCallback);
 
     }
 }

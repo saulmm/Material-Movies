@@ -1,5 +1,6 @@
 package com.hackvg.android.model;
 
+import com.hackvg.android.model.entities.PopularMoviesResponse;
 import com.hackvg.android.model.entities.PopularShowsResponse;
 
 import retrofit.Callback;
@@ -13,5 +14,10 @@ public interface TheMovieDBApi {
     void getPopularShows(
         @Query("api_key") String apiKey,
         Callback<PopularShowsResponse> callback);
+
+    @GET("/movie/popular")
+    void getPopularMovies(
+        @Query("api_key") String apiKey,
+        Callback<PopularMoviesResponse> callback);
 
 }

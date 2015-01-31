@@ -1,15 +1,12 @@
 
 package com.hackvg.android.model.entities;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
-public class PopularShowsResponse {
+public class PopularMoviesResponse {
     private Number page;
 
-    @SerializedName("results")
-    private List<TvShow> results;
+    private List<TvMovie> results;
 
     private Number total_pages;
     private Number total_results;
@@ -24,14 +21,9 @@ public class PopularShowsResponse {
         this.page = page;
     }
 
-    public List<TvShow> getResults() {
+    public List<TvMovie> getResults() {
 
-        return this.results;
-    }
-
-    public void setResults(List<TvShow> results) {
-
-        this.results = results;
+        return results;
     }
 
     public Number getTotal_pages() {

@@ -3,6 +3,7 @@ package com.hackvg.android.model.entities;
 
 import java.util.List;
 
+
 public class TvShow {
     private String backdrop_path;
     private String first_air_date;
