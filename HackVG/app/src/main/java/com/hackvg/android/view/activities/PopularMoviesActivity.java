@@ -16,6 +16,7 @@ import com.hackvg.android.view.adapters.MoviesAdapter;
 import com.hackvg.android.view.mvp_views.PopularMoviesView;
 import com.hackvg.android.view.presenter.PopularMediaPresenter;
 import com.hackvg.android.view.presenter.PopularShowsPresenterImpl;
+import com.hackvg.android.view.utils.RecyclerInsetsDecoration;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
 
         ButterKnife.inject(this);
         popularMoviesRecycler.setLayoutManager(new GridLayoutManager(this, COLUMNS));
+        popularMoviesRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
         popularMediaPresenter = new PopularShowsPresenterImpl(this);
     }
 

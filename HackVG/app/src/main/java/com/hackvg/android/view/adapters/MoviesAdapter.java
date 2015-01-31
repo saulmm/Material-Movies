@@ -50,7 +50,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         TvMovie selectedMovie = movieList.get(position);
 
         holder.titleTextView.setText(selectedMovie.getTitle());
-        holder.authorTextView.setText(selectedMovie.getRelease_date());
 
         String posterURL = Constants.POSTER_PREFIX + selectedMovie.getPoster_path();
 
@@ -78,7 +77,6 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         super(itemView);
 
         titleTextView = (TextView) itemView.findViewById(R.id.item_movie_title);
-        authorTextView = (TextView) itemView.findViewById(R.id.item_movie_author);
         coverImageView = (ImageView) itemView.findViewById(R.id.item_movie_cover);
 //        coverImageView.setOnClickListener(this);
         this.onClickListener = onClickListener;
