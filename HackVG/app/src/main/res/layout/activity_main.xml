@@ -1,16 +1,33 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_popular_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
-</RelativeLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_main_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/theme_primary"
+        android:title=""
+        android:elevation="10dp">
+
+        <com.hackvg.android.view.custom_views.LobsterTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="22sp"
+            android:textColor="#FFF"
+            />
+
+
+    </android.support.v7.widget.Toolbar>
+
+</FrameLayout>
