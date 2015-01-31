@@ -6,7 +6,6 @@ import com.hackvg.android.domain.GetMoviesUsecaseController;
 import com.hackvg.android.domain.GetPopularMediaUsecase;
 import com.hackvg.android.domain.Usecase;
 import com.hackvg.android.model.entities.TvMovie;
-import com.hackvg.android.model.entities.TvShow;
 import com.hackvg.android.view.mvp_views.PopularMoviesView;
 
 import java.util.List;
@@ -31,7 +30,9 @@ public class PopularShowsPresenterImpl implements PopularMediaPresenter {
     }
 
     @Override
-    public void onPopularShowsReceived(List<TvShow> shows) {
+    public void onPopularShowsReceived(List<TvMovie> movieList) {
+
+        popularMoviesView.showMovies(movieList);
 
     }
 
