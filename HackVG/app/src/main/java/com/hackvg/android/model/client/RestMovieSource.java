@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.hackvg.android.model.MediaDataSource;
 import com.hackvg.android.model.TheMovieDBApi;
+import com.hackvg.android.model.entities.MovieDetailResponse;
 import com.hackvg.android.model.entities.PopularMoviesResponse;
 import com.hackvg.android.utils.BusProvider;
 import com.hackvg.android.utils.Constants;
@@ -47,6 +48,34 @@ public class RestMovieSource implements MediaDataSource {
     }
 
 
+
+    @Override
+    public void getMovies() {
+
+        moviesDBApi.getPopularMovies(Constants.API_KEY, moviesResponseCallback);
+
+    }
+
+    @Override
+    public void getDetailMovie(String id) {
+
+        moviesDBApi.getMovieDetail(Constants.API_KEY, id, new Callback<MovieDetailResponse>() {
+            @Override
+            public void success(MovieDetailResponse movieDetailResponse, Response response) {
+
+                BusProvider.getBusInstance().post(movieDetailResponse);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                Log.e("[ERROR]", "RestMovieSource 71  - "+error.getMessage());
+            }
+        });
+    }
+
+
+
     Callback<PopularMoviesResponse> moviesResponseCallback = new Callback<PopularMoviesResponse>() {
         @Override
         public void success(PopularMoviesResponse popularMoviesResponse, Response response) {
@@ -61,10 +90,4 @@ public class RestMovieSource implements MediaDataSource {
         }
     };
 
-    @Override
-    public void getMovies() {
-
-        moviesDBApi.getPopularMovies(Constants.API_KEY, moviesResponseCallback);
-
-    }
 }

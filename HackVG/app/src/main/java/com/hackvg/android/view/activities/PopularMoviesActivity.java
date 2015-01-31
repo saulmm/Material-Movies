@@ -2,6 +2,7 @@ package com.hackvg.android.view.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,8 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
     @InjectView(R.id.recycler_popular_movies) RecyclerView popularMoviesRecycler;
     @InjectView(R.id.activity_main_progress) ProgressBar progress;
 
+    private MoviesAdapter moviesAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,7 +63,7 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
     @Override
     public void showMovies(List<TvMovie> movieList) {
 
-        MoviesAdapter moviesAdapter = new MoviesAdapter(movieList);
+        moviesAdapter = new MoviesAdapter(movieList);
         moviesAdapter.setHackVGClickListener(this);
         popularMoviesRecycler.setAdapter(moviesAdapter);
     }
@@ -91,5 +94,11 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
     public void onClick(View v, int position) {
 
         Log.d("[DEBUG]", "PopularMoviesActivity onClick - Pressed: " + position);
+
+        Intent i = new Intent (PopularMoviesActivity.this, MovieDetailActivity.class);
+        String movieID = moviesAdapter.getMovieList().get(position).getId();
+        i.putExtra("movie_id", movieID);
+
+        startActivity(i);
     }
 }
