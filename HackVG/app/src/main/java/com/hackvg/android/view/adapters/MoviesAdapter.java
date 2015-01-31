@@ -28,6 +28,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         this.movieList = movieList;
     }
 
+    public List<TvMovie> getMovieList() {
+
+        return movieList;
+    }
+
     public void setHackVGClickListener(HackVGClickListener hackVGClickListener) {
         this.hackVGClickListener = hackVGClickListener;
     }
@@ -78,7 +83,7 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
 
         titleTextView = (TextView) itemView.findViewById(R.id.item_movie_title);
         coverImageView = (ImageView) itemView.findViewById(R.id.item_movie_cover);
-//        coverImageView.setOnClickListener(this);
+        coverImageView.setOnClickListener(this);
         this.onClickListener = onClickListener;
 
     }
