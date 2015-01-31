@@ -16,25 +16,18 @@
         android:orientation="vertical"
         >
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/activity_movie_detail_toolbar"
+        <ImageView
+            android:id="@+id/activity_movie_detail_cover_wtf"
             android:layout_width="match_parent"
-            android:layout_height="416dp"
-            >
+            android:layout_height="480dp"
+            android:scaleType="fitXY"
+            />
 
-            <ImageView
-                android:id="@+id/activity_movie_detail_cover_wtf"
-                android:layout_width="match_parent"
-                android:layout_height="416dp"
-                android:scaleType="fitXY"
-                />
-
-        </android.support.v7.widget.Toolbar>
         <FrameLayout
             android:id="@+id/activity_movie_detail_main_container"
             android:layout_width="match_parent"
             android:layout_height="96dp"
-            android:layout_below="@id/activity_movie_detail_toolbar"
+            android:layout_below="@id/activity_movie_detail_cover_wtf"
             android:background="@color/theme_primary"
             android:elevation="4dp"
             >
@@ -72,7 +65,7 @@
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/activity_movie_detail_toolbar"
+            android:layout_below="@+id/activity_movie_detail_cover_wtf"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="-105dp"
             android:elevation="10dp"
@@ -106,7 +99,7 @@
             android:id="@+id/card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/activity_movie_detail_toolbar"
+            android:layout_below="@+id/activity_movie_detail_cover_wtf"
             android:layout_gravity="center"
             android:layout_marginBottom="?attr/actionBarSize"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
