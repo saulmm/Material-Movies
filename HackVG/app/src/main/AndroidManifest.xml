@@ -25,6 +25,11 @@
             android:theme="@style/TransAppTheme"
             android:screenOrientation="portrait"/>
 
+        <provider
+            android:authorities="com.hackvg.android.provider"
+            android:name=".model.database.DbProvider"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

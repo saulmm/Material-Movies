@@ -86,6 +86,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
                         DbConstants.Movies.ID_MOVIE + "=?", new String[]{movieID}, null);
 
         if ((movieStatus != null) && (movieStatus.getCount() > 0)) {
+            movieStatus.moveToFirst();
             int status = movieStatus.getInt(movieStatus.getColumnIndex(DbConstants.Movies.STATUS));
 
             if (status == 1) {
@@ -102,8 +103,10 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
 
         } else {
+
             ContentValues values = new ContentValues();
             values.put(DbConstants.Movies.STATUS, 0);
+            values.put(DbConstants.Movies.ID_MOVIE, Integer.parseInt(movieID));
             movieDetailView.getContext().getContentResolver().insert(DbConstants.CONTENT_URI, values);
         }
 
