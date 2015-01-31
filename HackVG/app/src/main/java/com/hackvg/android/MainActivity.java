@@ -1,40 +1,37 @@
 package com.hackvg.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import com.hackvg.android.view.mvp_views.PopularMoviesView;
+import com.hackvg.android.view.presenter.PopularMediaPresenter;
+import com.hackvg.android.view.presenter.PopularShowsPresenterImpl;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements PopularMoviesView {
+
+    private PopularMediaPresenter popularMediaPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        popularMediaPresenter = new PopularShowsPresenterImpl(this);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    protected void onResume() {
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        super.onResume();
+        popularMediaPresenter.onResume();
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public Context getContext() {
+
+        return this;
     }
 }
