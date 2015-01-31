@@ -27,19 +27,21 @@ public class PopularShowsPresenterImpl implements PopularMediaPresenter {
             GetPopularMediaUsecase.TV_MOVIES);
 
         getPopularShows.execute();
+        popularMoviesView.showLoading();
     }
 
     @Override
     public void onPopularShowsReceived(List<TvMovie> movieList) {
 
-        popularMoviesView.showMovies(movieList);
+
 
     }
 
     @Override
     public void onPopularMoviesReceived(List<TvMovie> popularMovies) {
 
-
         Log.d("[DEBUG]", "PopularShowsPresenterImpl onPopularMoviesReceived - movies: " + popularMovies);
+        popularMoviesView.hideLoading();
+        popularMoviesView.showMovies(popularMovies);
     }
 }

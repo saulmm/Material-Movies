@@ -43,11 +43,11 @@ public class RestMovieSource implements MediaDataSource {
     @Override
     public void getShows() {
 
-//        moviesDBApi.getPopularShows(Constants.API_KEY, mediaResponseCallback);
+//        moviesDBApi.getPopularShows(Constants.API_KEY, moviesResponseCallback);
     }
 
 
-    Callback<PopularMoviesResponse> mediaResponseCallback = new Callback<PopularMoviesResponse>() {
+    Callback<PopularMoviesResponse> moviesResponseCallback = new Callback<PopularMoviesResponse>() {
         @Override
         public void success(PopularMoviesResponse popularMoviesResponse, Response response) {
 
@@ -64,7 +64,7 @@ public class RestMovieSource implements MediaDataSource {
     @Override
     public void getMovies() {
 
-        moviesDBApi.getPopularMovies(Constants.API_KEY, mediaResponseCallback);
+        moviesDBApi.getPopularMovies(Constants.API_KEY, moviesResponseCallback);
 
     }
 }
