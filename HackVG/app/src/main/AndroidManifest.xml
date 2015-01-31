@@ -22,6 +22,7 @@
         </activity>
 
         <activity android:name=".view.activities.MovieDetailActivity"
+            android:theme="@style/TransAppTheme"
             android:screenOrientation="portrait"/>
 
     </application>

@@ -2,6 +2,8 @@ package com.hackvg.android.view.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +14,6 @@ import com.hackvg.android.R;
 import com.hackvg.android.view.mvp_views.MovieDetailView;
 import com.hackvg.android.view.presenter.MovieDetailPresenter;
 import com.hackvg.android.view.presenter.MovieDetailPresenterImpl;
-import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -36,6 +37,9 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
 
         ButterKnife.inject(this);
 
+        int moviePosition = getIntent().getIntExtra("movie_position", 0);
+        coverImageView.setTransitionName("cover"+moviePosition);
+
         findViewById(R.id.activity_detail_fab1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,14 +56,15 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
 
         String movieID = getIntent().getStringExtra("movie_id");
         this.detailPresenter = new MovieDetailPresenterImpl(this, movieID);
+
+
     }
 
     @Override
     public void setImage(String url) {
 
-        Picasso.with(this)
-            .load(url)
-            .into(coverImageView);
+        Bitmap bookCoverBitmap = PopularMoviesActivity.photoCache.get(0);
+        coverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
     }
 
     @Override
@@ -107,4 +112,6 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
         Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
         this.finish();
     }
+
+
 }

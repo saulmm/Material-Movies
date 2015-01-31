@@ -1,8 +1,6 @@
 package com.hackvg.android.view.mvp_views;
 
 
-import com.hackvg.android.view.MovieView;
-
 /**
  * Created by saulmm on 31/01/15.
  */
