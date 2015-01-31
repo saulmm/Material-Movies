@@ -20,6 +20,8 @@ public interface MovieDetailView extends MovieView {
 
     public void finish(String cause);
 
+    public void changePendingIcon(int drawable);
 
+    public void changeViewedIcon(int drawable);
 
 }

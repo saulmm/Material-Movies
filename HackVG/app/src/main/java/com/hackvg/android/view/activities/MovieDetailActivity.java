@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hackvg.android.R;
 import com.hackvg.android.view.mvp_views.MovieDetailView;
 import com.hackvg.android.view.presenter.MovieDetailPresenter;
@@ -23,9 +24,12 @@ import butterknife.InjectView;
  */
 public class MovieDetailActivity extends Activity implements MovieDetailView {
 
-    @InjectView(R.id.activity_movie_detail_cover_wtf)   ImageView coverImageView;
-    @InjectView(R.id.activity_movie_detail_title)   TextView titleTextView;
-    @InjectView(R.id.activity_movie_detail_content) TextView descriptionTextView;
+    @InjectView(R.id.activity_movie_detail_cover_wtf)
+    ImageView coverImageView;
+    @InjectView(R.id.activity_movie_detail_title)
+    TextView titleTextView;
+    @InjectView(R.id.activity_movie_detail_content)
+    TextView descriptionTextView;
 
     private MovieDetailPresenter detailPresenter;
 
@@ -65,6 +69,7 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
 
         Bitmap bookCoverBitmap = PopularMoviesActivity.photoCache.get(0);
         coverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
+
     }
 
     @Override
@@ -107,11 +112,19 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
         return this;
     }
 
-    public void finish (String cause) {
+    public void finish(String cause) {
 
         Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
         this.finish();
     }
 
+    @Override
+    public void changePendingIcon(int drawable) {
+        ((FloatingActionButton) findViewById(R.id.activity_detail_fab1)).setIcon(drawable);
+    }
 
+    @Override
+    public void changeViewedIcon(int drawable) {
+        ((FloatingActionButton) findViewById(R.id.activity_detail_fab2)).setIcon(drawable);
+    }
 }
