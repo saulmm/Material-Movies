@@ -112,4 +112,6 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
         Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
         this.finish();
     }
+
+
 }

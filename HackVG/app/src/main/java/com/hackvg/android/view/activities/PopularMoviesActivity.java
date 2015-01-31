@@ -8,11 +8,13 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -38,6 +40,7 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
 
     @InjectView(R.id.recycler_popular_movies) RecyclerView popularMoviesRecycler;
     @InjectView(R.id.activity_main_progress) ProgressBar progress;
+    @InjectView(R.id.activity_main_toolbar) Toolbar toolbar;
 
     private MoviesAdapter moviesAdapter;
     public static SparseArray<Bitmap> photoCache = new SparseArray<Bitmap>(1);
@@ -52,6 +55,7 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
         ButterKnife.inject(this);
         popularMoviesRecycler.setLayoutManager(new GridLayoutManager(this, COLUMNS));
         popularMoviesRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
+        popularMoviesRecycler.setOnScrollListener(recyclerScrollListener);
         popularShowsPresenter = new PopularShowsPresenterImpl(this);
         popularShowsPresenter.onCreate();
     }
@@ -117,5 +121,52 @@ public class PopularMoviesActivity extends Activity implements PopularMoviesView
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, new Pair<View, String>(v, "cover" + position));
 
         startActivity(i, options.toBundle());
+    }
+
+    private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
+        public int lastDy;
+        public boolean flag;
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+            super.onScrolled(recyclerView, dx, dy);
+
+            if (toolbar == null)
+                throw new IllegalStateException("BooksFragment has not a reference of the main toolbar");
+
+            // Is scrolling up
+            if (dy > 10) {
+
+                if (!flag) {
+
+                    showToolbar();
+                    flag = true;
+                }
+
+            // is scrolling down
+            } else if (dy < -10) {
+
+               if (flag) {
+
+                   hideToolbar();
+                   flag = false;
+               }
+            }
+
+            lastDy = dy;
+        }
+    };
+
+    private void showToolbar() {
+
+        toolbar.startAnimation(AnimationUtils.loadAnimation(this,
+            R.anim.translate_up_off));
+    }
+
+    private void hideToolbar() {
+
+        toolbar.startAnimation(AnimationUtils.loadAnimation(this,
+            R.anim.translate_up_on));
     }
 }

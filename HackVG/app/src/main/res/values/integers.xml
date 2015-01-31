@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="anim_alpha_duration_millis">300</integer>
+    <integer name="anim_trans_duration_millis">300</integer>
+</resources>
