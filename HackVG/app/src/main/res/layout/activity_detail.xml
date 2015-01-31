@@ -25,8 +25,8 @@
             <ImageView
                 android:id="@+id/activity_movie_detail_cover_wtf"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:layout_height="416dp"
+                android:scaleType="fitXY"
                 />
 
         </android.support.v7.widget.Toolbar>
@@ -74,7 +74,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/activity_movie_detail_toolbar"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="-115dp"
+            android:layout_marginTop="-105dp"
             android:elevation="10dp"
             fab:fab_expandDirection="up"
             fab:fab_labelStyle="@style/MaterialMoviesFabLabel"

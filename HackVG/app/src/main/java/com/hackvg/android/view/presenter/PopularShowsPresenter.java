@@ -7,11 +7,10 @@ import java.util.List;
 /**
  * Created by saulmm on 31/01/15.
  */
-public interface PopularMediaPresenter {
+public interface PopularShowsPresenter {
 
-    public void onPopularShowsReceived(List<TvMovie> movieList);
 
-    public void onResume ();
+    public void onCreate ();
 
     void onPopularMoviesReceived(List<TvMovie> popularMovies);
 }

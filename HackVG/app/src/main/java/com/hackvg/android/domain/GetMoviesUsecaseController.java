@@ -7,7 +7,7 @@ import com.hackvg.android.model.entities.PopularShowsResponse;
 import com.hackvg.android.model.entities.TvMovie;
 import com.hackvg.android.model.entities.TvShow;
 import com.hackvg.android.utils.BusProvider;
-import com.hackvg.android.view.presenter.PopularMediaPresenter;
+import com.hackvg.android.view.presenter.PopularShowsPresenter;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class GetMoviesUsecaseController implements GetPopularMediaUsecase {
 
-    private final PopularMediaPresenter popularMediaPresenter;
+    private final PopularShowsPresenter popularMediaPresenter;
     private final MediaDataSource dataSource;
     private final int mode;
 
@@ -25,7 +25,7 @@ public class GetMoviesUsecaseController implements GetPopularMediaUsecase {
     private List<TvMovie> popularMovies
         ;
 
-    public GetMoviesUsecaseController(PopularMediaPresenter popularMediaPresenter, int mode) {
+    public GetMoviesUsecaseController(PopularShowsPresenter popularMediaPresenter, int mode) {
 
         this.popularMediaPresenter = popularMediaPresenter;
         this.dataSource = RestMovieSource.getInstance();

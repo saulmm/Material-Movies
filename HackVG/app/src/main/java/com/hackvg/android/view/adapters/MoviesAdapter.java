@@ -55,6 +55,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         TvMovie selectedMovie = movieList.get(position);
 
         holder.titleTextView.setText(selectedMovie.getTitle());
+        holder.coverImageView.setTransitionName("cover" + position);
 
         String posterURL = Constants.POSTER_PREFIX + selectedMovie.getPoster_path();
 
@@ -73,9 +74,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private final HackVGClickListener onClickListener;
-     TextView titleTextView;
-     TextView authorTextView;
-     ImageView coverImageView;
+    TextView titleTextView;
+    TextView authorTextView;
+    ImageView coverImageView;
 
     public MovieViewHolder(View itemView, HackVGClickListener onClickListener) {
 
@@ -83,9 +84,9 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
 
         titleTextView = (TextView) itemView.findViewById(R.id.item_movie_title);
         coverImageView = (ImageView) itemView.findViewById(R.id.item_movie_cover);
+        coverImageView.setDrawingCacheEnabled(true);
         coverImageView.setOnClickListener(this);
         this.onClickListener = onClickListener;
-
     }
 
     @Override

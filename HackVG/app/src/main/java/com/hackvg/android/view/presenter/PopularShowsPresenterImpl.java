@@ -11,7 +11,7 @@ import com.hackvg.android.view.mvp_views.PopularMoviesView;
 import java.util.List;
 
 
-public class PopularShowsPresenterImpl implements PopularMediaPresenter {
+public class PopularShowsPresenterImpl implements PopularShowsPresenter {
 
     private final PopularMoviesView popularMoviesView;
 
@@ -21,7 +21,7 @@ public class PopularShowsPresenterImpl implements PopularMediaPresenter {
     }
 
     @Override
-    public void onResume() {
+    public void onCreate() {
 
         Usecase getPopularShows = new GetMoviesUsecaseController(this,
             GetPopularMediaUsecase.TV_MOVIES);
@@ -30,12 +30,6 @@ public class PopularShowsPresenterImpl implements PopularMediaPresenter {
         popularMoviesView.showLoading();
     }
 
-    @Override
-    public void onPopularShowsReceived(List<TvMovie> movieList) {
-
-
-
-    }
 
     @Override
     public void onPopularMoviesReceived(List<TvMovie> popularMovies) {
