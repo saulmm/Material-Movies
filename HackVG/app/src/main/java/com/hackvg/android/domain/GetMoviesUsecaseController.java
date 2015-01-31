@@ -1,7 +1,5 @@
 package com.hackvg.android.domain;
 
-import android.util.Log;
-
 import com.hackvg.android.model.MediaDataSource;
 import com.hackvg.android.model.client.RestMovieSource;
 import com.hackvg.android.model.entities.PopularMoviesResponse;
@@ -74,7 +72,6 @@ public class GetMoviesUsecaseController implements GetPopularMediaUsecase {
                 break;
 
             case GetPopularMediaUsecase.TV_SHOWS:
-                popularMediaPresenter.onPopularShowsReceived(popularShows);
                 break;
         }
 
@@ -91,7 +88,7 @@ public class GetMoviesUsecaseController implements GetPopularMediaUsecase {
                 break;
 
             case GetPopularMediaUsecase.TV_SHOWS:
-                popularMediaPresenter.onPopularShowsReceived(popularShows);
+//                popularMediaPresenter.onPopularShowsReceived(popularShows);
                 getPopularShows();
                 break;
         }

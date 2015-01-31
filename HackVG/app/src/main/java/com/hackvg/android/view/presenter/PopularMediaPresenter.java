@@ -1,7 +1,6 @@
 package com.hackvg.android.view.presenter;
 
 import com.hackvg.android.model.entities.TvMovie;
-import com.hackvg.android.model.entities.TvShow;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public interface PopularMediaPresenter {
 
-    public void onPopularShowsReceived(List<TvShow> shows);
+    public void onPopularShowsReceived(List<TvMovie> movieList);
 
     public void onResume ();
 
