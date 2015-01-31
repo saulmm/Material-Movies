@@ -22,4 +22,8 @@ public interface MovieDetailPresenter  {
     public void setPending ();
 
     public void onDetailInformationReceived (MovieDetailResponse response);
+
+    void onViewedPressed();
+
+    void onPendingPressed();
 }

@@ -20,6 +20,8 @@ public interface MovieDetailView extends MovieView {
 
     public void hideLoading ();
 
+    public void finish(String cause);
+
 
 
 }

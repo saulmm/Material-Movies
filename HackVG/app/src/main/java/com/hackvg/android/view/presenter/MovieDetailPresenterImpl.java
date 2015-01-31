@@ -14,6 +14,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private final MovieDetailView movieDetailView;
     private final String movieID;
 
+
     public MovieDetailPresenterImpl(MovieDetailView movieDetailView, String movieID) {
 
         this.movieDetailView = movieDetailView;
@@ -69,5 +70,17 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         showDescription(response.getOverview());
         showName(response.getTitle());
         showCover(response.getPoster_path());
+    }
+
+    @Override
+    public void onViewedPressed() {
+
+        movieDetailView.finish("Viewed");
+    }
+
+    @Override
+    public void onPendingPressed() {
+
+        movieDetailView.finish("Pending");
     }
 }

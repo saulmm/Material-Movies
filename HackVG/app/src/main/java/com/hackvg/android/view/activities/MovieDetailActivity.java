@@ -3,8 +3,10 @@ package com.hackvg.android.view.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackvg.android.R;
 import com.hackvg.android.view.mvp_views.MovieDetailView;
@@ -33,6 +35,20 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
         setContentView(R.layout.activity_detail);
 
         ButterKnife.inject(this);
+
+        findViewById(R.id.activity_detail_fab1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detailPresenter.onPendingPressed();
+            }
+        });
+
+        findViewById(R.id.activity_detail_fab2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detailPresenter.onViewedPressed();
+            }
+        });
 
         String movieID = getIntent().getStringExtra("movie_id");
         this.detailPresenter = new MovieDetailPresenterImpl(this, movieID);
@@ -84,5 +100,11 @@ public class MovieDetailActivity extends Activity implements MovieDetailView {
     public Context getContext() {
 
         return this;
+    }
+
+    public void finish (String cause) {
+
+        Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
+        this.finish();
     }
 }
