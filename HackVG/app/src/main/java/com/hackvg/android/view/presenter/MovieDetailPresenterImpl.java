@@ -1,7 +1,10 @@
 package com.hackvg.android.view.presenter;
 
+import android.content.ContentValues;
+
 import com.hackvg.android.domain.GetMovieDetailUsecaseController;
 import com.hackvg.android.domain.Usecase;
+import com.hackvg.android.model.database.DbConstants;
 import com.hackvg.android.model.entities.MovieDetailResponse;
 import com.hackvg.android.utils.Constants;
 import com.hackvg.android.view.mvp_views.MovieDetailView;
@@ -75,11 +78,21 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     @Override
     public void onViewedPressed() {
 
+        ContentValues values = new ContentValues();
+        values.put(DbConstants.Movies.STATUS, 2);
+        movieDetailView.getContext().getContentResolver().update(DbConstants.CONTENT_URI, values,
+                DbConstants.Movies.ID_MOVIE + "=?", new String[]{movieID});
+
         movieDetailView.finish("Viewed");
     }
 
     @Override
     public void onPendingPressed() {
+
+        ContentValues values = new ContentValues();
+        values.put(DbConstants.Movies.STATUS, 1);
+        movieDetailView.getContext().getContentResolver().update(DbConstants.CONTENT_URI, values,
+                DbConstants.Movies.ID_MOVIE + "=?", new String[]{movieID});
 
         movieDetailView.finish("Pending");
     }
