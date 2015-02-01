@@ -1,4 +1,4 @@
-package com.hackvg.android.adapters;
+package com.hackvg.android.views.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.hackvg.android.R;
 import com.hackvg.model.entities.TvMovie;
 import com.hackvg.common.utils.Constants;
-import com.hackvg.android.HackVGClickListener;
+import com.hackvg.android.utils.HackVGClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

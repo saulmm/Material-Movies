@@ -1,6 +1,6 @@
-package com.hackvg.android.presenter;
+package com.hackvg.android.mvp.presenters;
 
-import com.hackvg.android.mvp_views.PopularMoviesView;
+import com.hackvg.android.mvp.views.PopularMoviesView;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;

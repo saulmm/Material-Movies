@@ -1,4 +1,4 @@
-package com.hackvg.android.presenter;
+package com.hackvg.android.mvp.presenters;
 
 import com.hackvg.model.entities.PopularMoviesApiResponse;
 

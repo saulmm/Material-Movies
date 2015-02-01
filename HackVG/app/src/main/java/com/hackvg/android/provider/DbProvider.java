@@ -1,4 +1,4 @@
-package com.hackvg.android.model.provider;
+package com.hackvg.android.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

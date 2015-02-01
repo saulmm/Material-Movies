@@ -1,4 +1,4 @@
-package com.hackvg.android.custom_views;
+package com.hackvg.android.views.custom_views;
 
 
 import android.widget.ScrollView;

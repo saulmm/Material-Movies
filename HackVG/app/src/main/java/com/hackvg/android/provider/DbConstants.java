@@ -1,4 +1,4 @@
-package com.hackvg.android.model.provider;
+package com.hackvg.android.provider;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

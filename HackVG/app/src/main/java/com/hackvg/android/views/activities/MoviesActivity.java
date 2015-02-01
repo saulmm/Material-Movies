@@ -1,4 +1,4 @@
-package com.hackvg.android.activities;
+package com.hackvg.android.views.activities;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -17,12 +17,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toolbar;
 
-import com.hackvg.android.HackVGClickListener;
+import com.hackvg.android.utils.HackVGClickListener;
 import com.hackvg.android.R;
-import com.hackvg.android.adapters.MoviesAdapter;
-import com.hackvg.android.fragments.NavigationDrawerFragment;
-import com.hackvg.android.mvp_views.PopularMoviesView;
-import com.hackvg.android.presenter.PopularShowsPresenterImpl;
+import com.hackvg.android.views.adapters.MoviesAdapter;
+import com.hackvg.android.views.fragments.NavigationDrawerFragment;
+import com.hackvg.android.mvp.views.PopularMoviesView;
+import com.hackvg.android.mvp.presenters.PopularShowsPresenterImpl;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
 import com.hackvg.model.entities.TvMovie;
 

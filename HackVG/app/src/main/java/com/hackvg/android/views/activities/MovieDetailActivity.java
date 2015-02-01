@@ -1,4 +1,4 @@
-package com.hackvg.android.activities;
+package com.hackvg.android.views.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hackvg.android.R;
-import com.hackvg.android.mvp_views.MovieDetailView;
-import com.hackvg.android.presenter.MovieDetailPresenter;
-import com.hackvg.android.presenter.MovieDetailPresenterImpl;
+import com.hackvg.android.mvp.views.MovieDetailView;
+import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
+import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

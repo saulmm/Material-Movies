@@ -1,4 +1,4 @@
-package com.hackvg.android.fragments;
+package com.hackvg.android.views.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;

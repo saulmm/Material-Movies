@@ -1,11 +1,11 @@
-package com.hackvg.android.presenter;
+package com.hackvg.android.mvp.presenters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.hackvg.android.R;
-import com.hackvg.android.model.provider.DbConstants;
-import com.hackvg.android.mvp_views.MovieDetailView;
+import com.hackvg.android.provider.DbConstants;
+import com.hackvg.android.mvp.views.MovieDetailView;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.GetMovieDetailUsecaseController;

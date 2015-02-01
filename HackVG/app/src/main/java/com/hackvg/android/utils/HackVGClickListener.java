@@ -1,4 +1,4 @@
-package com.hackvg.android;
+package com.hackvg.android.utils;
 
 import android.view.View;
 

@@ -1,4 +1,4 @@
-package com.hackvg.android.mvp_views;
+package com.hackvg.android.mvp.views;
 
 
 /**
