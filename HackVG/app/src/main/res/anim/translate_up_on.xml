@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <translate
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:duration="@integer/anim_trans_duration_millis"
+        android:startOffset="0"
+        android:fromXDelta="0"
+        android:fromYDelta="-100%"
+        android:toXDelta="0"
+        android:toYDelta="0"
+    />
+    
+
+ 
+    
+
+ 

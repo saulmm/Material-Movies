@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/activity_movie_detail_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/activity_movie_detail_cover_wtf"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:scaleType="fitXY"
+            />
+
+
+        <com.hackvg.android.custom_views.LobsterTextView
+            android:id="@+id/activity_movie_detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:fontFamily="sans-serif-medium"
+            android:paddingLeft="48dp"
+            android:background="@color/theme_primary"
+            android:elevation="4dp"
+            android:layout_below="@id/activity_movie_detail_cover_wtf"
+
+            android:gravity="center_vertical"
+            android:ellipsize="end"
+            android:textSize="28sp"
+            android:maxLines="2"
+            android:textColor="#FFF"
+            tools:text="An awesome title"
+            />
+
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/activity_detail_fab_menu"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/activity_movie_detail_cover_wtf"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="-105dp"
+            android:elevation="10dp"
+            fab:fab_expandDirection="up"
+            fab:fab_labelStyle="@style/MaterialMoviesFabLabel"
+            fab:fab_addButtonColorNormal="@color/theme_accent"
+            fab:fab_addButtonColorPressed="@color/theme_accent"
+            >
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/activity_detail_fab_pending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/ic_bookmark_outline_white_24dp"
+                fab:fab_colorNormal="@color/theme_accent"
+                fab:fab_size="mini"
+                fab:fab_colorPressed="@color/theme_accent"
+                />
+
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/activity_detail_fab_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/ic_done_white_24dp"
+                fab:fab_colorNormal="@color/theme_accent"
+                fab:fab_size="mini"
+                fab:fab_colorPressed="@color/theme_accent"
+                />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+        <FrameLayout
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/activity_movie_detail_cover_wtf"
+            android:layout_gravity="center"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            >
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/activity_detail_book_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin_double_double"
+            android:layout_below="@id/activity_movie_detail_title"
+            >
+
+            <TextView
+                android:id="@+id/activity_detail_movie_description"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="@color/theme_accent"
+                android:text="Description"
+                style="@style/MaterialMoviesHeaderTextView"
+                />
+
+            <TextView
+                android:id="@+id/activity_movie_detail_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="6dp"
+                android:textColor="#FFF"
+                android:text="@string/lorem"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
+

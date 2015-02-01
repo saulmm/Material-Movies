@@ -5,4 +5,15 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MaterialMoviesHeaderTextView" parent="android:Widget.TextView">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+
+    <style name="MaterialMoviesFabLabel">
+
+    </style>
+
+
 </resources>
