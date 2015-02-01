@@ -1,49 +1,70 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context="com.hackvg.android.view.activities.DrawerActivity"
     >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/activity_main_toolbar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/theme_primary"
-        android:title=""
-        android:elevation="10dp"
-        >
-
-        <com.hackvg.android.view.custom_views.LobsterTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textSize="22sp"
-            android:textColor="#FFF"
-            />
-
-
-    </android.support.v7.widget.Toolbar>
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_popular_movies"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_main_toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/theme_primary"
+            android:title=""
+            android:elevation="10dp"
+            >
+
+            <com.hackvg.android.view.custom_views.LobsterTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="22sp"
+                android:textColor="#FFF"
+                />
+
+        </android.support.v7.widget.Toolbar>
+
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_popular_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <ProgressBar
+            android:id="@+id/activity_main_progress"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyleLarge"
+            />
+
+    </FrameLayout>
+
+    <fragment
+        android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.hackvg.android.view.activities.NavigationDrawerFragmentNew"
+        tools:layout="@layout/fragment_navigation_drawer"
         />
 
 
-    <ProgressBar
-        android:id="@+id/activity_main_progress"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        style="?android:attr/progressBarStyleLarge"
-        />
 
 
-</FrameLayout>
+</android.support.v4.widget.DrawerLayout>
