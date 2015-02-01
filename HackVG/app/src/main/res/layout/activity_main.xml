@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hackvg.android.view.activities.DrawerActivity"
+    tools:context="com.hackvg.android.presentation.activities.DrawerActivity"
     >
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,7 +15,7 @@
         tools:context=".MainActivity"
         >
 
-        <android.support.v7.widget.Toolbar
+        <android.widget.Toolbar
             android:id="@+id/activity_main_toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:elevation="10dp"
             >
 
-            <com.hackvg.android.view.custom_views.LobsterTextView
+            <com.hackvg.android.presentation.custom_views.LobsterTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
@@ -33,7 +33,7 @@
                 android:textColor="#FFF"
                 />
 
-        </android.support.v7.widget.Toolbar>
+        </android.widget.Toolbar>
 
 
 
@@ -60,7 +60,7 @@
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:name="com.hackvg.android.view.activities.NavigationDrawerFragmentNew"
+        android:name="com.hackvg.android.presentation.fragments.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer"
         />
 

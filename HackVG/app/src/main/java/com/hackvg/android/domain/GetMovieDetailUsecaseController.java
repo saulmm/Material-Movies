@@ -1,10 +1,10 @@
 package com.hackvg.android.domain;
 
 import com.hackvg.android.model.MediaDataSource;
-import com.hackvg.android.model.client.RestMovieSource;
+import com.hackvg.android.model.rest.RestMovieSource;
 import com.hackvg.android.model.entities.MovieDetailResponse;
 import com.hackvg.android.utils.BusProvider;
-import com.hackvg.android.view.presenter.MovieDetailPresenter;
+import com.hackvg.android.presentation.presenter.MovieDetailPresenter;
 import com.squareup.otto.Subscribe;
 
 /**

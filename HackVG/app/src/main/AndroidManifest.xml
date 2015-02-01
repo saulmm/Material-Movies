@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hackvg.android" >
 
-
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,24 +10,25 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".view.activities.PopularMoviesActivity"
+            android:name=".presentation.activities.PopularMoviesActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".view.activities.MovieDetailActivity"
-            android:theme="@style/TransAppTheme"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".presentation.activities.MovieDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransAppTheme" />
 
         <provider
-            android:authorities="com.hackvg.android.provider"
             android:name=".model.database.DbProvider"
-            android:exported="false"/>
+            android:authorities="com.hackvg.android.provider"
+            android:exported="false" />
+
 
     </application>
 

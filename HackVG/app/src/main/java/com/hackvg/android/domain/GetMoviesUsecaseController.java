@@ -1,13 +1,13 @@
 package com.hackvg.android.domain;
 
 import com.hackvg.android.model.MediaDataSource;
-import com.hackvg.android.model.client.RestMovieSource;
-import com.hackvg.android.model.entities.PopularMoviesResponse;
-import com.hackvg.android.model.entities.PopularShowsResponse;
+import com.hackvg.android.model.rest.RestMovieSource;
+import com.hackvg.android.model.entities.PopularMoviesApiResponse;
+import com.hackvg.android.model.entities.PopularShowsApiResponse;
 import com.hackvg.android.model.entities.TvMovie;
 import com.hackvg.android.model.entities.TvShow;
 import com.hackvg.android.utils.BusProvider;
-import com.hackvg.android.view.presenter.PopularShowsPresenter;
+import com.hackvg.android.presentation.presenter.PopularShowsPresenter;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -49,14 +49,14 @@ public class GetMoviesUsecaseController implements GetPopularMediaUsecase {
 
     @Subscribe
     @Override
-    public void onPopularShowsReceived(PopularShowsResponse response) {
+    public void onPopularShowsReceived(PopularShowsApiResponse response) {
 
         this.popularShows = response.getResults();
     }
 
     @Subscribe
     @Override
-    public void onPopularMoviesReceived(PopularMoviesResponse response) {
+    public void onPopularMoviesReceived(PopularMoviesApiResponse response) {
 
         this.popularMovies = response.getResults();
         sendShowsToPresenter();

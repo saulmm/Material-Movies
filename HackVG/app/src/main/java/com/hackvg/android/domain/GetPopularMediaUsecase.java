@@ -1,7 +1,7 @@
 package com.hackvg.android.domain;
 
-import com.hackvg.android.model.entities.PopularMoviesResponse;
-import com.hackvg.android.model.entities.PopularShowsResponse;
+import com.hackvg.android.model.entities.PopularMoviesApiResponse;
+import com.hackvg.android.model.entities.PopularShowsApiResponse;
 
 /**
  * Created by saulmm on 31/01/15.
@@ -15,9 +15,9 @@ public interface GetPopularMediaUsecase extends Usecase {
 
     public void getPopularMovies ();
 
-    public void onPopularShowsReceived (PopularShowsResponse response);
+    public void onPopularShowsReceived (PopularShowsApiResponse response);
 
-    public void onPopularMoviesReceived(PopularMoviesResponse response);
+    public void onPopularMoviesReceived(PopularMoviesApiResponse response);
 
     public void sendShowsToPresenter ();
 }
