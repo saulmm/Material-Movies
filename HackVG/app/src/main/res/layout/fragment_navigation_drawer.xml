@@ -7,7 +7,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:clickable="true"
-    tools:context="com.hackvg.android.presentation.fragments.NavigationDrawerFragment">
+    tools:context="com.hackvg.android.fragments.NavigationDrawerFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:src="@drawable/awesome"
             />
 
-        <com.hackvg.android.presentation.custom_views.LobsterTextView
+        <com.hackvg.android.custom_views.LobsterTextView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:background="@drawable/gradient_dark"
