@@ -25,7 +25,7 @@ dependencies {
     compile project(':domain') // Domain compiles model and common
 
 
-    // Third party
+    // Third party l
     compile 'com.getbase:floatingactionbutton:1.6.0'
 
     // Google libraries
