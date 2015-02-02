@@ -3,7 +3,7 @@ package com.hackvg.android.mvp.views;
 /**
  * Root class for view classes
  */
-public interface MovieView {
+public interface MVPView {
 
     public android.content.Context getContext();
 }

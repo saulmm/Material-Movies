@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.activities.MovieDetailActivity"
+            android:name=".views.activities.MVPDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/TransAppTheme" />
 

@@ -123,7 +123,7 @@ public class MoviesActivity extends ActionBarActivity implements
     @Override
     public void onClick(View v, int position) {
 
-        Intent i = new Intent (MoviesActivity.this, MovieDetailActivity.class);
+        Intent i = new Intent (MoviesActivity.this, MVPDetailActivity.class);
         String movieID = moviesAdapter.getMovieList().get(position).getId();
         i.putExtra("movie_id", movieID);
         i.putExtra("movie_position", position);

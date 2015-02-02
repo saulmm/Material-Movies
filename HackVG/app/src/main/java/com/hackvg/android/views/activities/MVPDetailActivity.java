@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hackvg.android.R;
-import com.hackvg.android.mvp.views.MovieDetailView;
+import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
 
@@ -24,8 +24,8 @@ import butterknife.InjectView;
 /**
  * Created by saulmm on 31/01/15.
  */
-public class MovieDetailActivity extends Activity
-    implements MovieDetailView, Palette.PaletteAsyncListener, View.OnClickListener {
+public class MVPDetailActivity extends Activity
+    implements MVPDetailView, Palette.PaletteAsyncListener, View.OnClickListener {
 
     @InjectView(R.id.activity_movie_detail_cover_wtf)           ImageView coverImageView;
     @InjectView(R.id.activity_movie_detail_title)               TextView titleTextView;

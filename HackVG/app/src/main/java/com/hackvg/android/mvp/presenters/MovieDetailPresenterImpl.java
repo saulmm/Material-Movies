@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.hackvg.android.R;
+import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.provider.DbConstants;
-import com.hackvg.android.mvp.views.MovieDetailView;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.GetMovieDetailUsecaseController;
@@ -18,11 +18,11 @@ import com.squareup.otto.Subscribe;
  */
 public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
-    private final MovieDetailView movieDetailView;
+    private final MVPDetailView movieDetailView;
     private final String movieID;
 
 
-    public MovieDetailPresenterImpl(MovieDetailView movieDetailView, String movieID) {
+    public MovieDetailPresenterImpl(MVPDetailView movieDetailView, String movieID) {
 
         this.movieDetailView = movieDetailView;
         this.movieID = movieID;
