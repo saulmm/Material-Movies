@@ -24,7 +24,7 @@
             />
 
 
-        <com.hackvg.android.custom_views.LobsterTextView
+        <com.hackvg.android.views.custom_views.LobsterTextView
             android:id="@+id/activity_movie_detail_title"
             android:layout_width="match_parent"
             android:layout_height="96dp"

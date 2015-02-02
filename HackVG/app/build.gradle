@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 21
         versionCode 1
-        versionName "0.01"
+        versionName "0.1"
     }
     buildTypes {
         release {
@@ -25,7 +25,7 @@ dependencies {
     compile project(':domain') // Domain compiles model and common
 
 
-    // Third party
+    // Third party l
     compile 'com.getbase:floatingactionbutton:1.6.0'
 
     // Google libraries
