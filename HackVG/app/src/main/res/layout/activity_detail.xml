@@ -23,17 +23,16 @@
             android:scaleType="fitXY"
             />
 
-
         <com.hackvg.android.views.custom_views.LobsterTextView
             android:id="@+id/activity_movie_detail_title"
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:fontFamily="sans-serif-medium"
             android:paddingLeft="48dp"
+            android:paddingRight="48dp"
             android:background="@color/theme_primary"
             android:elevation="4dp"
             android:layout_below="@id/activity_movie_detail_cover_wtf"
-
             android:gravity="center_vertical"
             android:ellipsize="end"
             android:textSize="28sp"
@@ -68,7 +67,6 @@
                 fab:fab_colorPressed="@color/theme_accent"
                 />
 
-
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/activity_detail_fab_done"
                 android:layout_width="wrap_content"
@@ -78,22 +76,7 @@
                 fab:fab_size="mini"
                 fab:fab_colorPressed="@color/theme_accent"
                 />
-
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
-        <FrameLayout
-            android:id="@+id/card_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/activity_movie_detail_cover_wtf"
-            android:layout_gravity="center"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="8dp"
-            >
-
-        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/activity_detail_book_info"
@@ -111,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:textColor="@color/theme_accent"
-                android:text="Description"
+                android:text="@string/activity_detail_description"
                 style="@style/MaterialMoviesHeaderTextView"
                 />
 
