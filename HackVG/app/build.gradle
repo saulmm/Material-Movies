@@ -24,7 +24,6 @@ dependencies {
 
     compile project(':domain') // Domain compiles model and common
 
-
     // Third party l
     compile 'com.getbase:floatingactionbutton:1.6.0'
 
