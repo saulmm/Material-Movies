@@ -24,7 +24,7 @@ import butterknife.InjectView;
 /**
  * Created by saulmm on 31/01/15.
  */
-public class MVPDetailActivity extends Activity
+public class MovieDetailActivity extends Activity
     implements MVPDetailView, Palette.PaletteAsyncListener, View.OnClickListener {
 
     @InjectView(R.id.activity_movie_detail_cover_wtf)           ImageView coverImageView;
@@ -71,7 +71,7 @@ public class MVPDetailActivity extends Activity
     @Override
     public void setImage(String url) {
 
-        Bitmap bookCoverBitmap = MoviesActivity.photoCache.get(0);
+        Bitmap bookCoverBitmap = MoviesActivityMVP.photoCache.get(0);
         coverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
 
         Palette.generateAsync(bookCoverBitmap, this);
