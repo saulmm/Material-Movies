@@ -9,6 +9,7 @@ import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ import com.hackvg.android.R;
 import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
+import com.hackvg.android.views.custom_views.ObservableScrollView;
+import com.hackvg.android.views.custom_views.ScrollViewListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,13 +28,14 @@ import butterknife.InjectView;
  * Created by saulmm on 31/01/15.
  */
 public class MovieDetailActivity extends Activity
-    implements MVPDetailView, Palette.PaletteAsyncListener, View.OnClickListener {
+    implements MVPDetailView, Palette.PaletteAsyncListener, View.OnClickListener, ScrollViewListener {
 
     @InjectView(R.id.activity_movie_detail_cover_wtf)           ImageView coverImageView;
     @InjectView(R.id.activity_movie_detail_title)               TextView titleTextView;
     @InjectView(R.id.activity_movie_detail_content)             TextView descriptionTextView;
     @InjectView(R.id.activity_detail_book_info)                 View overviewContainer;
     @InjectView(R.id.activity_detail_movie_description)         TextView descriptionTitle;
+    @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
 
     private MovieDetailPresenter detailPresenter;
     private FloatingActionButton fabPending;
@@ -165,5 +169,11 @@ public class MovieDetailActivity extends Activity
 
             detailPresenter.onViewedPressed();
         }
+    }
+
+    @Override
+    public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
+
+        Log.d("[DEBUG]", "MovieDetailActivity onScrollChanged - x: "+x+ "y: "+y+" oldx: "+oldx+" oldy: "+oldy);
     }
 }
