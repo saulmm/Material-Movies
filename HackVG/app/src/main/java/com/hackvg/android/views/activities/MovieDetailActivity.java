@@ -9,15 +9,16 @@ import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hackvg.android.R;
-import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
+import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.views.custom_views.ObservableScrollView;
 import com.hackvg.android.views.custom_views.ScrollViewListener;
 
@@ -40,6 +41,8 @@ public class MovieDetailActivity extends Activity
     private MovieDetailPresenter detailPresenter;
     private FloatingActionButton fabPending;
     private FloatingActionButton fabDone;
+    private int mActionBarSize;
+    private int coverImageHeight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,15 +51,20 @@ public class MovieDetailActivity extends Activity
         setContentView(R.layout.activity_detail);
 
         ButterKnife.inject(this);
+        mActionBarSize = (int) getResources().getDimension(R.dimen.abc_action_bar_default_height_material);
+
 
         int moviePosition = getIntent().getIntExtra("movie_position", 0);
         String movieID = getIntent().getStringExtra("movie_id");
 
         coverImageView.setTransitionName("cover" + moviePosition);
+        coverImageView.setPivotY(1);
 
         // This views cannot be injected by ButterKnife
         fabDone = (FloatingActionButton) findViewById(R.id.activity_detail_fab_done);
         fabDone.setOnClickListener(this);
+
+        observableScrollView.setScrollViewListener(this);
 
         fabPending = (FloatingActionButton) findViewById(R.id.activity_detail_fab_pending);
         fabPending.setOnClickListener(this);
@@ -174,6 +182,22 @@ public class MovieDetailActivity extends Activity
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
 
-        Log.d("[DEBUG]", "MovieDetailActivity onScrollChanged - x: "+x+ "y: "+y+" oldx: "+oldx+" oldy: "+oldy);
+
+        if (coverImageHeight == 0) {
+            coverImageHeight = coverImageView.getHeight();
+        }
+
+        if (y < 400) {
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                coverImageView.getWidth(), (coverImageHeight - y));
+
+            coverImageView.setLayoutParams(params);
+
+        } else {
+
+            Log.d("[DEBUG]", "DetailActivity onScrollChanged - No more®");
+
+        }
     }
 }
