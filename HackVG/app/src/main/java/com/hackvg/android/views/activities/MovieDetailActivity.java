@@ -37,6 +37,12 @@ public class MovieDetailActivity extends Activity
     @InjectView(R.id.activity_detail_book_info)                 View overviewContainer;
     @InjectView(R.id.activity_detail_movie_description)         TextView descriptionTitle;
     @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
+    @InjectView(R.id.activity_detail_company_icon)              ImageView companyIcon;
+    @InjectView(R.id.activity_detail_homepage_icon)             ImageView homepageIcon;
+    @InjectView(R.id.activity_detail_homepage_value)            TextView homepageTextview;
+    @InjectView(R.id.activity_detail_company_value)             TextView companiesTextview;
+    @InjectView(R.id.activity_detail_label_tagline)             TextView taglineLabelTextview;
+    @InjectView(R.id.activity_detail_tagline_value)             TextView taglineTextView;
 
     private MovieDetailPresenter detailPresenter;
     private FloatingActionButton fabPending;
@@ -106,7 +112,7 @@ public class MovieDetailActivity extends Activity
     @Override
     public void setDescription(String description) {
 
-        descriptionTextView.setText(description);
+//        descriptionTextView.setText(description);
     }
 
     @Override
@@ -132,6 +138,18 @@ public class MovieDetailActivity extends Activity
     }
 
     @Override
+    public void setHomepage(String homepage) {
+
+        homepageTextview.setText(homepage);
+    }
+
+    @Override
+    public void setCompanies(String companies) {
+
+        companiesTextview.setText(companies);
+    }
+
+    @Override
     public void onGenerated(Palette palette) {
 
         if (palette != null) {
@@ -143,16 +161,23 @@ public class MovieDetailActivity extends Activity
 
                 titleTextView.setTextColor(vibrantSwatch.getTitleTextColor());
                 titleTextView.setBackgroundColor(vibrantSwatch.getRgb());
+                taglineLabelTextview.setTextColor(vibrantSwatch.getRgb());
                 descriptionTitle.setTextColor(vibrantSwatch.getRgb());
 
                 fabPending.setColorNormal(vibrantSwatch.getRgb());
                 fabDone.setColorNormal(vibrantSwatch.getRgb());
+
+                companyIcon.setColorFilter(vibrantSwatch.getRgb());
+                homepageIcon.setColorFilter(vibrantSwatch.getRgb());
             }
 
             if (lightSwatch != null) {
 
                 overviewContainer.setBackgroundColor(lightSwatch.getRgb());
+                taglineTextView.setTextColor(lightSwatch.getTitleTextColor());
                 descriptionTextView.setTextColor(lightSwatch.getTitleTextColor());
+                companiesTextview.setTextColor(lightSwatch.getTitleTextColor());
+                homepageTextview.setTextColor(lightSwatch.getTitleTextColor());
 
             } else {
 
@@ -188,6 +213,8 @@ public class MovieDetailActivity extends Activity
         }
 
         if (y < 400) {
+
+            Log.d("[DEBUG]", "MovieDetailActivity onScrollChanged - "+(coverImageHeight - y));
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 coverImageView.getWidth(), (coverImageHeight - y));
