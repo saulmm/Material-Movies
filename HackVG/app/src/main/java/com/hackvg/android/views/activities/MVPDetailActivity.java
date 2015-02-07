@@ -58,7 +58,12 @@ public class MVPDetailActivity extends Activity
         fabPending.setOnClickListener(this);
 
         this.detailPresenter = new MovieDetailPresenterImpl(this, movieID);
-        this.detailPresenter.onCreate();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.detailPresenter.onStart();
     }
 
     @Override

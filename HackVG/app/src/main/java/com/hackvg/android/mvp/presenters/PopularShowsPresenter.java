@@ -7,7 +7,7 @@ import com.hackvg.model.entities.PopularMoviesApiResponse;
  */
 public interface PopularShowsPresenter {
 
-    public void onCreate ();
+    public void onStart ();
 
     public void onStop ();
 

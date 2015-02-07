@@ -74,7 +74,12 @@ public class MoviesActivity extends ActionBarActivity implements
             (DrawerLayout) findViewById(R.id.drawer_layout));
 
         popularShowsPresenter = new PopularShowsPresenterImpl(this);
-        popularShowsPresenter.onCreate();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        popularShowsPresenter.onStart();
     }
 
     @Override

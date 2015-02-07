@@ -12,7 +12,7 @@ public interface MovieDetailPresenter  {
 
     public void onResume();
 
-    public void onCreate ();
+    public void onStart ();
 
     public void onStop ();
 
