@@ -19,7 +19,7 @@ public class PopularShowsPresenterImpl implements PopularShowsPresenter {
     }
 
     @Override
-    public void onCreate() {
+    public void onStart() {
 
         BusProvider.getUIBusInstance().register(this);
 

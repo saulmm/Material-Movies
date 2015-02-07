@@ -50,7 +50,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     }
 
     @Override
-    public void onCreate() {
+    public void onStart() {
 
         BusProvider.getUIBusInstance().register(this);
     }
