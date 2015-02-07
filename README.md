@@ -1,8 +1,10 @@
 This projects support a series of articles about how to setup an android environment to develop an scalable, maintainable and testable projects.
 
-## Scenario
+### A useful stack on android 
 
-As an example, I will rely on the following project, is a proof of concept of a simple catalog of films, which can be marked as views or pendings.
+- [Architecture](http://saulmm.github.io/2015/02/02/A%20useful%20stack%20on%20android%20%231,%20architecture/) 
+
+## Scenario
 
 The information about the films is taken from a public API called [themoviedb](https://www.themoviedb.org/documentation/api), you can find nice documentation in this section at [Apiary](http: // docs. themoviedb.apiary.io/#).
 
