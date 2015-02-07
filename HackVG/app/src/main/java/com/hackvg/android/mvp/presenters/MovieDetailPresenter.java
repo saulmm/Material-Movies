@@ -1,6 +1,9 @@
 package com.hackvg.android.mvp.presenters;
 
 import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.Production_companies;
+
+import java.util.List;
 
 
 @SuppressWarnings("UnusedDeclaration")
@@ -20,13 +23,17 @@ public interface MovieDetailPresenter  {
 
     public void showName (String title);
 
+    public void showCompanies (List<Production_companies> companies);
+
     public void setChecked ();
 
     public void setPending ();
 
     public void onDetailInformationReceived (MovieDetailResponse response);
 
-    void onViewedPressed();
+    public void onViewedPressed();
 
-    void onPendingPressed();
+    public void onPendingPressed();
+
+    public void showHomepage (String homepage);
 }

@@ -3,7 +3,9 @@ package com.hackvg.android.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
@@ -37,8 +39,6 @@ public class MovieDetailActivity extends Activity
     @InjectView(R.id.activity_detail_book_info)                 View overviewContainer;
     @InjectView(R.id.activity_detail_movie_description)         TextView descriptionTitle;
     @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
-    @InjectView(R.id.activity_detail_company_icon)              ImageView companyIcon;
-    @InjectView(R.id.activity_detail_homepage_icon)             ImageView homepageIcon;
     @InjectView(R.id.activity_detail_homepage_value)            TextView homepageTextview;
     @InjectView(R.id.activity_detail_company_value)             TextView companiesTextview;
     @InjectView(R.id.activity_detail_label_tagline)             TextView taglineLabelTextview;
@@ -64,7 +64,6 @@ public class MovieDetailActivity extends Activity
         String movieID = getIntent().getStringExtra("movie_id");
 
         coverImageView.setTransitionName("cover" + moviePosition);
-        coverImageView.setPivotY(1);
 
         // This views cannot be injected by ButterKnife
         fabDone = (FloatingActionButton) findViewById(R.id.activity_detail_fab_done);
@@ -112,7 +111,7 @@ public class MovieDetailActivity extends Activity
     @Override
     public void setDescription(String description) {
 
-//        descriptionTextView.setText(description);
+        descriptionTextView.setText(description);
     }
 
     @Override
@@ -150,6 +149,12 @@ public class MovieDetailActivity extends Activity
     }
 
     @Override
+    public void settagLine(String tagline) {
+
+        taglineTextView.setText(tagline);
+    }
+
+    @Override
     public void onGenerated(Palette palette) {
 
         if (palette != null) {
@@ -167,8 +172,15 @@ public class MovieDetailActivity extends Activity
                 fabPending.setColorNormal(vibrantSwatch.getRgb());
                 fabDone.setColorNormal(vibrantSwatch.getRgb());
 
-                companyIcon.setColorFilter(vibrantSwatch.getRgb());
-                homepageIcon.setColorFilter(vibrantSwatch.getRgb());
+                Drawable companyIcon = getResources().getDrawable(R.drawable.ic_domain_white_24dp);
+                companyIcon.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                companiesTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(companyIcon, null, null, null);
+                companiesTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
+
+                Drawable homePage = getResources().getDrawable(R.drawable.ic_public_white_24dp);
+                homePage.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                homepageTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(homePage, null, null, null);
+                homepageTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
             }
 
             if (lightSwatch != null) {

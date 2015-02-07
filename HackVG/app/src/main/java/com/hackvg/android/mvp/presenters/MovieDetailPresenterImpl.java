@@ -11,7 +11,10 @@ import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.GetMovieDetailUsecaseController;
 import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.Production_companies;
 import com.squareup.otto.Subscribe;
+
+import java.util.List;
 
 /**
  * Created by saulmm on 31/01/15.
@@ -39,7 +42,6 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
         String coverUrl = Constants.POSTER_PREFIX + url;
         movieDetailView.setImage(coverUrl);
-
     }
 
     @Override
@@ -65,12 +67,34 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     @Override
     public void showTagline(String tagLine) {
 
+        movieDetailView.settagLine(tagLine);
     }
 
     @Override
     public void showName(String title) {
 
         movieDetailView.setName(title);
+    }
+
+    @Override
+    public void showCompanies(List<Production_companies> companies) {
+
+        String companiesString = "";
+
+        for (int i = 0; i <companies.size(); i++) {
+
+            Production_companies company = companies.get(i);
+
+            companiesString += company.getName();
+
+            if (i != companies.size() -1) {
+
+                companiesString += ", ";
+            }
+        }
+
+        movieDetailView.setCompanies(companiesString);
+
     }
 
     @Override
@@ -90,7 +114,9 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         showDescription(response.getOverview());
         showName(response.getTitle());
         showCover(response.getPoster_path());
-
+        showTagline(response.getTagline());
+        showCompanies(response.getProduction_companies());
+        showHomepage(response.getHomepage());
         updatePendingViewed();
     }
 
@@ -149,5 +175,11 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
             DbConstants.Movies.ID_MOVIE + "=?", new String[]{movieID});
 
         movieDetailView.finish("Pending");
+    }
+
+    @Override
+    public void showHomepage(String homepage) {
+
+        movieDetailView.setHomepage(homepage);
     }
 }

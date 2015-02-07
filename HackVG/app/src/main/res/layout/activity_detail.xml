@@ -85,72 +85,35 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingBottom="@dimen/activity_vertical_margin_double_double"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_below="@id/activity_movie_detail_title"
             >
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/activity_detail_homepage_value"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:orientation="horizontal"
-                >
+                android:gravity="center_vertical"
+                android:textColor="#FFF"
+                tools:text="http://awesome.title.com"
+                />
 
-                <ImageView
-                    android:id="@+id/activity_detail_homepage_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_public_white_24dp"
-                    android:tint="@color/theme_accent"
-                    android:layout_gravity="center_vertical"
-                    />
-
-                <TextView
-                    android:id="@+id/activity_detail_homepage_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:gravity="center_vertical"
-                    android:lineSpacingExtra="6dp"
-                    android:textColor="#FFF"
-                    android:text="http://awesome.title.com"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/activity_detail_company_value"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                >
-
-                <ImageView
-                    android:id="@+id/activity_detail_company_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_domain_white_24dp"
-                    android:tint="@color/theme_accent"
-                    android:layout_gravity="center_vertical"
-                    />
-
-                <TextView
-                    android:id="@+id/activity_detail_company_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:gravity="center_vertical"
-                    android:lineSpacingExtra="6dp"
-                    android:textColor="#FFF"
-                    android:text="Warner Bros, Paramount Pictures "
-                    />
-            </LinearLayout>
-
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="6dp"
+                android:textColor="#FFF"
+                tools:text="Warner Bros, Paramount Pictures "
+                />
 
             <TextView
                 android:id="@+id/activity_detail_label_tagline"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:textColor="@color/theme_accent"
-                android:text="Tagline"
+                android:text="@string/activity_detail_label_tagline"
                 style="@style/MaterialMoviesHeaderTextView"
                 />
 
@@ -159,18 +122,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:layout_marginTop="8dp"
                 android:lineSpacingExtra="6dp"
                 android:textColor="#FFF"
-                android:text="Mankind was born on Earth. It was never meant to die here."
+                tools:text="Mankind was born on Earth. It was never meant to die here."
                 />
 
             <TextView
                 android:id="@+id/activity_detail_movie_description"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_half"
                 android:textColor="@color/theme_accent"
-                android:text="@string/activity_detail_description"
+                android:text="@string/activity_detail_label_description"
                 style="@style/MaterialMoviesHeaderTextView"
                 />
 
@@ -179,7 +142,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:layout_marginTop="8dp"
                 android:lineSpacingExtra="6dp"
                 android:textColor="#FFF"
                 android:text="@string/lorem"
