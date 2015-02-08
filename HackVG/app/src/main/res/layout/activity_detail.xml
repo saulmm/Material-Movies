@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<com.hackvg.android.views.custom_views.ObservableScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -40,7 +40,6 @@
             android:textColor="#FFF"
             tools:text="An awesome title"
             />
-
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/activity_detail_fab_menu"
@@ -86,15 +85,58 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingBottom="@dimen/activity_vertical_margin_double_double"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_below="@id/activity_movie_detail_title"
             >
+
+            <TextView
+                android:id="@+id/activity_detail_homepage_value"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:textColor="#FFF"
+                android:visibility="gone"
+                tools:text="http://awesome.title.com"
+                tools:visibility="visible"
+                />
+
+            <TextView
+                android:id="@+id/activity_detail_company_value"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="6dp"
+                android:textColor="#FFF"
+                android:visibility="gone"
+                tools:text="Warner Bros, Paramount Pictures "
+                />
+
+            <TextView
+                android:id="@+id/activity_detail_label_tagline"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="@color/theme_accent"
+                android:text="@string/activity_detail_label_tagline"
+                style="@style/MaterialMoviesHeaderTextView"
+                />
+
+            <TextView
+                android:id="@+id/activity_detail_tagline_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="6dp"
+                android:textColor="#FFF"
+                tools:text="Mankind was born on Earth. It was never meant to die here."
+                />
 
             <TextView
                 android:id="@+id/activity_detail_movie_description"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_half"
                 android:textColor="@color/theme_accent"
-                android:text="@string/activity_detail_description"
+                android:text="@string/activity_detail_label_description"
                 style="@style/MaterialMoviesHeaderTextView"
                 />
 
@@ -103,7 +145,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:layout_marginTop="8dp"
                 android:lineSpacingExtra="6dp"
                 android:textColor="#FFF"
                 android:text="@string/lorem"
@@ -111,5 +152,5 @@
 
         </LinearLayout>
     </RelativeLayout>
-</ScrollView>
+</com.hackvg.android.views.custom_views.ObservableScrollView>
 

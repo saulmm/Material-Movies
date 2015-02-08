@@ -17,5 +17,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
-    <string name="activity_detail_description">Description</string>
+    <string name="activity_detail_label_description">Description</string>
+    <string name="activity_detail_label_tagline">Tagline</string>
 </resources>
