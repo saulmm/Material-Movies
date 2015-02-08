@@ -2,6 +2,7 @@ package com.hackvg.android.mvp.presenters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import com.hackvg.android.R;
 import com.hackvg.android.mvp.views.MVPDetailView;
@@ -67,7 +68,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     @Override
     public void showTagline(String tagLine) {
 
-        movieDetailView.settagLine(tagLine);
+        movieDetailView.setTagline(tagLine);
     }
 
     @Override
@@ -84,16 +85,14 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
         for (int i = 0; i <companies.size(); i++) {
 
             Production_companies company = companies.get(i);
-
             companiesString += company.getName();
 
-            if (i != companies.size() -1) {
-
+            if (i != companies.size() -1)
                 companiesString += ", ";
-            }
         }
 
-        movieDetailView.setCompanies(companiesString);
+        if (!companies.isEmpty())
+            movieDetailView.setCompanies(companiesString);
 
     }
 
@@ -180,6 +179,7 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     @Override
     public void showHomepage(String homepage) {
 
-        movieDetailView.setHomepage(homepage);
+        if (!TextUtils.isEmpty(homepage))
+            movieDetailView.setHomepage(homepage);
     }
 }

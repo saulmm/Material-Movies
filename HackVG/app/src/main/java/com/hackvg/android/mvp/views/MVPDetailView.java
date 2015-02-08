@@ -22,5 +22,5 @@ public interface MVPDetailView extends MVPView {
 
     public void setCompanies (String companies);
 
-    public void settagLine (String tagline);
+    public void setTagline(String tagline);
 }

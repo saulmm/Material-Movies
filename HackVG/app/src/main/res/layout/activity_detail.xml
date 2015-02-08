@@ -95,7 +95,9 @@
                 android:layout_height="48dp"
                 android:gravity="center_vertical"
                 android:textColor="#FFF"
+                android:visibility="gone"
                 tools:text="http://awesome.title.com"
+                tools:visibility="visible"
                 />
 
             <TextView
@@ -105,6 +107,7 @@
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="6dp"
                 android:textColor="#FFF"
+                android:visibility="gone"
                 tools:text="Warner Bros, Paramount Pictures "
                 />
 

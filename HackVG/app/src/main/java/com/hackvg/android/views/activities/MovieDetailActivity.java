@@ -139,17 +139,19 @@ public class MovieDetailActivity extends Activity
     @Override
     public void setHomepage(String homepage) {
 
+        homepageTextview.setVisibility(View.VISIBLE);
         homepageTextview.setText(homepage);
     }
 
     @Override
     public void setCompanies(String companies) {
 
+        companiesTextview.setVisibility(View.VISIBLE);
         companiesTextview.setText(companies);
     }
 
     @Override
-    public void settagLine(String tagline) {
+    public void setTagline(String tagline) {
 
         taglineTextView.setText(tagline);
     }
@@ -172,15 +174,21 @@ public class MovieDetailActivity extends Activity
                 fabPending.setColorNormal(vibrantSwatch.getRgb());
                 fabDone.setColorNormal(vibrantSwatch.getRgb());
 
-                Drawable companyIcon = getResources().getDrawable(R.drawable.ic_domain_white_24dp);
-                companyIcon.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-                companiesTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(companyIcon, null, null, null);
-                companiesTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
+                if (companiesTextview.getVisibility() == View.VISIBLE) {
 
-                Drawable homePage = getResources().getDrawable(R.drawable.ic_public_white_24dp);
-                homePage.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-                homepageTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(homePage, null, null, null);
-                homepageTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
+                    Drawable companyIcon = getResources().getDrawable(R.drawable.ic_domain_white_24dp);
+                    companyIcon.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                    companiesTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(companyIcon, null, null, null);
+                    companiesTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
+                }
+
+                if (homepageTextview.getVisibility() == View.VISIBLE) {
+
+                    Drawable homePage = getResources().getDrawable(R.drawable.ic_public_white_24dp);
+                    homePage.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                    homepageTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(homePage, null, null, null);
+                    homepageTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
+                }
             }
 
             if (lightSwatch != null) {
@@ -236,7 +244,6 @@ public class MovieDetailActivity extends Activity
         } else {
 
             Log.d("[DEBUG]", "DetailActivity onScrollChanged - No more®");
-
         }
     }
 }
