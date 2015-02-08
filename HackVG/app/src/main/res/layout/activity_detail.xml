@@ -41,40 +41,19 @@
             tools:text="An awesome title"
             />
 
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/activity_detail_fab_menu"
+        <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/activity_detail_fab"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/activity_movie_detail_cover_wtf"
+            android:layout_above="@+id/activity_detail_book_info"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="-105dp"
+            android:layout_marginBottom="-27.5dp"
+            android:src="@drawable/ic_fab_star"
+            android:background="@drawable/ripple_round"
             android:elevation="10dp"
-            fab:fab_expandDirection="up"
-            fab:fab_addButtonColorNormal="?colorAccent"
-            fab:fab_addButtonColorPressed="?colorAccent"
-            >
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/activity_detail_fab_pending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/ic_bookmark_outline_white_24dp"
-                fab:fab_colorNormal="@color/theme_accent"
-                fab:fab_size="mini"
-                fab:fab_colorPressed="@color/theme_accent"
-                />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/activity_detail_fab_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/ic_done_white_24dp"
-                fab:fab_colorNormal="@color/theme_accent"
-                fab:fab_size="mini"
-                fab:fab_colorPressed="@color/theme_accent"
-                />
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            android:stateListAnimator="@anim/fab_animation"
+            />
 
         <LinearLayout
             android:id="@+id/activity_detail_book_info"

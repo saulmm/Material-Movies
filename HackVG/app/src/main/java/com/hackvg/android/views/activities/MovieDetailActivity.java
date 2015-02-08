@@ -16,7 +16,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.hackvg.android.R;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
@@ -45,10 +44,8 @@ public class MovieDetailActivity extends Activity
     @InjectView(R.id.activity_detail_tagline_value)             TextView taglineTextView;
 
     private MovieDetailPresenter detailPresenter;
-    private FloatingActionButton fabPending;
-    private FloatingActionButton fabDone;
-    private int mActionBarSize;
     private int coverImageHeight;
+    private int mActionBarSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,14 +62,10 @@ public class MovieDetailActivity extends Activity
 
         coverImageView.setTransitionName("cover" + moviePosition);
 
-        // This views cannot be injected by ButterKnife
-        fabDone = (FloatingActionButton) findViewById(R.id.activity_detail_fab_done);
-        fabDone.setOnClickListener(this);
+
 
         observableScrollView.setScrollViewListener(this);
 
-        fabPending = (FloatingActionButton) findViewById(R.id.activity_detail_fab_pending);
-        fabPending.setOnClickListener(this);
 
         this.detailPresenter = new MovieDetailPresenterImpl(this, movieID);
         this.detailPresenter.onCreate();
@@ -101,7 +94,6 @@ public class MovieDetailActivity extends Activity
         detailPresenter.onResume();
     }
 
-
     @Override
     public void setName(String title) {
 
@@ -128,12 +120,14 @@ public class MovieDetailActivity extends Activity
 
     @Override
     public void changePendingIcon(int drawable) {
-        fabPending.setIcon(drawable);
+
+//        fabPending.setIcon(drawable);
     }
 
     @Override
     public void changeViewedIcon(int drawable) {
-        fabDone.setIcon(drawable);
+
+//        fabDone.setIcon(drawable);
     }
 
     @Override
@@ -171,8 +165,8 @@ public class MovieDetailActivity extends Activity
                 taglineLabelTextview.setTextColor(vibrantSwatch.getRgb());
                 descriptionTitle.setTextColor(vibrantSwatch.getRgb());
 
-                fabPending.setColorNormal(vibrantSwatch.getRgb());
-                fabDone.setColorNormal(vibrantSwatch.getRgb());
+//                fabPending.setColorNormal(vibrantSwatch.getRgb());
+//                fabDone.setColorNormal(vibrantSwatch.getRgb());
 
                 if (companiesTextview.getVisibility() == View.VISIBLE) {
 
@@ -214,14 +208,14 @@ public class MovieDetailActivity extends Activity
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == R.id.activity_detail_fab_pending) {
-
-            detailPresenter.onPendingPressed();
-
-        } else if (v.getId() == R.id.activity_detail_fab_done) {
-
-            detailPresenter.onViewedPressed();
-        }
+//        if (v.getId() == R.id.activity_detail_fab_pending) {
+//
+//            detailPresenter.onPendingPressed();
+//
+//        } else if (v.getId() == R.id.activity_detail_fab_done) {
+//
+//            detailPresenter.onViewedPressed();
+//        }
     }
 
     @Override
