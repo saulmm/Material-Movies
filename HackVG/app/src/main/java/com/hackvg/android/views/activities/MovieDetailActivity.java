@@ -20,6 +20,7 @@ import com.hackvg.android.R;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
 import com.hackvg.android.mvp.views.MVPDetailView;
+import com.hackvg.android.utils.GUIUtils;
 import com.hackvg.android.views.custom_views.ObservableScrollView;
 import com.hackvg.android.views.custom_views.ScrollViewListener;
 
@@ -33,19 +34,21 @@ public class MovieDetailActivity extends Activity
     implements MVPDetailView, Palette.PaletteAsyncListener, View.OnClickListener, ScrollViewListener {
 
     @InjectView(R.id.activity_movie_detail_cover_wtf)           ImageView coverImageView;
-    @InjectView(R.id.activity_movie_detail_title)               TextView titleTextView;
-    @InjectView(R.id.activity_movie_detail_content)             TextView descriptionTextView;
     @InjectView(R.id.activity_detail_book_info)                 View overviewContainer;
     @InjectView(R.id.activity_detail_movie_description)         TextView descriptionTitle;
     @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
+    @InjectView(R.id.activity_movie_detail_title)               TextView titleTextView;
+    @InjectView(R.id.activity_movie_detail_content)             TextView descriptionTextView;
     @InjectView(R.id.activity_detail_homepage_value)            TextView homepageTextview;
     @InjectView(R.id.activity_detail_company_value)             TextView companiesTextview;
     @InjectView(R.id.activity_detail_label_tagline)             TextView taglineLabelTextview;
     @InjectView(R.id.activity_detail_tagline_value)             TextView taglineTextView;
+    @InjectView(R.id.activity_movie_detail_fab)                 ImageView fabButton;
 
     private MovieDetailPresenter detailPresenter;
     private int coverImageHeight;
     private int mActionBarSize;
+    private boolean configured;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,35 +158,9 @@ public class MovieDetailActivity extends Activity
 
         if (palette != null) {
 
-            Palette.Swatch vibrantSwatch    = palette.getVibrantSwatch();
-            Palette.Swatch lightSwatch      = palette.getLightVibrantSwatch();
-
-            if (vibrantSwatch != null) {
-
-                titleTextView.setTextColor(vibrantSwatch.getTitleTextColor());
-                titleTextView.setBackgroundColor(vibrantSwatch.getRgb());
-                taglineLabelTextview.setTextColor(vibrantSwatch.getRgb());
-                descriptionTitle.setTextColor(vibrantSwatch.getRgb());
-
-//                fabPending.setColorNormal(vibrantSwatch.getRgb());
-//                fabDone.setColorNormal(vibrantSwatch.getRgb());
-
-                if (companiesTextview.getVisibility() == View.VISIBLE) {
-
-                    Drawable companyIcon = getResources().getDrawable(R.drawable.ic_domain_white_24dp);
-                    companyIcon.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-                    companiesTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(companyIcon, null, null, null);
-                    companiesTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
-                }
-
-                if (homepageTextview.getVisibility() == View.VISIBLE) {
-
-                    Drawable homePage = getResources().getDrawable(R.drawable.ic_public_white_24dp);
-                    homePage.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-                    homepageTextview.setCompoundDrawablesRelativeWithIntrinsicBounds(homePage, null, null, null);
-                    homepageTextview.setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.activity_horizontal_margin));
-                }
-            }
+            Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+            Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
+            Palette.Swatch lightSwatch = palette.getLightVibrantSwatch();
 
             if (lightSwatch != null) {
 
@@ -192,17 +169,54 @@ public class MovieDetailActivity extends Activity
                 descriptionTextView.setTextColor(lightSwatch.getTitleTextColor());
                 companiesTextview.setTextColor(lightSwatch.getTitleTextColor());
                 homepageTextview.setTextColor(lightSwatch.getTitleTextColor());
-
-            } else {
-
-                overviewContainer.setBackgroundColor(
-                    getResources().getColor(R.color.theme_primary));
             }
 
-        } else {
+            if (lightSwatch == null && vibrantSwatch != null) {
+                colorBrightElements(vibrantSwatch);
 
-            Log.e("[ERROR]", "MovieDetailActivity 139  - Error ");
+                
+                overviewContainer.setBackgroundColor(getResources()
+                    .getColor(R.color.theme_primary));
+            }
+
+            if (darkVibrantSwatch != null && lightSwatch != null)
+                colorBrightElements(darkVibrantSwatch);
+
+            if (vibrantSwatch != null) {
+
+                Drawable fabRipple = getResources().getDrawable(R.drawable.ripple_round);
+                fabRipple.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.ADD);
+
+                fabButton.setBackground(fabRipple);
+            }
         }
+    }
+
+    public void colorBrightElements (Palette.Swatch brightSwatch) {
+
+
+
+        titleTextView.setTextColor(brightSwatch.getTitleTextColor());
+        titleTextView.setBackgroundColor(brightSwatch.getRgb());
+
+        if (brightSwatch != null) {
+            if (companiesTextview.getVisibility() == View.VISIBLE) {
+
+                GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
+                    brightSwatch.getRgb(), companiesTextview);
+            }
+
+            if (homepageTextview.getVisibility() == View.VISIBLE) {
+
+                GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
+                    brightSwatch.getRgb(), homepageTextview);
+            }
+
+            taglineLabelTextview.setTextColor(brightSwatch.getRgb());
+            descriptionTitle.setTextColor(brightSwatch.getRgb());
+        }
+
+        configured = true;
     }
 
     @Override

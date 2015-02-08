@@ -41,8 +41,8 @@
             tools:text="An awesome title"
             />
 
-        <ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/activity_detail_fab"
+        <ImageButton
+            android:id="@+id/activity_movie_detail_fab"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             android:layout_alignParentEnd="true"
