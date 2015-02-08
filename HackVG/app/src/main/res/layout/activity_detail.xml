@@ -27,17 +27,17 @@
             android:id="@+id/activity_movie_detail_title"
             android:layout_width="match_parent"
             android:layout_height="96dp"
-            android:fontFamily="sans-serif-medium"
+            android:layout_below="@id/activity_movie_detail_cover_wtf"
             android:paddingLeft="48dp"
             android:paddingRight="48dp"
-            android:background="@color/theme_primary"
-            android:elevation="4dp"
-            android:layout_below="@id/activity_movie_detail_cover_wtf"
             android:gravity="center_vertical"
-            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:textSize="28sp"
-            android:maxLines="2"
             android:textColor="#FFF"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:elevation="4dp"
+            android:background="@color/theme_primary"
             tools:text="An awesome title"
             />
 
@@ -51,9 +51,8 @@
             android:layout_marginTop="-105dp"
             android:elevation="10dp"
             fab:fab_expandDirection="up"
-            fab:fab_labelStyle="@style/MaterialMoviesFabLabel"
-            fab:fab_addButtonColorNormal="@color/theme_accent"
-            fab:fab_addButtonColorPressed="@color/theme_accent"
+            fab:fab_addButtonColorNormal="?colorAccent"
+            fab:fab_addButtonColorPressed="?colorAccent"
             >
 
             <com.getbase.floatingactionbutton.FloatingActionButton
@@ -92,30 +91,26 @@
             <TextView
                 android:id="@+id/activity_detail_homepage_value"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:textColor="#FFF"
-                android:visibility="gone"
+                android:layout_height="wrap_content"
                 tools:text="http://awesome.title.com"
                 tools:visibility="visible"
+                style="@style/MaterialMoviesDetailField"
                 />
 
             <TextView
                 android:id="@+id/activity_detail_company_value"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="6dp"
-                android:textColor="#FFF"
-                android:visibility="gone"
-                tools:text="Warner Bros, Paramount Pictures "
+                android:layout_height="wrap_content"
+                tools:visibility="visible"
+                tools:text="Warner Bros, Paramount Pictures"
+                style="@style/MaterialMoviesDetailField"
                 />
 
             <TextView
                 android:id="@+id/activity_detail_label_tagline"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:textColor="@color/theme_accent"
+                android:layout_height="wrap_content"
+
                 android:text="@string/activity_detail_label_tagline"
                 style="@style/MaterialMoviesHeaderTextView"
                 />
