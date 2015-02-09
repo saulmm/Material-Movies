@@ -12,15 +12,11 @@ public interface MVPDetailView extends MVPView {
 
     public void setDescription(String description);
 
-    public void finish(String cause);
-
-    public void changePendingIcon(int drawable);
-
-    public void changeViewedIcon(int drawable);
-
     public void setHomepage (String homepage);
 
     public void setCompanies (String companies);
 
     public void setTagline(String tagline);
+
+    public void finish(String cause);
 }

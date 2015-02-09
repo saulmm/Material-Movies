@@ -8,8 +8,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
-import android.util.Log;
+import android.transition.Transition;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -21,22 +22,23 @@ import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenterImpl;
 import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.utils.GUIUtils;
+import com.hackvg.android.utils.HackVGTransitionListener;
 import com.hackvg.android.views.custom_views.ObservableScrollView;
 import com.hackvg.android.views.custom_views.ScrollViewListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by saulmm on 31/01/15.
  */
-public class MovieDetailActivity extends Activity
-    implements MVPDetailView, Palette.PaletteAsyncListener, View.OnClickListener, ScrollViewListener {
+public class MovieDetailActivity extends Activity implements MVPDetailView,
+    Palette.PaletteAsyncListener, ScrollViewListener {
 
     @InjectView(R.id.activity_movie_detail_cover_wtf)           ImageView coverImageView;
     @InjectView(R.id.activity_detail_book_info)                 View overviewContainer;
     @InjectView(R.id.activity_detail_movie_description)         TextView descriptionTitle;
-    @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
     @InjectView(R.id.activity_movie_detail_title)               TextView titleTextView;
     @InjectView(R.id.activity_movie_detail_content)             TextView descriptionTextView;
     @InjectView(R.id.activity_detail_homepage_value)            TextView homepageTextview;
@@ -44,11 +46,12 @@ public class MovieDetailActivity extends Activity
     @InjectView(R.id.activity_detail_label_tagline)             TextView taglineLabelTextview;
     @InjectView(R.id.activity_detail_tagline_value)             TextView taglineTextView;
     @InjectView(R.id.activity_movie_detail_fab)                 ImageView fabButton;
+    @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
 
     private MovieDetailPresenter detailPresenter;
     private int coverImageHeight;
-    private int mActionBarSize;
-    private boolean configured;
+
+    private Drawable fabRipple;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,29 +59,33 @@ public class MovieDetailActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        ButterKnife.inject(this);
-        mActionBarSize = (int) getResources().getDimension(R.dimen.abc_action_bar_default_height_material);
+        getWindow().getSharedElementEnterTransition().addListener(transitionListener);
 
+        ButterKnife.inject(this);
 
         int moviePosition = getIntent().getIntExtra("movie_position", 0);
         String movieID = getIntent().getStringExtra("movie_id");
 
         coverImageView.setTransitionName("cover" + moviePosition);
 
+        fabRipple = getResources().getDrawable(R.drawable.ripple_round);
+        fabButton.setBackground(fabRipple);
 
+        fabButton.setScaleX(0);
+        fabButton.setScaleY(0);
+        fabButton.setTranslationZ(200);
 
         observableScrollView.setScrollViewListener(this);
 
-
-        this.detailPresenter = new MovieDetailPresenterImpl(this, movieID);
-        this.detailPresenter.onCreate();
+        detailPresenter = new MovieDetailPresenterImpl(this, movieID);
+        detailPresenter.onCreate();
     }
 
     @Override
     protected void onStop() {
 
         super.onStop();
-        this.detailPresenter.onStop();
+        detailPresenter.onStop();
     }
 
     @Override
@@ -86,6 +93,7 @@ public class MovieDetailActivity extends Activity
 
         Bitmap bookCoverBitmap = MoviesActivityMVP.photoCache.get(0);
         coverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
+
 
         Palette.generateAsync(bookCoverBitmap, this);
     }
@@ -115,22 +123,11 @@ public class MovieDetailActivity extends Activity
         return this;
     }
 
+    @Override
     public void finish(String cause) {
 
         Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
         this.finish();
-    }
-
-    @Override
-    public void changePendingIcon(int drawable) {
-
-//        fabPending.setIcon(drawable);
-    }
-
-    @Override
-    public void changeViewedIcon(int drawable) {
-
-//        fabDone.setIcon(drawable);
     }
 
     @Override
@@ -169,89 +166,72 @@ public class MovieDetailActivity extends Activity
                 descriptionTextView.setTextColor(lightSwatch.getTitleTextColor());
                 companiesTextview.setTextColor(lightSwatch.getTitleTextColor());
                 homepageTextview.setTextColor(lightSwatch.getTitleTextColor());
+                fabRipple.setColorFilter(lightSwatch.getRgb(), PorterDuff.Mode.ADD);
             }
 
             if (lightSwatch == null && vibrantSwatch != null) {
                 colorBrightElements(vibrantSwatch);
 
-                
-                overviewContainer.setBackgroundColor(getResources()
-                    .getColor(R.color.theme_primary));
+                int primaryColor = getResources()
+                    .getColor(R.color.theme_primary);
+
+                fabRipple.setColorFilter(primaryColor, PorterDuff.Mode.ADD);
+                overviewContainer.setBackgroundColor(primaryColor);
             }
 
             if (darkVibrantSwatch != null && lightSwatch != null)
                 colorBrightElements(darkVibrantSwatch);
-
-            if (vibrantSwatch != null) {
-
-                Drawable fabRipple = getResources().getDrawable(R.drawable.ripple_round);
-                fabRipple.setColorFilter(vibrantSwatch.getRgb(), PorterDuff.Mode.ADD);
-
-                fabButton.setBackground(fabRipple);
-            }
         }
     }
 
     public void colorBrightElements (Palette.Swatch brightSwatch) {
 
-
-
         titleTextView.setTextColor(brightSwatch.getTitleTextColor());
         titleTextView.setBackgroundColor(brightSwatch.getRgb());
 
         if (brightSwatch != null) {
-            if (companiesTextview.getVisibility() == View.VISIBLE) {
 
+            if (companiesTextview.getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
                     brightSwatch.getRgb(), companiesTextview);
-            }
 
-            if (homepageTextview.getVisibility() == View.VISIBLE) {
-
+            if (homepageTextview.getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
                     brightSwatch.getRgb(), homepageTextview);
-            }
 
             taglineLabelTextview.setTextColor(brightSwatch.getRgb());
             descriptionTitle.setTextColor(brightSwatch.getRgb());
         }
-
-        configured = true;
     }
 
-    @Override
-    public void onClick(View v) {
+    @OnClick(R.id.activity_movie_detail_fab)
+    public void onClick(ImageButton v) {
 
-//        if (v.getId() == R.id.activity_detail_fab_pending) {
-//
-//            detailPresenter.onPendingPressed();
-//
-//        } else if (v.getId() == R.id.activity_detail_fab_done) {
-//
-//            detailPresenter.onViewedPressed();
-//        }
+        detailPresenter.onViewedPressed();
     }
 
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
 
-
-        if (coverImageHeight == 0) {
+        if (coverImageHeight == 0)
             coverImageHeight = coverImageView.getHeight();
-        }
 
-        if (y < 400) {
-
-            Log.d("[DEBUG]", "MovieDetailActivity onScrollChanged - "+(coverImageHeight - y));
+        if (y < 100) {
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 coverImageView.getWidth(), (coverImageHeight - y));
 
             coverImageView.setLayoutParams(params);
-
-        } else {
-
-            Log.d("[DEBUG]", "DetailActivity onScrollChanged - No more®");
         }
     }
+
+    private final HackVGTransitionListener transitionListener = new HackVGTransitionListener() {
+
+        @Override
+        public void onTransitionEnd(Transition transition) {
+
+            super.onTransitionEnd(transition);
+            GUIUtils.showViewByScale(fabButton);
+        }
+    };
 }
