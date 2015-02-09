@@ -24,9 +24,6 @@ dependencies {
 
     compile project(':domain') // Domain compiles model and common
 
-    // Third party l
-    compile 'com.getbase:floatingactionbutton:1.6.0'
-
     // Google libraries
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:support-v4:21.0.3'

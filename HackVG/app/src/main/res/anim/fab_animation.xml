@@ -6,7 +6,7 @@
         <set>
             <objectAnimator android:propertyName="translationZ"
                             android:duration="100"
-                            android:valueTo="2"
+                            android:valueTo="4"
                             android:valueType="floatType"/>
             <!-- you could have other objectAnimator elements
                  here for "x" and "y", or other properties -->
@@ -17,9 +17,9 @@
           android:state_focused="true">
         <set>
             <objectAnimator android:propertyName="translationZ"
-                            android:duration="100"
-                            android:valueTo="10"
-                            android:valueType="floatType"/>
+                android:duration="100"
+                android:valueTo="10"
+                android:valueType="floatType"/>
         </set>
     </item>
 </selector>

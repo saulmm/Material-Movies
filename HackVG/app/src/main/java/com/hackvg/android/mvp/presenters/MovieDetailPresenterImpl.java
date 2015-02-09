@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.TextUtils;
 
-import com.hackvg.android.R;
 import com.hackvg.android.mvp.views.MVPDetailView;
 import com.hackvg.android.provider.DbConstants;
 import com.hackvg.common.utils.BusProvider;
@@ -130,19 +129,6 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
             movieStatus.moveToFirst();
             int status = movieStatus.getInt(movieStatus.getColumnIndex(DbConstants.Movies.STATUS));
 
-            if (status == 1) {
-                movieDetailView.changePendingIcon(R.drawable.ic_bookmark_outline_black_24dp);
-            } else {
-                movieDetailView.changePendingIcon(R.drawable.ic_bookmark_outline_white_24dp);
-            }
-
-            if (status == 2) {
-                movieDetailView.changeViewedIcon(R.drawable.ic_done_black_24dp);
-            } else {
-                movieDetailView.changeViewedIcon(R.drawable.ic_done_white_24dp);
-            }
-
-
         } else {
 
             ContentValues values = new ContentValues();
@@ -150,8 +136,6 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
             values.put(DbConstants.Movies.ID_MOVIE, Integer.parseInt(movieID));
             movieDetailView.getContext().getContentResolver().insert(DbConstants.CONTENT_URI, values);
         }
-
-
     }
 
     @Override

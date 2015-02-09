@@ -3,7 +3,6 @@
 <com.hackvg.android.views.custom_views.ObservableScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/activity_movie_detail_scroll"
     android:layout_width="match_parent"
@@ -13,7 +12,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         >
 
         <ImageView
@@ -27,55 +25,33 @@
             android:id="@+id/activity_movie_detail_title"
             android:layout_width="match_parent"
             android:layout_height="96dp"
-            android:fontFamily="sans-serif-medium"
+            android:layout_below="@id/activity_movie_detail_cover_wtf"
             android:paddingLeft="48dp"
             android:paddingRight="48dp"
+            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="28sp"
+            android:textColor="#FFF"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:background="@color/theme_primary"
             android:elevation="4dp"
-            android:layout_below="@id/activity_movie_detail_cover_wtf"
-            android:gravity="center_vertical"
-            android:ellipsize="end"
-            android:textSize="28sp"
-            android:maxLines="2"
-            android:textColor="#FFF"
             tools:text="An awesome title"
             />
 
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/activity_detail_fab_menu"
+
+        <ImageButton
+            android:id="@+id/activity_movie_detail_fab"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/activity_movie_detail_cover_wtf"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="-105dp"
-            android:elevation="10dp"
-            fab:fab_expandDirection="up"
-            fab:fab_labelStyle="@style/MaterialMoviesFabLabel"
-            fab:fab_addButtonColorNormal="@color/theme_accent"
-            fab:fab_addButtonColorPressed="@color/theme_accent"
-            >
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/activity_detail_fab_pending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/ic_bookmark_outline_white_24dp"
-                fab:fab_colorNormal="@color/theme_accent"
-                fab:fab_size="mini"
-                fab:fab_colorPressed="@color/theme_accent"
-                />
-
-            <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/activity_detail_fab_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_icon="@drawable/ic_done_white_24dp"
-                fab:fab_colorNormal="@color/theme_accent"
-                fab:fab_size="mini"
-                fab:fab_colorPressed="@color/theme_accent"
-                />
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            android:layout_marginTop="-27dp"
+            android:src="@drawable/ic_fab_star"
+            android:elevation="4dp"
+            android:stateListAnimator="@anim/fab_animation"
+            />
 
         <LinearLayout
             android:id="@+id/activity_detail_book_info"
@@ -92,30 +68,26 @@
             <TextView
                 android:id="@+id/activity_detail_homepage_value"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:textColor="#FFF"
-                android:visibility="gone"
+                android:layout_height="wrap_content"
                 tools:text="http://awesome.title.com"
                 tools:visibility="visible"
+                style="@style/MaterialMoviesDetailField"
                 />
 
             <TextView
                 android:id="@+id/activity_detail_company_value"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="6dp"
-                android:textColor="#FFF"
-                android:visibility="gone"
-                tools:text="Warner Bros, Paramount Pictures "
+                android:layout_height="wrap_content"
+                tools:visibility="visible"
+                tools:text="Warner Bros, Paramount Pictures"
+                style="@style/MaterialMoviesDetailField"
                 />
 
             <TextView
                 android:id="@+id/activity_detail_label_tagline"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:textColor="@color/theme_accent"
+                android:layout_height="wrap_content"
+
                 android:text="@string/activity_detail_label_tagline"
                 style="@style/MaterialMoviesHeaderTextView"
                 />
