@@ -1,128 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.hackvg.android.views.custom_views.ObservableScrollView
+
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
-    android:id="@+id/activity_movie_detail_scroll"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     >
 
-    <RelativeLayout
+
+    <com.hackvg.android.views.custom_views.ObservableScrollView
+        android:id="@+id/activity_movie_detail_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:visibility="invisible"
         >
 
-        <ImageView
-            android:id="@+id/activity_movie_detail_cover_wtf"
-            android:layout_width="match_parent"
-            android:layout_height="480dp"
-            android:scaleType="fitXY"
-            />
-
-        <com.hackvg.android.views.custom_views.LobsterTextView
-            android:id="@+id/activity_movie_detail_title"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_below="@id/activity_movie_detail_cover_wtf"
-            android:paddingLeft="48dp"
-            android:paddingRight="48dp"
-            android:gravity="center_vertical"
-            android:fontFamily="sans-serif-medium"
-            android:textSize="28sp"
-            android:textColor="#FFF"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:background="@color/theme_primary"
-            android:elevation="4dp"
-            tools:text="An awesome title"
-            />
-
-
-        <ImageButton
-            android:id="@+id/activity_movie_detail_fab"
-            android:layout_width="@dimen/fab_size"
-            android:layout_height="@dimen/fab_size"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/activity_movie_detail_cover_wtf"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="-27dp"
-            android:src="@drawable/ic_fab_star"
-            android:elevation="4dp"
-            android:stateListAnimator="@anim/fab_animation"
-            />
-
-        <LinearLayout
-            android:id="@+id/activity_detail_book_info"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin_double_double"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:layout_below="@id/activity_movie_detail_title"
             >
 
-            <TextView
-                android:id="@+id/activity_detail_homepage_value"
+            <ImageView
+                android:id="@+id/activity_movie_detail_cover_wtf"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="http://awesome.title.com"
-                tools:visibility="visible"
-                style="@style/MaterialMoviesDetailField"
+                android:layout_height="480dp"
+                android:scaleType="fitXY"
                 />
 
-            <TextView
-                android:id="@+id/activity_detail_company_value"
+            <com.hackvg.android.views.custom_views.LobsterTextView
+                android:id="@+id/activity_movie_detail_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:visibility="visible"
-                tools:text="Warner Bros, Paramount Pictures"
-                style="@style/MaterialMoviesDetailField"
-                />
-
-            <TextView
-                android:id="@+id/activity_detail_label_tagline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:text="@string/activity_detail_label_tagline"
-                style="@style/MaterialMoviesHeaderTextView"
-                />
-
-            <TextView
-                android:id="@+id/activity_detail_tagline_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="96dp"
+                android:layout_below="@id/activity_movie_detail_cover_wtf"
+                android:paddingLeft="48dp"
+                android:paddingRight="48dp"
                 android:gravity="center_vertical"
-                android:lineSpacingExtra="6dp"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="28sp"
                 android:textColor="#FFF"
-                tools:text="Mankind was born on Earth. It was never meant to die here."
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:background="@color/theme_primary"
+                android:elevation="4dp"
+                tools:text="An awesome title"
                 />
 
-            <TextView
-                android:id="@+id/activity_detail_movie_description"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin_half"
-                android:textColor="@color/theme_accent"
-                android:text="@string/activity_detail_label_description"
-                style="@style/MaterialMoviesHeaderTextView"
+            <ImageButton
+                android:id="@+id/activity_movie_detail_fab"
+                android:layout_width="@dimen/fab_size"
+                android:layout_height="@dimen/fab_size"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/activity_movie_detail_cover_wtf"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="-27dp"
+                android:src="@drawable/ic_fab_star"
+                android:elevation="4dp"
+                android:stateListAnimator="@anim/fab_animation"
                 />
 
-            <TextView
-                android:id="@+id/activity_movie_detail_content"
+            <LinearLayout
+                android:id="@+id/activity_detail_book_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="6dp"
-                android:textColor="#FFF"
-                android:text="@string/lorem"
-                />
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin_double_double"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:layout_below="@id/activity_movie_detail_title"
+                >
 
-        </LinearLayout>
-    </RelativeLayout>
-</com.hackvg.android.views.custom_views.ObservableScrollView>
+                <TextView
+                    android:id="@+id/activity_detail_homepage_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="http://awesome.title.com"
+                    tools:visibility="visible"
+                    style="@style/MaterialMoviesDetailField"
+                    />
 
+                <TextView
+                    android:id="@+id/activity_detail_company_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="visible"
+                    tools:text="Warner Bros, Paramount Pictures"
+                    style="@style/MaterialMoviesDetailField"
+                    />
+
+                <TextView
+                    android:id="@+id/activity_detail_label_tagline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/activity_detail_label_tagline"
+                    style="@style/MaterialMoviesHeaderTextView"
+                    />
+
+                <TextView
+                    android:id="@+id/activity_detail_tagline_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#FFF"
+                    tools:text="Mankind was born on Earth. It was never meant to die here."
+                    />
+
+                <TextView
+                    android:id="@+id/activity_detail_movie_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin_half"
+                    android:textColor="@color/theme_accent"
+                    android:text="@string/activity_detail_label_description"
+                    style="@style/MaterialMoviesHeaderTextView"
+                    />
+
+                <TextView
+                    android:id="@+id/activity_movie_detail_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#FFF"
+                    android:text="@string/lorem"
+                    />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+    </com.hackvg.android.views.custom_views.ObservableScrollView>
+
+
+    <FrameLayout
+        android:id="@+id/activity_movie_detai_confirmation_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/theme_primary"
+        android:visibility="gone"
+        >
+
+        <com.hackvg.android.views.custom_views.LobsterTextView
+            android:id="@+id/activity_movie_detail_confirmation_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saved !! "
+            android:layout_gravity="center_horizontal"
+            android:textSize="40sp"
+            android:layout_marginTop="@dimen/activity_vertical_margin_double_double"
+            android:textColor="#FFFFFF"/>
+
+        <ImageView
+            android:id="@+id/activity_movide_detail_confirmation_image"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:src="@drawable/animation_star"
+            />
+
+
+    </FrameLayout>
+
+
+</merge>

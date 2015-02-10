@@ -1,11 +1,13 @@
 package com.hackvg.android.utils;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewPropertyAnimator;
 import android.widget.TextView;
 
@@ -33,7 +35,6 @@ public class GUIUtils {
             textview.setCompoundDrawablePadding(padding);
         }
 
-
     /**
      * Shows a view by scaling
      *
@@ -47,5 +48,18 @@ public class GUIUtils {
             .scaleX(1).scaleY(1);
 
         return propertyAnimator;
+    }
+
+    public static void showViewByRevealEffect (View hidenView, View centerPointView, int height) {
+
+        int cx = (centerPointView.getLeft() + centerPointView.getRight())   / 2;
+        int cy = (centerPointView.getTop()  + centerPointView.getBottom())  / 2;
+
+        Animator anim = ViewAnimationUtils.createCircularReveal(
+            hidenView, cx, cy, 0, height);
+
+        // make the view visible and start the animation
+        hidenView.setVisibility(View.VISIBLE);
+        anim.start();
     }
 }

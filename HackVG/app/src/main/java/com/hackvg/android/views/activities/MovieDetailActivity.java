@@ -3,13 +3,19 @@ package com.hackvg.android.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.graphics.Palette;
+import android.transition.Slide;
 import android.transition.Transition;
+import android.view.Display;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -47,11 +53,17 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @InjectView(R.id.activity_detail_tagline_value)             TextView taglineTextView;
     @InjectView(R.id.activity_movie_detail_fab)                 ImageView fabButton;
     @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
+    @InjectView(R.id.activity_movide_detail_confirmation_image)       ImageView confirmationView;
+    @InjectView(R.id.activity_movie_detai_confirmation_container) FrameLayout confirmationContainer;
+    @InjectView(R.id.activity_movie_detail_confirmation_text)   TextView confirmationText;
 
     private MovieDetailPresenter detailPresenter;
     private int coverImageHeight;
 
     private Drawable fabRipple;
+    private int mScreenHeight;
+    private Palette.Swatch vibrantSwatch;
+    private Palette.Swatch lightSwatch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +72,6 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
         setContentView(R.layout.activity_detail);
 
         getWindow().getSharedElementEnterTransition().addListener(transitionListener);
-
         ButterKnife.inject(this);
 
         int moviePosition = getIntent().getIntExtra("movie_position", 0);
@@ -73,7 +84,13 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         fabButton.setScaleX(0);
         fabButton.setScaleY(0);
-        fabButton.setTranslationZ(200);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        mScreenHeight = size.y;
+
 
         observableScrollView.setScrollViewListener(this);
 
@@ -93,7 +110,6 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         Bitmap bookCoverBitmap = MoviesActivityMVP.photoCache.get(0);
         coverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
-
 
         Palette.generateAsync(bookCoverBitmap, this);
     }
@@ -131,6 +147,44 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     }
 
     @Override
+    public void showConfirmationView() {
+
+        GUIUtils.showViewByRevealEffect(confirmationContainer,
+            fabButton, mScreenHeight);
+
+        animateConfirmationView();
+        startClosingConfirmationView();
+    }
+
+    @Override
+    public void animateConfirmationView() {
+
+        Drawable drawable = confirmationView.getDrawable();
+
+        if (drawable instanceof Animatable) {
+
+            ((Animatable) drawable).start();
+        }
+
+    }
+
+    @Override
+    public void startClosingConfirmationView() {
+
+        int milliseconds = 500;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                observableScrollView.setVisibility(View.GONE);
+                MovieDetailActivity.this. finishAfterTransition();
+            }
+
+        }, milliseconds);
+    }
+
+    @Override
     public void setHomepage(String homepage) {
 
         homepageTextview.setVisibility(View.VISIBLE);
@@ -155,9 +209,9 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         if (palette != null) {
 
-            Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+            vibrantSwatch = palette.getVibrantSwatch();
             Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-            Palette.Swatch lightSwatch = palette.getLightVibrantSwatch();
+            lightSwatch = palette.getLightVibrantSwatch();
 
             if (lightSwatch != null) {
 
@@ -167,6 +221,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
                 companiesTextview.setTextColor(lightSwatch.getTitleTextColor());
                 homepageTextview.setTextColor(lightSwatch.getTitleTextColor());
                 fabRipple.setColorFilter(lightSwatch.getRgb(), PorterDuff.Mode.ADD);
+                confirmationContainer.setBackgroundColor(lightSwatch.getRgb());
             }
 
             if (lightSwatch == null && vibrantSwatch != null) {
@@ -176,6 +231,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
                     .getColor(R.color.theme_primary);
 
                 fabRipple.setColorFilter(primaryColor, PorterDuff.Mode.ADD);
+                confirmationView.setBackgroundColor(primaryColor);
                 overviewContainer.setBackgroundColor(primaryColor);
             }
 
@@ -186,6 +242,10 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
     public void colorBrightElements (Palette.Swatch brightSwatch) {
 
+        Drawable drawable = confirmationView.getDrawable();
+        drawable.setColorFilter(brightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+        confirmationText.setTextColor(brightSwatch.getRgb());
+        
         titleTextView.setTextColor(brightSwatch.getTitleTextColor());
         titleTextView.setBackgroundColor(brightSwatch.getRgb());
 
@@ -207,7 +267,13 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @OnClick(R.id.activity_movie_detail_fab)
     public void onClick(ImageButton v) {
 
-        detailPresenter.onViewedPressed();
+
+        showConfirmationView();
+
+
+        getWindow().setReturnTransition(new Slide());
+
+
     }
 
     @Override
