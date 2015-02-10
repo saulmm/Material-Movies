@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
                 android:scaleType="fitXY"
+                android:background="@drawable/gradient_dark"
                 />
 
             <com.hackvg.android.views.custom_views.LobsterTextView

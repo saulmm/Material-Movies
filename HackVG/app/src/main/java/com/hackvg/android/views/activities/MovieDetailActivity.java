@@ -42,28 +42,33 @@ import butterknife.OnClick;
 public class MovieDetailActivity extends Activity implements MVPDetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
 
-    @InjectView(R.id.activity_movie_detail_cover_wtf)           ImageView coverImageView;
-    @InjectView(R.id.activity_detail_book_info)                 View overviewContainer;
-    @InjectView(R.id.activity_detail_movie_description)         TextView descriptionTitle;
-    @InjectView(R.id.activity_movie_detail_title)               TextView titleTextView;
-    @InjectView(R.id.activity_movie_detail_content)             TextView descriptionTextView;
-    @InjectView(R.id.activity_detail_homepage_value)            TextView homepageTextview;
-    @InjectView(R.id.activity_detail_company_value)             TextView companiesTextview;
-    @InjectView(R.id.activity_detail_label_tagline)             TextView taglineLabelTextview;
-    @InjectView(R.id.activity_detail_tagline_value)             TextView taglineTextView;
-    @InjectView(R.id.activity_movie_detail_fab)                 ImageView fabButton;
-    @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView observableScrollView;
-    @InjectView(R.id.activity_movide_detail_confirmation_image)       ImageView confirmationView;
-    @InjectView(R.id.activity_movie_detai_confirmation_container) FrameLayout confirmationContainer;
-    @InjectView(R.id.activity_movie_detail_confirmation_text)   TextView confirmationText;
+    @InjectView(R.id.activity_detail_book_info)                     View overviewContainer;
+    @InjectView(R.id.activity_detail_movie_description)             TextView descriptionTitle;
+    @InjectView(R.id.activity_movie_detail_title)                   TextView titleTextView;
+    @InjectView(R.id.activity_movie_detail_content)                 TextView descriptionTextView;
+    @InjectView(R.id.activity_detail_homepage_value)                TextView homepageTextview;
+    @InjectView(R.id.activity_detail_company_value)                 TextView companiesTextview;
+    @InjectView(R.id.activity_detail_label_tagline)                 TextView taglineLabelTextview;
+    @InjectView(R.id.activity_detail_tagline_value)                 TextView taglineTextView;
+    @InjectView(R.id.activity_movie_detail_confirmation_text)       TextView confirmationText;
+    @InjectView(R.id.activity_movie_detail_fab)                     ImageView fabButton;
+    @InjectView(R.id.activity_movie_detail_cover_wtf)               ImageView coverImageView;
+    @InjectView(R.id.activity_movide_detail_confirmation_image)     ImageView confirmationView;
+    @InjectView(R.id.activity_movie_detai_confirmation_container)   FrameLayout confirmationContainer;
+    @InjectView(R.id.activity_movie_detail_scroll)                  ObservableScrollView observableScrollView;
 
     private MovieDetailPresenter detailPresenter;
     private int coverImageHeight;
 
     private Drawable fabRipple;
     private int mScreenHeight;
-    private Palette.Swatch vibrantSwatch;
-    private Palette.Swatch lightSwatch;
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        detailPresenter.onResume();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,13 +120,6 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     }
 
     @Override
-    protected void onResume() {
-
-        super.onResume();
-        detailPresenter.onResume();
-    }
-
-    @Override
     public void setName(String title) {
 
         titleTextView.setText(title);
@@ -161,17 +159,15 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         Drawable drawable = confirmationView.getDrawable();
 
-        if (drawable instanceof Animatable) {
-
+        if (drawable instanceof Animatable)
             ((Animatable) drawable).start();
-        }
-
     }
 
     @Override
     public void startClosingConfirmationView() {
 
-        int milliseconds = 500;
+        int milliseconds = 700;
+        getWindow().setReturnTransition(new Slide());
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -209,9 +205,9 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         if (palette != null) {
 
-            vibrantSwatch = palette.getVibrantSwatch();
+            Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
             Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-            lightSwatch = palette.getLightVibrantSwatch();
+            Palette.Swatch lightSwatch = palette.getLightVibrantSwatch();
 
             if (lightSwatch != null) {
 
@@ -245,7 +241,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
         Drawable drawable = confirmationView.getDrawable();
         drawable.setColorFilter(brightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
         confirmationText.setTextColor(brightSwatch.getRgb());
-        
+
         titleTextView.setTextColor(brightSwatch.getTitleTextColor());
         titleTextView.setBackgroundColor(brightSwatch.getRgb());
 
@@ -267,13 +263,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @OnClick(R.id.activity_movie_detail_fab)
     public void onClick(ImageButton v) {
 
-
         showConfirmationView();
-
-
-        getWindow().setReturnTransition(new Slide());
-
-
     }
 
     @Override
@@ -282,13 +272,12 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
         if (coverImageHeight == 0)
             coverImageHeight = coverImageView.getHeight();
 
-        if (y < 100) {
+
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 coverImageView.getWidth(), (coverImageHeight - y));
 
             coverImageView.setLayoutParams(params);
-        }
     }
 
     private final HackVGTransitionListener transitionListener = new HackVGTransitionListener() {
