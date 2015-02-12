@@ -19,4 +19,10 @@ public interface MVPDetailView extends MVPView {
     public void setTagline(String tagline);
 
     public void finish(String cause);
+
+    public void showConfirmationView ();
+
+    public void animateConfirmationView ();
+
+    public void startClosingConfirmationView();
 }

@@ -6,7 +6,7 @@
 
     <item>
         <shape android:shape="oval">
-            <solid android:color="?android:colorAccent"/>
+            <solid android:color="?android:attr/selectableItemBackground"/>
         </shape>
     </item>
 </ripple>
