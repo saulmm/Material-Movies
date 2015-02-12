@@ -26,7 +26,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
                 android:scaleType="fitXY"
-                android:background="@drawable/gradient_dark"
                 />
 
             <com.hackvg.android.views.custom_views.LobsterTextView
@@ -34,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="96dp"
                 android:layout_below="@id/activity_movie_detail_cover_wtf"
+                android:layout_marginTop="-5dp"
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
                 android:gravity="center_vertical"
@@ -51,6 +51,8 @@
                 android:id="@+id/activity_movie_detail_fab"
                 android:layout_width="@dimen/fab_size"
                 android:layout_height="@dimen/fab_size"
+                android:scaleX="0"
+                android:scaleY="0"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/activity_movie_detail_cover_wtf"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
@@ -91,7 +93,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/activity_detail_label_tagline"
+                    android:id="@+id/activity_detail_header_tagline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -110,7 +112,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/activity_detail_movie_description"
+                    android:id="@+id/activity_detail_movie_header_description"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="@dimen/activity_vertical_margin_half"

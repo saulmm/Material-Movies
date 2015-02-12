@@ -3,7 +3,6 @@ package com.hackvg.android.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,12 +12,9 @@ import android.os.Handler;
 import android.support.v7.graphics.Palette;
 import android.transition.Slide;
 import android.transition.Transition;
-import android.view.Display;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +28,11 @@ import com.hackvg.android.utils.HackVGTransitionListener;
 import com.hackvg.android.views.custom_views.ObservableScrollView;
 import com.hackvg.android.views.custom_views.ScrollViewListener;
 
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.InjectViews;
 import butterknife.OnClick;
 
 /**
@@ -42,26 +41,41 @@ import butterknife.OnClick;
 public class MovieDetailActivity extends Activity implements MVPDetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
 
+    @InjectViews({
+        R.id.activity_movie_detail_title,
+        R.id.activity_movie_detail_content,
+        R.id.activity_detail_homepage_value,
+        R.id.activity_detail_company_value,
+        R.id.activity_detail_tagline_value,
+        R.id.activity_movie_detail_confirmation_text,
+    }) List<TextView> movieInfoTextViews;
+
+    @InjectViews({
+        R.id.activity_detail_header_tagline,
+        R.id.activity_detail_movie_header_description
+    }) List<TextView> headers;
+
     @InjectView(R.id.activity_detail_book_info)                     View overviewContainer;
-    @InjectView(R.id.activity_detail_movie_description)             TextView descriptionTitle;
-    @InjectView(R.id.activity_movie_detail_title)                   TextView titleTextView;
-    @InjectView(R.id.activity_movie_detail_content)                 TextView descriptionTextView;
-    @InjectView(R.id.activity_detail_homepage_value)                TextView homepageTextview;
-    @InjectView(R.id.activity_detail_company_value)                 TextView companiesTextview;
-    @InjectView(R.id.activity_detail_label_tagline)                 TextView taglineLabelTextview;
-    @InjectView(R.id.activity_detail_tagline_value)                 TextView taglineTextView;
-    @InjectView(R.id.activity_movie_detail_confirmation_text)       TextView confirmationText;
     @InjectView(R.id.activity_movie_detail_fab)                     ImageView fabButton;
-    @InjectView(R.id.activity_movie_detail_cover_wtf)               ImageView coverImageView;
+    @InjectView(R .id.activity_movie_detail_cover_wtf)              ImageView coverImageView;
     @InjectView(R.id.activity_movide_detail_confirmation_image)     ImageView confirmationView;
     @InjectView(R.id.activity_movie_detai_confirmation_container)   FrameLayout confirmationContainer;
+
     @InjectView(R.id.activity_movie_detail_scroll)                  ObservableScrollView observableScrollView;
 
+    private final int TITLE         = 0;
+    private final int DESCRIPTION   = 1;
+    private final int HOMEPAGE      = 2;
+    private final int COMPANY       = 3;
+    private final int TAGLINE       = 4;
+    private final int CONFIRMATION  = 5;
+
     private MovieDetailPresenter detailPresenter;
+    private Palette.Swatch mBrightSwatch;
+    private Drawable fabRipple;
+
     private int coverImageHeight;
 
-    private Drawable fabRipple;
-    private int mScreenHeight;
 
     @Override
     protected void onResume() {
@@ -77,27 +91,18 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
         setContentView(R.layout.activity_detail);
 
         getWindow().getSharedElementEnterTransition().addListener(transitionListener);
+        GUIUtils.makeTheStatusbarTranslucent(this);
         ButterKnife.inject(this);
 
         int moviePosition = getIntent().getIntExtra("movie_position", 0);
         String movieID = getIntent().getStringExtra("movie_id");
-
         coverImageView.setTransitionName("cover" + moviePosition);
 
         fabRipple = getResources().getDrawable(R.drawable.ripple_round);
         fabButton.setBackground(fabRipple);
 
-        fabButton.setScaleX(0);
-        fabButton.setScaleY(0);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        mScreenHeight = size.y;
-
-
         observableScrollView.setScrollViewListener(this);
+
 
         detailPresenter = new MovieDetailPresenterImpl(this, movieID);
         detailPresenter.onCreate();
@@ -113,7 +118,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @Override
     public void setImage(String url) {
 
-        Bitmap bookCoverBitmap = MoviesActivityMVP.photoCache.get(0);
+        Bitmap bookCoverBitmap = MoviesActivity.photoCache.get(0);
         coverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
 
         Palette.generateAsync(bookCoverBitmap, this);
@@ -122,13 +127,13 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @Override
     public void setName(String title) {
 
-        titleTextView.setText(title);
+        movieInfoTextViews.get(TITLE).setText(title);
     }
 
     @Override
     public void setDescription(String description) {
 
-        descriptionTextView.setText(description);
+        movieInfoTextViews.get(DESCRIPTION).setText(description);
     }
 
     @Override
@@ -148,7 +153,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     public void showConfirmationView() {
 
         GUIUtils.showViewByRevealEffect(confirmationContainer,
-            fabButton, mScreenHeight);
+            fabButton, GUIUtils.getWindowWidth(this));
 
         animateConfirmationView();
         startClosingConfirmationView();
@@ -167,6 +172,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     public void startClosingConfirmationView() {
 
         int milliseconds = 700;
+
         getWindow().setReturnTransition(new Slide());
 
         new Handler().postDelayed(new Runnable() {
@@ -183,21 +189,21 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @Override
     public void setHomepage(String homepage) {
 
-        homepageTextview.setVisibility(View.VISIBLE);
-        homepageTextview.setText(homepage);
+        movieInfoTextViews.get(HOMEPAGE).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(HOMEPAGE).setText(homepage);
     }
 
     @Override
     public void setCompanies(String companies) {
 
-        companiesTextview.setVisibility(View.VISIBLE);
-        companiesTextview.setText(companies);
+        movieInfoTextViews.get(COMPANY).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(COMPANY).setText(companies);
     }
 
     @Override
     public void setTagline(String tagline) {
 
-        taglineTextView.setText(tagline);
+        movieInfoTextViews.get(TAGLINE).setText(tagline);
     }
 
     @Override
@@ -212,10 +218,9 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
             if (lightSwatch != null) {
 
                 overviewContainer.setBackgroundColor(lightSwatch.getRgb());
-                taglineTextView.setTextColor(lightSwatch.getTitleTextColor());
-                descriptionTextView.setTextColor(lightSwatch.getTitleTextColor());
-                companiesTextview.setTextColor(lightSwatch.getTitleTextColor());
-                homepageTextview.setTextColor(lightSwatch.getTitleTextColor());
+
+                ButterKnife.apply(movieInfoTextViews, GUIUtils.setter, lightSwatch.getTitleTextColor());
+
                 fabRipple.setColorFilter(lightSwatch.getRgb(), PorterDuff.Mode.ADD);
                 confirmationContainer.setBackgroundColor(lightSwatch.getRgb());
             }
@@ -240,31 +245,36 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         Drawable drawable = confirmationView.getDrawable();
         drawable.setColorFilter(brightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-        confirmationText.setTextColor(brightSwatch.getRgb());
 
-        titleTextView.setTextColor(brightSwatch.getTitleTextColor());
-        titleTextView.setBackgroundColor(brightSwatch.getRgb());
+        movieInfoTextViews.get(CONFIRMATION).setTextColor(brightSwatch.getRgb());
+        movieInfoTextViews.get(TITLE).setTextColor(brightSwatch.getTitleTextColor());
+        movieInfoTextViews.get(TITLE).setBackgroundColor(brightSwatch.getRgb());
+
+        mBrightSwatch = brightSwatch;
+
+        getWindow().setNavigationBarColor(mBrightSwatch.getRgb());
 
         if (brightSwatch != null) {
 
-            if (companiesTextview.getVisibility() == View.VISIBLE)
+            if (movieInfoTextViews.get(HOMEPAGE).getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
-                    brightSwatch.getRgb(), companiesTextview);
+                    brightSwatch.getRgb(), movieInfoTextViews.get(HOMEPAGE));
 
-            if (homepageTextview.getVisibility() == View.VISIBLE)
+            if (movieInfoTextViews.get(COMPANY).getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
-                    brightSwatch.getRgb(), homepageTextview);
+                    brightSwatch.getRgb(), movieInfoTextViews.get(COMPANY));
 
-            taglineLabelTextview.setTextColor(brightSwatch.getRgb());
-            descriptionTitle.setTextColor(brightSwatch.getRgb());
+            ButterKnife.apply(headers, GUIUtils.setter, brightSwatch.getRgb());
         }
     }
 
     @OnClick(R.id.activity_movie_detail_fab)
-    public void onClick(ImageButton v) {
+    public void onClick() {
 
         showConfirmationView();
     }
+
+    boolean isTranslucent = false;
 
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
@@ -272,12 +282,24 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
         if (coverImageHeight == 0)
             coverImageHeight = coverImageView.getHeight();
 
+        int limite = 1480;
 
+        if (y > limite) {
 
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                coverImageView.getWidth(), (coverImageHeight - y));
+            movieInfoTextViews.get(TITLE).setTranslationY(y - limite);
 
-            coverImageView.setLayoutParams(params);
+            if (!isTranslucent) {
+                GUIUtils.setTheStatusbarNotTranslucent(this);
+                getWindow().setStatusBarColor(mBrightSwatch.getRgb());
+                isTranslucent = true;
+            }
+        }
+
+        if (y < limite && isTranslucent) {
+
+            GUIUtils.makeTheStatusbarTranslucent(this);
+            isTranslucent = false;
+        }
     }
 
     private final HackVGTransitionListener transitionListener = new HackVGTransitionListener() {
