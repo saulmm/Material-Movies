@@ -1,6 +1,8 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:ordering="sequentially"
-    android:fillAfter="true">
+    android:shareInterpolator="true"
+    android:interpolator="@android:anim/accelerate_interpolator"
+    >
 
     <objectAnimator
         android:duration="500"
@@ -8,7 +10,7 @@
         android:valueFrom="@string/star_data"
         android:valueTo="@string/star_lollipop"
         android:valueType="pathType"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        />
 
     <objectAnimator
         android:duration="500"
@@ -16,5 +18,5 @@
         android:valueFrom="@string/star_lollipop"
         android:valueTo="@string/star_data"
         android:valueType="pathType"
-        android:interpolator="@android:anim/accelerate_interpolator"/>
+        />
 </set>

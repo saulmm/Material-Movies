@@ -15,6 +15,5 @@
             android:name="star"
             android:fillColor="#FFFFFF"
             android:pathData="@string/star_data"/>
-
     </group>
 </vector>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/star">
+    android:drawable="@drawable/vd_star">
 
     <target
         android:name="star_group"

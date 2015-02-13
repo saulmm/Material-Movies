@@ -278,14 +278,9 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
 
-        if (coverImageHeight == 0)
-            coverImageHeight = coverImageView.getHeight();
+        if (y > coverImageView.getHeight()) {
 
-        int limite = 1480;
-
-        if (y > limite) {
-
-            movieInfoTextViews.get(TITLE).setTranslationY(y - limite);
+            movieInfoTextViews.get(TITLE).setTranslationY(y - coverImageView.getHeight());
 
             if (!isTranslucent) {
                 GUIUtils.setTheStatusbarNotTranslucent(this);
@@ -294,7 +289,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
             }
         }
 
-        if (y < limite && isTranslucent) {
+        if (y < coverImageView.getHeight() && isTranslucent) {
 
             GUIUtils.makeTheStatusbarTranslucent(this);
             isTranslucent = false;
