@@ -1,12 +1,12 @@
 This projects support a series of articles about how to setup an android environment to develop an scalable, maintainable and testable projects.
 
-## Scenario
+### A useful stack on android 
 
-As an example, I will rely on the following project, is a proof of concept of a simple catalog of films, which can be marked as views or pendings.
+- [Architecture](http://saulmm.github.io/2015/02/02/A%20useful%20stack%20on%20android%20%231,%20architecture/) 
 
-The information about the films is taken from a public API called [themoviedb](https://www.themoviedb.org/documentation/api), you can find nice documentation in this section at [Apiary](http: // docs. themoviedb.apiary.io/#).
+- [User interface](http://saulmm.github.io/a-useful-stack-on-android-2-user-interface/)
 
-This project is based on the pattern [Model View Presenter](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) also implements some _guidelines_ of [Material Design](http://www.google.com/design/spec/material-design/introduction.html) like transitions, structures, animations, colors etc ...
+### Screenshots
 
 ![](http://androcode.es/wp-content/uploads/2015/02/1.png)
 ![](http://androcode.es/wp-content/uploads/2015/02/2.png)
