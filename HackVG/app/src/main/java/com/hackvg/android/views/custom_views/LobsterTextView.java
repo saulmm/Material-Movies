@@ -13,22 +13,24 @@ public class LobsterTextView extends TextView {
 
         super(context);
 
-        init(context);
+        if (!isInEditMode())
+            init(context);
     }
 
     public LobsterTextView(Context context, AttributeSet attrs) {
 
         super(context, attrs);
 
-        init(context);
+        if (!isInEditMode())
+            init(context);
     }
 
     public LobsterTextView(Context context, AttributeSet attrs, int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);
 
-
-        init(context);
+        if (!isInEditMode())
+            init(context);
 
     }
 

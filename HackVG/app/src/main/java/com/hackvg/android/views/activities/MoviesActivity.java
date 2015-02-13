@@ -21,7 +21,7 @@ import com.hackvg.android.utils.HackVGClickListener;
 import com.hackvg.android.R;
 import com.hackvg.android.views.adapters.MoviesAdapter;
 import com.hackvg.android.views.fragments.NavigationDrawerFragment;
-import com.hackvg.android.mvp.views.PopularMoviesView;
+import com.hackvg.android.mvp.views.MVPPopularMoviesView;
 import com.hackvg.android.mvp.presenters.PopularShowsPresenterImpl;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
 import com.hackvg.model.entities.TvMovie;
@@ -33,7 +33,7 @@ import butterknife.InjectView;
 
 
 public class MoviesActivity extends ActionBarActivity implements
-    PopularMoviesView, HackVGClickListener, View.OnClickListener {
+    MVPPopularMoviesView, HackVGClickListener, View.OnClickListener {
 
     private static final int COLUMNS = 2;
 
@@ -123,7 +123,7 @@ public class MoviesActivity extends ActionBarActivity implements
     @Override
     public void onClick(View v, int position) {
 
-        Intent i = new Intent (MoviesActivity.this, MVPDetailActivity.class);
+        Intent i = new Intent (MoviesActivity.this, MovieDetailActivity.class);
         String movieID = moviesAdapter.getMovieList().get(position).getId();
         i.putExtra("movie_id", movieID);
         i.putExtra("movie_position", position);
@@ -139,7 +139,6 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
-        public int lastDy;
         public boolean flag;
 
         @Override
@@ -147,30 +146,26 @@ public class MoviesActivity extends ActionBarActivity implements
 
             super.onScrolled(recyclerView, dx, dy);
 
-                if (toolbar == null)
-                    throw new IllegalStateException("BooksFragment has not a reference of the main toolbar");
+            // Is scrolling up
+            if (dy > 10) {
 
-                // Is scrolling up
-                if (dy > 10) {
+                if (!flag) {
 
-                    if (!flag) {
-
-                        showToolbar();
-                        flag = true;
-                    }
-
-                // is scrolling down
-                } else if (dy < -10) {
-
-                    if (flag) {
-
-                        hideToolbar();
-                        flag = false;
-                    }
+                    showToolbar();
+                    flag = true;
                 }
 
-                lastDy = dy;
+            // Is scrolling down
+            } else if (dy < -10) {
+
+                if (flag) {
+
+                    hideToolbar();
+                    flag = false;
+                }
             }
+
+        }
     };
 
     private void showToolbar() {

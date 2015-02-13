@@ -1,6 +1,6 @@
 package com.hackvg.android.mvp.presenters;
 
-import com.hackvg.android.mvp.views.PopularMoviesView;
+import com.hackvg.android.mvp.views.MVPPopularMoviesView;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;
@@ -11,11 +11,11 @@ import com.squareup.otto.Subscribe;
 
 public class PopularShowsPresenterImpl implements PopularShowsPresenter {
 
-    private final PopularMoviesView popularMoviesView;
+    private final MVPPopularMoviesView MVPPopularMoviesView;
 
-    public PopularShowsPresenterImpl(PopularMoviesView popularMoviesView) {
+    public PopularShowsPresenterImpl(MVPPopularMoviesView MVPPopularMoviesView) {
 
-        this.popularMoviesView = popularMoviesView;
+        this.MVPPopularMoviesView = MVPPopularMoviesView;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class PopularShowsPresenterImpl implements PopularShowsPresenter {
 
         BusProvider.getUIBusInstance().register(this);
 
-        popularMoviesView.showLoading();
+        MVPPopularMoviesView.showLoading();
 
         Usecase getPopularShows = new GetMoviesUsecaseController(GetMoviesUsecase.TV_MOVIES);
         getPopularShows.execute();
@@ -40,7 +40,7 @@ public class PopularShowsPresenterImpl implements PopularShowsPresenter {
     @Override
     public void onPopularMoviesReceived(PopularMoviesApiResponse popularMovies) {
 
-        popularMoviesView.hideLoading();
-        popularMoviesView.showMovies(popularMovies.getResults());
+        MVPPopularMoviesView.hideLoading();
+        MVPPopularMoviesView.showMovies(popularMovies.getResults());
     }
 }
