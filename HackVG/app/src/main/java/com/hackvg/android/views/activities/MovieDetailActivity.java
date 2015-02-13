@@ -103,7 +103,6 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
 
         observableScrollView.setScrollViewListener(this);
 
-
         detailPresenter = new MovieDetailPresenterImpl(this, movieID);
         detailPresenter.onCreate();
     }
@@ -171,7 +170,7 @@ public class MovieDetailActivity extends Activity implements MVPDetailView,
     @Override
     public void startClosingConfirmationView() {
 
-        int milliseconds = 700;
+        int milliseconds = 1500;
 
         getWindow().setReturnTransition(new Slide());
 

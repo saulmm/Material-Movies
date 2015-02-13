@@ -6,4 +6,8 @@
         android:name="star_group"
         android:animation="@anim/appear_rotate" />
 
+    <target
+        android:name="star"
+        android:animation="@anim/star_morph" />
+
 </animated-vector>
