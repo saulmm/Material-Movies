@@ -4,26 +4,27 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toolbar;
 
-import com.hackvg.android.utils.HackVGClickListener;
 import com.hackvg.android.R;
+import com.hackvg.android.mvp.presenters.MoviesPresenter;
+import com.hackvg.android.mvp.views.MoviesView;
+import com.hackvg.android.utils.RecyclerInsetsDecoration;
+import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.android.views.adapters.MoviesAdapter;
 import com.hackvg.android.views.fragments.NavigationDrawerFragment;
-import com.hackvg.android.mvp.views.MVPPopularMoviesView;
-import com.hackvg.android.mvp.presenters.PopularShowsPresenterImpl;
-import com.hackvg.android.utils.RecyclerInsetsDecoration;
 import com.hackvg.model.entities.TvMovie;
 
 import java.util.List;
@@ -33,55 +34,67 @@ import butterknife.InjectView;
 
 
 public class MoviesActivity extends ActionBarActivity implements
-    MVPPopularMoviesView, HackVGClickListener, View.OnClickListener {
+    MoviesView, RecyclerViewClickListener, View.OnClickListener {
 
+    /**
+     * Number of columns in the RecyclerView
+     */
     private static final int COLUMNS = 2;
 
-    @InjectView(R.id.recycler_popular_movies)   RecyclerView popularMoviesRecycler;
-    @InjectView(R.id.activity_main_progress)    ProgressBar progress;
-    @InjectView(R.id.activity_main_toolbar)     Toolbar toolbar;
+    /**
+     * A container used between this activity and MovieDetailActivity
+     * to share a Bitmap with a SharedElementTransition
+     */
+    public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
-    private MoviesAdapter moviesAdapter;
-    public static SparseArray<Bitmap> photoCache = new SparseArray<Bitmap>(1);
+    private MoviesAdapter mMoviesAdapter;
+    private MoviesPresenter mMoviesPresenter;
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private PopularShowsPresenterImpl popularShowsPresenter;
+
+    @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
+    @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
+    @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.inject(this);
 
-        // Set the toolbar as the SupportActionbar
-        setActionBar(toolbar);
-        getActionBar().setTitle("");
-        getActionBar().setHomeAsUpIndicator(
-            getDrawable(R.drawable.ic_menu_white_24dp));
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
 
-        toolbar.setNavigationOnClickListener(this);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        mToolbar.setNavigationOnClickListener(this);
 
-        popularMoviesRecycler.setLayoutManager(new GridLayoutManager(this, COLUMNS));
-        popularMoviesRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
-        popularMoviesRecycler.setOnScrollListener(recyclerScrollListener);
+        mRecycler.setLayoutManager(new GridLayoutManager(this, COLUMNS));
+        mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
+        mRecycler.setOnScrollListener(recyclerScrollListener);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
             getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
             (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        popularShowsPresenter = new PopularShowsPresenterImpl(this);
-        popularShowsPresenter.onCreate();
+        mMoviesPresenter = new MoviesPresenter(this);
     }
 
     @Override
     protected void onStop() {
 
         super.onStop();
-        popularShowsPresenter.onStop();
+        mMoviesPresenter.stop();
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        mMoviesPresenter.start();
     }
 
     @Override
@@ -93,49 +106,62 @@ public class MoviesActivity extends ActionBarActivity implements
     @Override
     public void showMovies(List<TvMovie> movieList) {
 
-        moviesAdapter = new MoviesAdapter(movieList);
-        moviesAdapter.setHackVGClickListener(this);
-        popularMoviesRecycler.setAdapter(moviesAdapter);
+        mMoviesAdapter = new MoviesAdapter(movieList);
+        mMoviesAdapter.setRecyclerViewClickListener(this);
+        mRecycler.setAdapter(mMoviesAdapter);
     }
 
     @Override
     public void showLoading() {
 
-        progress.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
 
-        progress.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showError(String error) {
 
+        // TODO
     }
 
     @Override
     public void hideError() {
 
+        // TODO
     }
 
     @Override
     public void onClick(View v, int position) {
 
-        Intent i = new Intent (MoviesActivity.this, MovieDetailActivity.class);
-        String movieID = moviesAdapter.getMovieList().get(position).getId();
-        i.putExtra("movie_id", movieID);
-        i.putExtra("movie_position", position);
+        Intent movieDetailActivityIntent = new Intent (
+            MoviesActivity.this, MovieDetailActivity.class);
+
+        String movieID = mMoviesAdapter.getMovieList().get(position).getId();
+        movieDetailActivityIntent.putExtra("movie_id", movieID);
 
         ImageView coverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
-        photoCache.put(0, coverImage.getDrawingCache());
+        sPhotoCache.put(0, coverImage.getDrawingCache());
 
-        // Setup the transition to the detail activity
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-            this, new Pair<View, String>(v, "cover" + position));
+        // Perform a SharedElement transition on Lollipop and higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-        startActivity(i, options.toBundle());
+            movieDetailActivityIntent.putExtra("movie_position", position);
+
+            // Setup the transition to the detail activity
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                this, new Pair<View, String>(v, "cover" + position));
+
+            startActivity(movieDetailActivityIntent, options.toBundle());
+
+        } else {
+
+            startActivity(movieDetailActivityIntent);
+        }
     }
 
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
@@ -170,13 +196,13 @@ public class MoviesActivity extends ActionBarActivity implements
 
     private void showToolbar() {
 
-        toolbar.startAnimation(AnimationUtils.loadAnimation(this,
+        mToolbar.startAnimation(AnimationUtils.loadAnimation(this,
             R.anim.translate_up_off));
     }
 
     private void hideToolbar() {
 
-        toolbar.startAnimation(AnimationUtils.loadAnimation(this,
+        mToolbar.startAnimation(AnimationUtils.loadAnimation(this,
             R.anim.translate_up_on));
     }
 

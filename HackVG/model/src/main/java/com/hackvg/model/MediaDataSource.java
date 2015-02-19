@@ -10,4 +10,6 @@ public interface MediaDataSource {
     public void getMovies();
 
     public void getDetailMovie (String id);
+
+    public void getConfiguration ();
 }

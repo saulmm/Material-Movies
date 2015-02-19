@@ -5,4 +5,8 @@ targetCompatibility = 1.6
 dependencies {
     compile project (':common')
     compile project (':model')
+
+    //test dependencies
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.mockito:mockito-core:1.9.5'
 }

@@ -8,6 +8,6 @@
 
     <target
         android:name="star"
-        android:animation="@anim/star_morph" />
+        android:animation="@anim/morph_star_lollipop" />
 
 </animated-vector>

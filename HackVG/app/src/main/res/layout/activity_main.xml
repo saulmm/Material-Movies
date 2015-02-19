@@ -14,8 +14,14 @@
         tools:context=".MainActivity"
         >
 
-        <android.widget.Toolbar
-            android:id="@+id/activity_main_toolbar"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_popular_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_movies_toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
@@ -30,19 +36,10 @@
                 android:textSize="22sp"
                 android:textColor="#FFF"
                 />
-
-        </android.widget.Toolbar>
-
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_popular_movies"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+        </android.support.v7.widget.Toolbar>
 
         <ProgressBar
-            android:id="@+id/activity_main_progress"
+            android:id="@+id/activity_movies_progress"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_marginTop="@dimen/activity_vertical_margin"
@@ -61,8 +58,6 @@
         android:name="com.hackvg.android.views.fragments.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer"
         />
-
-
 
 
 </android.support.v4.widget.DrawerLayout>

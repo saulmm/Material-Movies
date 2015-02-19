@@ -4,13 +4,26 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    aaptOptions {
+        useNewCruncher false
+    }
+
+    packagingOptions {
+        exclude 'APK LICENSE.txt'
+        exclude 'LICENSE.txt'
+    }
+
     defaultConfig {
         applicationId "com.hackvg.android"
-        minSdkVersion 21
+        testApplicationId "com.hackvg.android.test"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        minSdkVersion 16
         targetSdkVersion 21
         versionCode 1
         versionName "0.2"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -21,15 +34,21 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    compile project(':domain') 
+    compile project(':domain')
 
     // Google libraries
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.android.support:palette-v7:21.0.0'
+    compile 'com.android.support:support-v13:21.0.3'
+    compile 'com.android.support:support-v4:21.0.3'
+
+    // Testing libraries (Only in cltesting builds)
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
 
     // Square libraries
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.jakewharton:butterknife:6.0.0'
+
 }

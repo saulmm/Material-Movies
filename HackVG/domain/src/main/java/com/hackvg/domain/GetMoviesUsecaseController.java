@@ -4,26 +4,33 @@ import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
 import com.hackvg.model.entities.PopularShowsApiResponse;
-import com.hackvg.model.entities.TvMovie;
-import com.hackvg.model.rest.RestMovieSource;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import java.util.List;
 
 /**
  * Created by saulmm on 31/01/15.
  */
-public class GetMoviesUsecaseController implements GetMoviesUsecase {
+
+public class GetMoviesUsecaseController implements GetMoviesUsecase, GetMoviesUsecase.MoviesCallback {
 
     private final MediaDataSource dataSource;
     private final int mode;
+    private final Bus uiBus;
 
     private PopularMoviesApiResponse response;
 
-    public GetMoviesUsecaseController(int mode) {
+    public GetMoviesUsecaseController(
+        int mode, MediaDataSource dataSource, Bus uiBus) {
 
-        this.dataSource = RestMovieSource.getInstance();
+        if (mode == GetMoviesUsecase.TV_SHOWS)
+            throw  new IllegalArgumentException("The Shows feature is not implemented yet");
+
+        if (dataSource == null || uiBus == null)
+            throw new IllegalArgumentException("MediaDataSource & the event bus cannot be null");
+
+        this.dataSource = dataSource;
         this.mode = mode;
+        this.uiBus = uiBus;
 
         BusProvider.getRestBusInstance().register(this);
     }
@@ -44,6 +51,7 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
     @Override
     public void onPopularShowsReceived(PopularShowsApiResponse response) {
 
+        // TODO
     }
 
     @Subscribe
@@ -60,11 +68,9 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
         switch (mode) {
 
             case GetMoviesUsecase.TV_MOVIES:
-                BusProvider.getUIBusInstance().post(response);
+                uiBus.post(response);
                 break;
 
-            case GetMoviesUsecase.TV_SHOWS:
-                break;
         }
 
         BusProvider.getRestBusInstance().unregister(this);
@@ -84,4 +90,6 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
                 break;
         }
     }
+
+
 }

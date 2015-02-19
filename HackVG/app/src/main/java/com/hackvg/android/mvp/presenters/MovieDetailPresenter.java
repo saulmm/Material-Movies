@@ -1,39 +1,97 @@
 package com.hackvg.android.mvp.presenters;
 
+import android.text.TextUtils;
+
+import com.hackvg.android.mvp.views.DetailView;
+import com.hackvg.common.utils.BusProvider;
+import com.hackvg.common.utils.Constants;
+import com.hackvg.domain.GetMovieDetailUsecaseController;
+import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.Production_companies;
+import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
 
-@SuppressWarnings("UnusedDeclaration")
-public interface MovieDetailPresenter  {
+public class MovieDetailPresenter extends Presenter {
 
-    public void showDescription (String description);
+    private final DetailView mMovieDetailView;
+    private final String mMovieID;
 
-    public void showCover (String url);
+    public MovieDetailPresenter(DetailView movieDetailView, String movieID) {
 
-    public void onResume();
+        mMovieDetailView = movieDetailView;
+        mMovieID = movieID;
+    }
 
-    public void onCreate ();
+    public void showDescription(String description) {
 
-    public void onStop ();
+        mMovieDetailView.setDescription(description);
+    }
 
-    public void showTagline (String tagLine);
+    public void showCover(String url) {
 
-    public void showName (String title);
+        String coverUrl = Constants.BASIC_STATIC_URL + url;
+        mMovieDetailView.setImage(coverUrl);
+    }
 
-    public void showCompanies (List<Production_companies> companies);
+    @Override
+    public void start() {
 
-    public void setChecked ();
+        BusProvider.getUIBusInstance().register(this);
 
-    public void setPending ();
+        Usecase getDetailUsecase = new GetMovieDetailUsecaseController(mMovieID);
+        getDetailUsecase.execute();
+    }
 
-    public void onDetailInformationReceived (MovieDetailResponse response);
+    @Override
+    public void stop() {
 
-    public void onViewedPressed();
+        BusProvider.getUIBusInstance().unregister(this);
+    }
 
-    public void onPendingPressed();
+    public void showTagline(String tagLine) {
 
-    public void showHomepage (String homepage);
+        mMovieDetailView.setTagline(tagLine);
+    }
+
+    public void showTitle(String title) {
+
+        mMovieDetailView.setName(title);
+    }
+
+    public void showCompanies(List<Production_companies> companies) {
+
+        String companiesString = "";
+
+        for (int i = 0; i < companies.size(); i++) {
+
+            Production_companies company = companies.get(i);
+            companiesString += company.getName();
+
+            if (i != companies.size() -1)
+                companiesString += ", ";
+        }
+
+        if (!companies.isEmpty())
+            mMovieDetailView.setCompanies(companiesString);
+    }
+
+    @Subscribe
+    public void onDetailInformationReceived(MovieDetailResponse response) {
+
+        showDescription(response.getOverview());
+        showTitle(response.getTitle());
+        showCover(response.getPoster_path());
+        showTagline(response.getTagline());
+        showCompanies(response.getProduction_companies());
+        showHomepage(response.getHomepage());
+    }
+
+    public void showHomepage(String homepage) {
+
+        if (!TextUtils.isEmpty(homepage))
+            mMovieDetailView.setHomepage(homepage);
+    }
 }

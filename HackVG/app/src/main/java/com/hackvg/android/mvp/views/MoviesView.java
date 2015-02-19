@@ -4,7 +4,7 @@ import com.hackvg.model.entities.TvMovie;
 
 import java.util.List;
 
-public interface MVPPopularMoviesView extends MVPView {
+public interface MoviesView extends MVPView {
 
     void showMovies (List<TvMovie> movieList);
 

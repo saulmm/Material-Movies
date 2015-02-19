@@ -8,6 +8,19 @@ import com.hackvg.model.entities.PopularShowsApiResponse;
  */
 public interface GetMoviesUsecase extends Usecase {
 
+
+    public interface MoviesCallback {
+
+        /**
+         *  Callback sent after receive the movies
+         *  by now I am using event bus to async calls so
+         *  this callback is not used
+         *
+          * @param response containing the films
+         */
+        public void onPopularMoviesReceived(PopularMoviesApiResponse response);
+    }
+
     public static final int TV_SHOWS = 0;
     public static final int TV_MOVIES = 1;
 

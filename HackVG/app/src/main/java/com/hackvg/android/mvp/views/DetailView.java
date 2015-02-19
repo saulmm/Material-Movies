@@ -4,7 +4,7 @@ package com.hackvg.android.mvp.views;
 /**
  * Created by saulmm on 31/01/15.
  */
-public interface MVPDetailView extends MVPView {
+public interface DetailView extends MVPView {
 
     public void setImage (String url);
 

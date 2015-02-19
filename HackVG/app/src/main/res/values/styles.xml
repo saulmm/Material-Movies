@@ -1,9 +1,12 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary_dark</item>
+        <item name="colorAccent">@color/theme_accent</item>
     </style>
+
+    <style name="TransAppTheme" parent="AppTheme"/>
 
     <style name="MaterialMoviesHeaderTextView" parent="android:Widget.TextView">
         <item name="android:gravity">center_vertical</item>
