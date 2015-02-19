@@ -46,7 +46,9 @@ public class MoviesPresenter extends Presenter {
 
         mMoviesView.showLoading();
 
-        Usecase configureUsecase = new ConfigurationUsecaseController();
+        Usecase configureUsecase = new ConfigurationUsecaseController(
+            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+
         configureUsecase.execute();
     }
 
