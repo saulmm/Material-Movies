@@ -14,6 +14,7 @@ public class TvMovie {
     private String vote_average;
     private String vote_count;
     private String overview;
+    private boolean movieReady;
 
     public TvMovie(String id, String title, String overview) {
 
@@ -70,5 +71,15 @@ public class TvMovie {
     public String getVote_count() {
 
         return vote_count;
+    }
+
+    public void setMovieReady(boolean movieReady) {
+
+        this.movieReady = movieReady;
+    }
+
+    public boolean isMovieReady() {
+
+        return movieReady;
     }
 }
