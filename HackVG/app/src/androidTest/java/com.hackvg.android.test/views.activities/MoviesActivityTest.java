@@ -9,6 +9,7 @@ import com.hackvg.android.views.activities.MoviesActivity;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Created by saulmm on 17/02/15.
@@ -42,6 +43,18 @@ public class MoviesActivityTest extends ActivityInstrumentationTestCase2<MoviesA
 
         Espresso.onView(withId(R.id.activity_movies_progress))
             .check(matches(isDisplayed()));
+    }
+
+    public void testRecyclerViewIsShown () throws InterruptedException {
+
+        // Work around, it would be better use Espresso Idling resources
+        Thread.sleep(1000);
+
+        Espresso.onView(withId(R.id.recycler_popular_movies))
+            .check(matches(isDisplayed()));
+
+        Espresso.onView(withId(R.id.activity_movies_progress))
+            .check(matches(not(isDisplayed())));
     }
 
 }

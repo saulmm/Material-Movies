@@ -1,15 +1,16 @@
 import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;
 import com.hackvg.model.MediaDataSource;
+import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -49,10 +50,12 @@ public class GetMoviesUsecaseTest {
     @Test
     public void testUiFilmsPost () {
 
+
         // Called from rest
         getMoviesUsecase.onPopularMoviesReceived(
-            Mockito.any(PopularMoviesApiResponse.class));
+            any(PopularMoviesApiResponse.class));
 
-        verify(mockUiBus, times(1)).post(Mockito.any(PopularMoviesApiResponse.class));
+        verify(mockUiBus, times(1)).post(
+            any(PopularMoviesApiResponse.class));
     }
 }

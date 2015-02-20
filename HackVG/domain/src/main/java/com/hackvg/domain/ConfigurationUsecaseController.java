@@ -3,7 +3,7 @@ package com.hackvg.domain;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ConfigurationResponse;
-import com.hackvg.model.rest.RestMovieSource;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -14,10 +14,13 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     private final String DESIRED_QUALITY = "w780";
 
     private final MediaDataSource movieDataSource;
+    private final Bus uiBus;
 
-    public ConfigurationUsecaseController() {
+    public ConfigurationUsecaseController(MediaDataSource mediaDataSource, Bus uiBus) {
 
-        this.movieDataSource = RestMovieSource.getInstance();
+        this.movieDataSource = mediaDataSource;
+        this.uiBus = uiBus;
+
         BusProvider.getRestBusInstance().register(this);
     }
 
@@ -38,22 +41,29 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     @Override
     public void configure(ConfigurationResponse configuration) {
 
-        String url = configuration.getImages().getBase_url();
-        String imageQuality = "";
+        String url = "";
 
-        for (String quality : configuration.getImages().getBackdrop_sizes()) {
+        if (configuration.getImages() != null) {
 
-            if (quality.equals(DESIRED_QUALITY)) {
+            url = configuration.getImages()
+                .getBase_url();
+            String imageQuality = "";
 
-                imageQuality = DESIRED_QUALITY;
-                break;
+            for (String quality : configuration.getImages().getBackdrop_sizes()) {
+
+                if (quality.equals(DESIRED_QUALITY)) {
+
+                    imageQuality = DESIRED_QUALITY;
+                    break;
+                }
             }
+
+            if (imageQuality.equals(""))
+                imageQuality = "original";
+
+            url += imageQuality;
         }
 
-        if (imageQuality.equals(""))
-            imageQuality = "original";
-
-        url += imageQuality;
-        BusProvider.getUIBusInstance().post(url);
+        uiBus.post(url);
    }
 }

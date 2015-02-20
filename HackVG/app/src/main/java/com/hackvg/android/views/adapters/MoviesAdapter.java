@@ -13,6 +13,7 @@ import com.hackvg.android.R;
 import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.model.entities.TvMovie;
 import com.hackvg.common.utils.Constants;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(final MovieViewHolder holder, final int position) {
 
         TvMovie selectedMovie = movieList.get(position);
 
@@ -64,7 +65,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
         Picasso.with(context)
             .load(posterURL)
-            .into(holder.coverImageView);
+            .into(holder.coverImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                    movieList.get(position).setMovieReady(true);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
+    }
+
+    public boolean isMovieReady(int position) {
+
+        return movieList.get(position).isMovieReady();
     }
 
     @Override
@@ -90,6 +107,11 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         coverImageView.setDrawingCacheEnabled(true);
         coverImageView.setOnClickListener(this);
         this.onClickListener = onClickListener;
+    }
+
+    public void setReady(boolean ready) {
+
+        coverImageView.setTag(ready);
     }
 
     @Override
