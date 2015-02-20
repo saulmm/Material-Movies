@@ -26,7 +26,7 @@ public interface GetMovieDetailUsecase extends Usecase {
     public void onMovieDetailResponse (MovieDetailResponse response);
 
     /**
-     * Sends the MovieDetailResponse throught the communication system
+     * Sends the MovieDetailResponse thought the communication system
      * to be received by the presenter
      *
      * @param response the response containing the details of the film

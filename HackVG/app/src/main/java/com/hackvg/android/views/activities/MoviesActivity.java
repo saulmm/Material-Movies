@@ -136,8 +136,11 @@ public class MoviesActivity extends ActionBarActivity implements
         // TODO
     }
 
+
     @Override
     public void onClick(View v, int position) {
+
+
 
         Intent movieDetailActivityIntent = new Intent (
             MoviesActivity.this, MovieDetailActivity.class);

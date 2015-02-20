@@ -1,6 +1,8 @@
 package com.hackvg.android.test.views.activity;
 
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.hackvg.android.R;
@@ -57,4 +59,15 @@ public class MoviesActivityTest extends ActivityInstrumentationTestCase2<MoviesA
             .check(matches(not(isDisplayed())));
     }
 
+    public void testDetailActivityOpen () throws InterruptedException {
+
+        // Work around, it would be better use Espresso Idling resources
+        Thread.sleep(1000);
+
+        Espresso.onView(withId(R.id.recycler_popular_movies)).perform(
+            RecyclerViewActions.actionOnItemAtPosition(2, ViewActions.click()));
+
+        Espresso.onView(withId(R.id.activity_movie_detail_scroll))
+            .check(matches(isDisplayed()));
+    }
 }
