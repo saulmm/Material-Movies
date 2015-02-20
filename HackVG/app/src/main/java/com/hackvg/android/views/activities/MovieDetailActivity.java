@@ -122,11 +122,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
         }
 
         String movieID = getIntent().getStringExtra("movie_id");
-
-
-//        mObservableScrollView.setScrollViewListener(this);
-
         mDetailPresenter = new MovieDetailPresenter(this, movieID);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mObservableScrollView.setScrollViewListener(this);
     }
 
     @Override
@@ -177,17 +176,33 @@ public class MovieDetailActivity extends Activity implements DetailView,
         this.finish();
     }
 
+    /**
+     * Show a confirmation view with a reveal animation if the android version
+     * is v21 or higher, otherwise the view visibility is set to visible without
+     * an animation
+     */
     @Override
     public void showConfirmationView() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
             GUIUtils.showViewByRevealEffect(mConfirmationContainer,
                 mFabButton, GUIUtils.getWindowWidth(this));
+
+        } else {
+
+            mConfirmationContainer.setVisibility(View.VISIBLE);
+        }
 
         animateConfirmationView();
         startClosingConfirmationView();
     }
 
+    /**
+     * Starts an animation provided by a <animation-drawable> on Lollipop &
+     * higher versions, in lower versions a simple set with a scale and a rotate
+     * animation is shown
+     */
     @Override
     public void animateConfirmationView() {
 
@@ -290,6 +305,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             Drawable drawable = mConfirmationView.getDrawable();
             drawable.setColorFilter(brightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+
+        } else {
+
+            mConfirmationView.setColorFilter(brightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
         }
 
         movieInfoTextViews.get(CONFIRMATION).setTextColor(brightSwatch.getRgb());

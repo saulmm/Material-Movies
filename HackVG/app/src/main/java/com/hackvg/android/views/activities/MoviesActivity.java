@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.hackvg.android.R;
 import com.hackvg.android.mvp.presenters.MoviesPresenter;
@@ -147,20 +148,27 @@ public class MoviesActivity extends ActionBarActivity implements
         ImageView coverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
         sPhotoCache.put(0, coverImage.getDrawingCache());
 
-        // Perform a SharedElement transition on Lollipop and higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (mMoviesAdapter.isMovieReady(position)) {
+            // Perform a SharedElement transition on Lollipop and higher
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            movieDetailActivityIntent.putExtra("movie_position", position);
+                movieDetailActivityIntent.putExtra("movie_position", position);
 
-            // Setup the transition to the detail activity
-            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                this, new Pair<View, String>(v, "cover" + position));
+                // Setup the transition to the detail activity
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                    this, new Pair<View, String>(v, "cover" + position));
 
-            startActivity(movieDetailActivityIntent, options.toBundle());
+                startActivity(movieDetailActivityIntent, options.toBundle());
+
+            } else {
+
+                startActivity(movieDetailActivityIntent);
+            }
 
         } else {
 
-            startActivity(movieDetailActivityIntent);
+            Toast.makeText(this, "Movie loading, please wait", Toast.LENGTH_SHORT)
+                .show();
         }
     }
 
