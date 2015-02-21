@@ -3,75 +3,55 @@ package com.hackvg.domain;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
-import com.hackvg.model.entities.PopularShowsApiResponse;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 /**
- * Created by saulmm on 31/01/15.
+ * This class is an implementation of {@link GetMoviesUsecase}
  */
+public class GetMoviesUsecaseController implements GetMoviesUsecase {
 
-public class GetMoviesUsecaseController implements GetMoviesUsecase, GetMoviesUsecase.MoviesCallback {
+    private final MediaDataSource mDataSource;
+    private final Bus mUiBus;
 
-    private final MediaDataSource dataSource;
-    private final int mode;
-    private final Bus uiBus;
+    /**
+     * Constructor of the class.
+     *
+     * @param uiBus The bus to communicate the domain module and the app module
+     * @param dataSource The data source to retrieve the list of movies
+     */
+    public GetMoviesUsecaseController(MediaDataSource dataSource, Bus uiBus) {
 
-    private PopularMoviesApiResponse response;
+        if (dataSource == null)
+            throw new IllegalArgumentException("MediaDataSource cannot be null");
 
-    public GetMoviesUsecaseController(
-        int mode, MediaDataSource dataSource, Bus uiBus) {
+        if (uiBus == null)
+            throw new IllegalArgumentException("Bus cannot be null");
 
-        if (mode == GetMoviesUsecase.TV_SHOWS)
-            throw  new IllegalArgumentException("The Shows feature is not implemented yet");
-
-        if (dataSource == null || uiBus == null)
-            throw new IllegalArgumentException("MediaDataSource & the event bus cannot be null");
-
-        this.dataSource = dataSource;
-        this.mode = mode;
-        this.uiBus = uiBus;
+        mDataSource = dataSource;
+        mUiBus = uiBus;
 
         BusProvider.getRestBusInstance().register(this);
     }
 
-    @Override
-    public void getPopularShows() {
-
-        dataSource.getShows();
-    }
 
     @Override
-    public void getPopularMovies() {
+    public void requestPopularMovies() {
 
-        dataSource.getMovies ();
-    }
-
-    @Subscribe
-    @Override
-    public void onPopularShowsReceived(PopularShowsApiResponse response) {
-
-        // TODO
+        mDataSource.getMovies();
     }
 
     @Subscribe
     @Override
     public void onPopularMoviesReceived(PopularMoviesApiResponse response) {
 
-        this.response = response;
-        sendShowsToPresenter();
+        sendMoviesToPresenter(response);
     }
 
     @Override
-    public void sendShowsToPresenter() {
+    public void sendMoviesToPresenter (PopularMoviesApiResponse response) {
 
-        switch (mode) {
-
-            case GetMoviesUsecase.TV_MOVIES:
-                uiBus.post(response);
-                break;
-
-        }
+        mUiBus.post(response);
 
         BusProvider.getRestBusInstance().unregister(this);
     }
@@ -79,17 +59,6 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase, GetMoviesUs
     @Override
     public void execute() {
 
-        switch (mode) {
-
-            case GetMoviesUsecase.TV_MOVIES:
-                getPopularMovies();
-                break;
-
-            case GetMoviesUsecase.TV_SHOWS:
-                getPopularShows();
-                break;
-        }
+        requestPopularMovies();
     }
-
-
 }

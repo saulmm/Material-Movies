@@ -46,6 +46,7 @@ dependencies {
     // Testing libraries (Only in cltesting builds)
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.0'
 
     // Square libraries
     compile 'com.squareup.picasso:picasso:2.4.0'
