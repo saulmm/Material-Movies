@@ -61,7 +61,6 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
         mUiBus.post(response);
     }
 
-
     @Override
     public void execute() {
 
