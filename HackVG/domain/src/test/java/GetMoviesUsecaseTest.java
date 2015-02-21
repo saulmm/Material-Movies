@@ -1,7 +1,6 @@
 import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;
 import com.hackvg.model.MediaDataSource;
-import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
 import com.squareup.otto.Bus;
 
@@ -33,7 +32,7 @@ public class GetMoviesUsecaseTest {
         MockitoAnnotations.initMocks(this);
 
         getMoviesUsecase = new GetMoviesUsecaseController(
-            GetMoviesUsecase.TV_MOVIES, mockDataSource, mockUiBus
+            mockDataSource, mockUiBus
         );
     }
 

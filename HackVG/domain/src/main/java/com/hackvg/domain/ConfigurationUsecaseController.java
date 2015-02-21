@@ -7,27 +7,45 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 /**
- * Created by saulmm on 15/02/15.
+ * This class is an implementation of {@link ConfigurationUsecase}
  */
 public class ConfigurationUsecaseController implements ConfigurationUsecase {
 
     private final String DESIRED_QUALITY = "w780";
 
-    private final MediaDataSource movieDataSource;
-    private final Bus uiBus;
+    private final MediaDataSource mMediaDataSource;
+    private final Bus mUiBus;
 
+    /**
+     * Constructor of the class.
+     *
+     * @param uiBus The bus to communicate the domain module and the app module
+     * @param mediaDataSource The data source to retrieve the  configuariton
+     */
     public ConfigurationUsecaseController(MediaDataSource mediaDataSource, Bus uiBus) {
 
-        this.movieDataSource = mediaDataSource;
-        this.uiBus = uiBus;
+        if (mediaDataSource == null)
+            throw new IllegalArgumentException("Media data source cannot be null");
+
+        if (uiBus == null)
+            throw new IllegalArgumentException("Ui bus cannot be null");
+
+        mMediaDataSource = mediaDataSource;
+        mUiBus = uiBus;
 
         BusProvider.getRestBusInstance().register(this);
     }
 
     @Override
+    public void requestConfiguration () {
+
+        mMediaDataSource.getConfiguration();
+    }
+
+    @Override
     public void execute() {
 
-        movieDataSource.getConfiguration();
+        requestConfiguration();
     }
 
     @Subscribe
@@ -35,21 +53,20 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     public void onConfigurationReceived(ConfigurationResponse configuration) {
 
         BusProvider.getRestBusInstance().unregister(this);
-        configure(configuration);
+        configureImageUrl(configuration);
     }
 
-    @Override
-    public void configure(ConfigurationResponse configuration) {
+    public void configureImageUrl (ConfigurationResponse configurationResponse) {
 
         String url = "";
 
-        if (configuration.getImages() != null) {
+        if (configurationResponse.getImages() != null) {
 
-            url = configuration.getImages()
+            url = configurationResponse.getImages()
                 .getBase_url();
             String imageQuality = "";
 
-            for (String quality : configuration.getImages().getBackdrop_sizes()) {
+            for (String quality : configurationResponse.getImages().getBackdrop_sizes()) {
 
                 if (quality.equals(DESIRED_QUALITY)) {
 
@@ -62,8 +79,14 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
                 imageQuality = "original";
 
             url += imageQuality;
+            sendConfiguredUrlToPresenter(url);
         }
+    }
 
-        uiBus.post(url);
+
+    @Override
+    public void sendConfiguredUrlToPresenter (String url) {
+
+        mUiBus.post(url);
    }
 }
