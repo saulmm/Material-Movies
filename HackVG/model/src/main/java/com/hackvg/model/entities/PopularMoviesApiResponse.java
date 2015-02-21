@@ -3,7 +3,7 @@ package com.hackvg.model.entities;
 
 import java.util.List;
 
-public class PopularMoviesApiResponse extends ApiResponse {
+public class PopularMoviesApiResponse {
     private Number page;
 
     private List<TvMovie> results;

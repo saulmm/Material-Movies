@@ -1,6 +1,7 @@
 
 package com.hackvg.model.entities;
 
+@SuppressWarnings("UnusedDeclaration")
 public class TvMovie {
 
     private String adult;
