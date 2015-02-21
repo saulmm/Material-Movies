@@ -1,7 +1,7 @@
 package com.hackvg.model.entities;
 
 /**
- * Class that respresents the configuration in the model layer,
+ * Class that represents the configuration in the model layer,
  *
  * The configuration gets the system wide configuration information. Some elements of the API
  * require some knowledge of this configuration data. The purpose of this is to try and keep the

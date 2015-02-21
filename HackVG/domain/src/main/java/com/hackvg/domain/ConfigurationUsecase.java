@@ -3,11 +3,36 @@ package com.hackvg.domain;
 import com.hackvg.model.entities.ConfigurationResponse;
 
 /**
- * Created by saulmm on 15/02/15.
+ * Representation of an use case to get the configuration parameters
+ * to use with the MovieDatabase api, such as the image endpoint
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface ConfigurationUsecase extends Usecase {
 
-    public void onConfigurationReceived (ConfigurationResponse configuration);
+    /**
+     * Request data source the configuration data
+     */
+    public void requestConfiguration ();
 
-    public void configure (ConfigurationResponse configuration);
+    /**
+     * Callback used to be notified when the configuration data has been received
+     *
+     * @param configurationResponse the configuration with the data about the endpoint
+     * of the images
+     */
+    public void onConfigurationReceived (ConfigurationResponse configurationResponse);
+
+    /**
+     * Configures the endpoint used to retrieve images from the movie database api
+     *
+     * @param configurationResponse the configuration with the data about the endpoint of the images
+     */
+    public void configureImageUrl (ConfigurationResponse configurationResponse);
+
+    /**
+     * Sends a configured to request images from the movie database api
+     *
+     * @param url configurated url
+     */
+    public void sendConfiguredUrlToPresenter(String url);
 }

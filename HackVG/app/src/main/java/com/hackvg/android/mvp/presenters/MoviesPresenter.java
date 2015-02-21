@@ -4,7 +4,6 @@ import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.ConfigurationUsecaseController;
-import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;
 import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
@@ -34,7 +33,7 @@ public class MoviesPresenter extends Presenter {
         Constants.BASIC_STATIC_URL = baseImageUrl;
 
         Usecase getPopularShows = new GetMoviesUsecaseController(
-            GetMoviesUsecase.TV_MOVIES, RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
 
         getPopularShows.execute();
     }

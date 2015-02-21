@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Material Movies</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mollis nunc massa, quis suscipit orci mattis a. Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum. Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum. Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum, Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum, Morbi ac dui in lacus finibus hendrerit. Ut vestibulum, Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum, Ut vestibulum, Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum, Morbi ac dui in lacus finibus hendrerit. Ut vestibulum, Nulla rutrum fringilla finibus. Morbi ac dui in lacus finibus hendrerit. Ut vestibulum</string>
     <string name="activity_detail_action_label_1">Pending</string>
     <string name="activity_detail_action_label_2">Viewed</string>
@@ -43,6 +40,4 @@
             C 255.048,238.561 254.706,187.75 248.302,183.489
             C 221.536,165.677 218.848,144.628 223.42,133.484 z
     </string>
-    <string name="path_data_star_left_eye">M153.5,175.333 C153.5,167.969 159.609,162 167.145,162 C174.681,162 180.79,167.969 180.79,175.333 C180.79,182.697 174.681,188.667 167.145,188.667 C159.609,188.667 153.5,182.697 153.5,175.333 Z</string>
-    <string name="path_data_star_right_eye">M225,175.333 C225,167.969 231.109,162 238.645,162 C246.181,162 252.29,167.969 252.29,175.333 C252.29,182.697 246.181,188.667 238.645,188.667 C231.109,188.667 225,182.697 225,175.333 Z</string>
 </resources>

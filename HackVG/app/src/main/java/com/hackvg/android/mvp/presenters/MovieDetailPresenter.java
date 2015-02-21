@@ -9,6 +9,7 @@ import com.hackvg.domain.GetMovieDetailUsecaseController;
 import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.Production_companies;
+import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
@@ -41,7 +42,9 @@ public class MovieDetailPresenter extends Presenter {
 
         BusProvider.getUIBusInstance().register(this);
 
-        Usecase getDetailUsecase = new GetMovieDetailUsecaseController(mMovieID);
+        Usecase getDetailUsecase = new GetMovieDetailUsecaseController(
+            mMovieID, BusProvider.getUIBusInstance(), RestMovieSource.getInstance());
+
         getDetailUsecase.execute();
     }
 
