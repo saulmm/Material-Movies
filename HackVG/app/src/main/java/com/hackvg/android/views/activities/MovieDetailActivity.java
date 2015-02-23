@@ -1,5 +1,7 @@
 package com.hackvg.android.views.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +16,8 @@ import android.support.v7.graphics.Palette;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -118,7 +122,35 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         } else {
 
-            GUIUtils.showViewByScale(mFabButton);
+            int [] viewLastLocation = getIntent().getIntArrayExtra("view_location");
+
+            mObservableScrollView.setScaleY(0.1f);
+            mObservableScrollView.setScaleX(0);
+            mObservableScrollView.setPivotX(viewLastLocation[0]);
+            mObservableScrollView.setPivotY(viewLastLocation[1]);
+
+            mObservableScrollView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+
+                    mObservableScrollView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    mObservableScrollView.animate()
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .scaleY(1)
+                        .scaleX(1)
+                        .setDuration(400)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+
+                                GUIUtils.showViewByScale(mFabButton);
+                            }
+                        })
+                        .start();
+
+                    return true;
+                }
+            });
         }
 
         String movieID = getIntent().getStringExtra("movie_id");

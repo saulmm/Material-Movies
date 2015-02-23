@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -91,7 +92,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     }
 }
 
-class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener{
 
     private final RecyclerViewClickListener onClickListener;
     TextView titleTextView;
@@ -105,7 +106,7 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         titleTextView = (TextView) itemView.findViewById(R.id.item_movie_title);
         coverImageView = (ImageView) itemView.findViewById(R.id.item_movie_cover);
         coverImageView.setDrawingCacheEnabled(true);
-        coverImageView.setOnClickListener(this);
+        coverImageView.setOnTouchListener(this);
         this.onClickListener = onClickListener;
     }
 
@@ -117,7 +118,17 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
-        onClickListener.onClick(v, getPosition());
+
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        if (event.getAction() == MotionEvent.ACTION_UP && event.getAction() != MotionEvent.ACTION_MOVE) {
+
+            onClickListener.onClick(v, getPosition(), event.getX(), event.getY());
+        }
+        return true;
     }
 }
 
