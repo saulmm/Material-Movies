@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -147,7 +148,7 @@ public class MoviesActivity extends ActionBarActivity implements
         movieDetailActivityIntent.putExtra("movie_id", movieID);
 
         ImageView coverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
-        sPhotoCache.put(0, coverImage.getDrawingCache());
+        sPhotoCache.put(0, ((BitmapDrawable)coverImage.getDrawable()).getBitmap());
 
         if (mMoviesAdapter.isMovieReady(position)) {
 
@@ -158,7 +159,7 @@ public class MoviesActivity extends ActionBarActivity implements
 
                 // Setup the transition to the detail activity
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    this, new Pair<View, String>(v, "cover" + position));
+                    this, new Pair<>(v, "cover" + position));
 
                 startActivity(movieDetailActivityIntent, options.toBundle());
 

@@ -12,8 +12,10 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewPropertyAnimator;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
 import com.hackvg.android.R;
@@ -101,4 +103,32 @@ public class GUIUtils {
             view.setTextColor(value);
         }
     };
+
+    public static void startScaleAnimationFromPivot (int pivotX, int pivotY, final View v,
+        final Animator.AnimatorListener animatorListener) {
+
+        v.setScaleX(0);
+        v.setScaleY(0);
+        v.setPivotX(pivotX);
+        v.setPivotY(pivotY);
+
+        v.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+
+                v.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                ViewPropertyAnimator viewPropertyAnimator = v.animate()
+                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .scaleX(1).scaleY(1)
+                    .setDuration(400);
+
+                if (animatorListener != null)
+                    viewPropertyAnimator.setListener(animatorListener);
+
+                viewPropertyAnimator.start();
+                return true;
+            }
+        });
+    }
 }
