@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -138,9 +139,7 @@ public class MoviesActivity extends ActionBarActivity implements
 
 
     @Override
-    public void onClick(View v, int position) {
-
-
+    public void onClick(View v, int position, float x, float y) {
 
         Intent movieDetailActivityIntent = new Intent (
             MoviesActivity.this, MovieDetailActivity.class);
@@ -149,9 +148,10 @@ public class MoviesActivity extends ActionBarActivity implements
         movieDetailActivityIntent.putExtra("movie_id", movieID);
 
         ImageView coverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
-        sPhotoCache.put(0, coverImage.getDrawingCache());
+        sPhotoCache.put(0, ((BitmapDrawable)coverImage.getDrawable()).getBitmap());
 
         if (mMoviesAdapter.isMovieReady(position)) {
+
             // Perform a SharedElement transition on Lollipop and higher
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -159,12 +159,22 @@ public class MoviesActivity extends ActionBarActivity implements
 
                 // Setup the transition to the detail activity
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    this, new Pair<View, String>(v, "cover" + position));
+                    this, new Pair<>(v, "cover" + position));
 
                 startActivity(movieDetailActivityIntent, options.toBundle());
 
+            // Collect the necessary parameters for scaling
             } else {
 
+                int[] location = {(int) x, (int) y};
+                int[] locationAtScreen = new int [2];
+                v.getLocationOnScreen(locationAtScreen);
+
+                int finalLocationX = locationAtScreen[0] + location[0];
+                int finalLocationY = locationAtScreen[1] + location[1];
+
+                int [] finalLocation = {finalLocationX, finalLocationY};
+                movieDetailActivityIntent.putExtra("view_location", finalLocation);
                 startActivity(movieDetailActivityIntent);
             }
 

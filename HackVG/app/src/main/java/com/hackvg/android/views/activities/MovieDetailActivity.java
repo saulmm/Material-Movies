@@ -118,7 +118,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         } else {
 
-            GUIUtils.showViewByScale(mFabButton);
+            int [] viewLastLocation = getIntent().getIntArrayExtra("view_location");
+
+            GUIUtils.startScaleAnimationFromPivot(viewLastLocation[0], viewLastLocation[1], mObservableScrollView, null);
         }
 
         String movieID = getIntent().getStringExtra("movie_id");
