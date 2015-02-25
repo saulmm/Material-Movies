@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.android.views.adapters.MoviesAdapter;
 import com.hackvg.android.views.fragments.NavigationDrawerFragment;
 import com.hackvg.model.entities.TvMovie;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
 
 import java.util.List;
 
@@ -51,9 +54,11 @@ public class MoviesActivity extends ActionBarActivity implements
 
     private MoviesAdapter mMoviesAdapter;
     private MoviesPresenter mMoviesPresenter;
+    private GridLayoutManager mGridLayoutManager;
+
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
@@ -72,7 +77,8 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         mToolbar.setNavigationOnClickListener(this);
 
-        mRecycler.setLayoutManager(new GridLayoutManager(this, COLUMNS));
+        mGridLayoutManager = new GridLayoutManager(this, COLUMNS);
+        mRecycler.setLayoutManager(mGridLayoutManager);
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
         mRecycler.setOnScrollListener(recyclerScrollListener);
 
@@ -137,6 +143,25 @@ public class MoviesActivity extends ActionBarActivity implements
         // TODO
     }
 
+    @Override
+    public void showLoadingLabel() {
+
+        Snackbar loadingSnackBar = Snackbar.with(this)
+            .text("Loading more films")
+            .actionLabel("Cancel")
+            .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+            .color(getResources().getColor(R.color.theme_primary))
+            .actionColor(getResources().getColor(R.color.theme_accent));
+
+        SnackbarManager.show(loadingSnackBar);
+    }
+
+    @Override
+    public void hideActionLabel() {
+
+        SnackbarManager.dismiss();
+    }
+
 
     @Override
     public void onClick(View v, int position, float x, float y) {
@@ -189,9 +214,26 @@ public class MoviesActivity extends ActionBarActivity implements
         public boolean flag;
 
         @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+            super.onScrollStateChanged(recyclerView, newState);
+            Log.d("[DEBUG]", "MoviesActivity onScrollStateChanged - NewState: "+newState);
+        }
+
+
+        @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
             super.onScrolled(recyclerView, dx, dy);
+            Log.d("[DEBUG]", "MoviesActivity onScrolled - DX: "+dx + " DY: "+dy);
+
+            visibleItemCount = mGridLayoutManager.getChildCount();
+            totalItemCount = mGridLayoutManager.getItemCount();
+            pastVisiblesItems = mGridLayoutManager.findFirstVisibleItemPosition();
+
+            if((visibleItemCount+pastVisiblesItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
+                mMoviesPresenter.onEndListReached();
+            }
 
             // Is scrolling up
             if (dy > 10) {

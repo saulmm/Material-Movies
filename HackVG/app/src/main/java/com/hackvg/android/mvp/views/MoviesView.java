@@ -15,4 +15,8 @@ public interface MoviesView extends MVPView {
     void showError (String error);
 
     void hideError ();
+
+    void showLoadingLabel();
+
+    void hideActionLabel ();
 }
