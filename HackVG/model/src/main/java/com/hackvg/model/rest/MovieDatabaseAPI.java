@@ -27,6 +27,13 @@ public interface MovieDatabaseAPI {
         Callback<MovieDetailResponse> callback
     );
 
+    @GET("/movie/popular")
+    void getPopularMoviesByPage(
+        @Query("api_key") String apiKey,
+        @Query("page") String page,
+        Callback<PopularMoviesApiResponse> callback
+    );
+
     @GET("/configuration")
     void getConfiguration (
         @Query("api_key") String apiKey,
