@@ -77,7 +77,7 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         mToolbar.setNavigationOnClickListener(this);
 
-        mGridLayoutManager = new GridLayoutManager(this, COLUMNS);
+        mGridLayoutManager = new GridLayoutManager(this, GridLayoutManager.DEFAULT_SPAN_COUNT);
         mRecycler.setLayoutManager(mGridLayoutManager);
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
         mRecycler.setOnScrollListener(recyclerScrollListener);
