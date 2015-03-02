@@ -1,8 +1,10 @@
 
 package com.hackvg.model.entities;
 
+import java.io.Serializable;
+
 @SuppressWarnings("UnusedDeclaration")
-public class TvMovie {
+public class TvMovie implements Serializable {
 
     private String adult;
     private String backdrop_path;

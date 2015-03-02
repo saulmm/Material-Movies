@@ -42,7 +42,7 @@ public class AutofitRecyclerView extends RecyclerView {
             array.recycle();
         }
 
-        mLayoutManager = new GridLayoutManager(getContext(), 1);
+        mLayoutManager = new GridLayoutManager(getContext(), 2);
         setLayoutManager(mLayoutManager);
     }
 
@@ -57,4 +57,6 @@ public class AutofitRecyclerView extends RecyclerView {
             mLayoutManager.setSpanCount(spanCount);
         }
     }
+
+
 }

@@ -1,7 +1,7 @@
 package com.hackvg.domain;
 
 import com.hackvg.common.utils.BusProvider;
-import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.rest.RestDataSource;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -44,13 +44,13 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
 
     @Subscribe
     @Override
-    public void onPopularMoviesReceived(PopularMoviesApiResponse response) {
+    public void onPopularMoviesReceived(MoviesWrapper response) {
 
         sendMoviesToPresenter(response);
     }
 
     @Override
-    public void sendMoviesToPresenter (PopularMoviesApiResponse response) {
+    public void sendMoviesToPresenter (MoviesWrapper response) {
 
         mUiBus.post(response);
 

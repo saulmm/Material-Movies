@@ -14,9 +14,10 @@
         tools:context=".MainActivity"
         >
 
-        <android.support.v7.widget.RecyclerView
+        <com.hackvg.android.views.custom_views.AutofitRecyclerView
             android:id="@+id/recycler_popular_movies"
             android:layout_width="match_parent"
+            android:columnWidth="@dimen/item_movie_with"
             android:layout_height="match_parent"
             />
 
@@ -58,6 +59,5 @@
         android:name="com.hackvg.android.views.fragments.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer"
         />
-
 
 </android.support.v4.widget.DrawerLayout>

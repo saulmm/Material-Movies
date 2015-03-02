@@ -2,7 +2,7 @@ package com.hackvg.model.rest;
 
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.MovieDetailResponse;
-import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.entities.MoviesWrapper;
 
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -18,7 +18,7 @@ public interface MovieDatabaseAPI {
     @GET("/movie/popular")
     void getPopularMovies(
         @Query("api_key") String apiKey,
-        Callback<PopularMoviesApiResponse> callback);
+        Callback<MoviesWrapper> callback);
 
     @GET("/movie/{id}")
     void getMovieDetail (
@@ -31,7 +31,7 @@ public interface MovieDatabaseAPI {
     void getPopularMoviesByPage(
         @Query("api_key") String apiKey,
         @Query("page") String page,
-        Callback<PopularMoviesApiResponse> callback
+        Callback<MoviesWrapper> callback
     );
 
     @GET("/configuration")

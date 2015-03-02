@@ -27,11 +27,11 @@ import com.hackvg.android.utils.RecyclerInsetsDecoration;
 import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.android.views.adapters.MoviesAdapter;
 import com.hackvg.android.views.fragments.NavigationDrawerFragment;
+import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.TvMovie;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -40,11 +40,6 @@ import butterknife.InjectView;
 
 public class MoviesActivity extends ActionBarActivity implements
     MoviesView, RecyclerViewClickListener, View.OnClickListener {
-
-    /**
-     * Number of columns in the RecyclerView
-     */
-    private static final int COLUMNS = 2;
 
     /**
      * A container used between this activity and MovieDetailActivity
@@ -59,6 +54,7 @@ public class MoviesActivity extends ActionBarActivity implements
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
@@ -77,12 +73,8 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         mToolbar.setNavigationOnClickListener(this);
 
-        mGridLayoutManager = new GridLayoutManager(this, GridLayoutManager.DEFAULT_SPAN_COUNT);
-        mRecycler.setLayoutManager(mGridLayoutManager);
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
         mRecycler.setOnScrollListener(recyclerScrollListener);
-
-
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
             getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -90,7 +82,17 @@ public class MoviesActivity extends ActionBarActivity implements
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
             (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        mMoviesPresenter = new MoviesPresenter(this);
+        if (savedInstanceState == null) {
+
+            mMoviesPresenter = new MoviesPresenter(this);
+
+        } else {
+
+            MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
+                .getSerializable("movies_wrapper");
+
+            mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
+        }
     }
 
     @Override
@@ -108,13 +110,22 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("movies_wrapper",
+            new MoviesWrapper(mMoviesAdapter.getMovieList()));
+
+    }
+
+    @Override
     public Context getContext() {
 
         return this;
     }
 
     @Override
-    public void showMovies(ArrayList<TvMovie> movieList) {
+    public void showMovies(List<TvMovie> movieList) {
 
         mMoviesAdapter = new MoviesAdapter(movieList);
         mMoviesAdapter.setRecyclerListListener(this);
@@ -234,9 +245,9 @@ public class MoviesActivity extends ActionBarActivity implements
 
             super.onScrolled(recyclerView, dx, dy);
 
-            visibleItemCount = mGridLayoutManager.getChildCount();
-            totalItemCount = mGridLayoutManager.getItemCount();
-            pastVisiblesItems = mGridLayoutManager.findFirstVisibleItemPosition();
+            visibleItemCount = mRecycler.getLayoutManager().getChildCount();
+            totalItemCount = mRecycler.getLayoutManager().getItemCount();
+            pastVisiblesItems = ((GridLayoutManager) mRecycler.getLayoutManager()).findFirstVisibleItemPosition();
 
             if((visibleItemCount+pastVisiblesItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
                 mMoviesPresenter.onEndListReached();

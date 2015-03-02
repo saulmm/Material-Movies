@@ -5,7 +5,7 @@ import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.MovieDetailResponse;
-import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.entities.MoviesWrapper;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -71,9 +71,9 @@ public class RestMovieSource implements RestDataSource {
                 MovieDetailResponse detailResponse = (MovieDetailResponse) o;
                 BusProvider.getRestBusInstance().post(detailResponse);
 
-            } else if (o instanceof PopularMoviesApiResponse) {
+            } else if (o instanceof MoviesWrapper) {
 
-                PopularMoviesApiResponse moviesApiResponse = (PopularMoviesApiResponse) o;
+                MoviesWrapper moviesApiResponse = (MoviesWrapper) o;
 
                 BusProvider.getRestBusInstance().post(
                     moviesApiResponse);
