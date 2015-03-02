@@ -22,22 +22,22 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
-    private final List<TvMovie> movieList;
-    public RecyclerViewClickListener recyclerViewClickListener;
-    private Context context;
+    private Context mContext;
+    private List<TvMovie> mMovieList;
+    private RecyclerViewClickListener mRecyclerClickListener;
 
-    public MoviesAdapter(List<TvMovie> movieList) {
+    public MoviesAdapter(List<TvMovie> mMovieList) {
 
-        this.movieList = movieList;
+        this.mMovieList = mMovieList;
     }
 
     public List<TvMovie> getMovieList() {
 
-        return movieList;
+        return mMovieList;
     }
 
-    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
-        this.recyclerViewClickListener = recyclerViewClickListener;
+    public void setRecyclerListListener(RecyclerViewClickListener mRecyclerClickListener) {
+        this.mRecyclerClickListener = mRecyclerClickListener;
     }
 
     @Override
@@ -46,16 +46,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         View rowView = LayoutInflater.from(viewGroup.getContext())
             .inflate(R.layout.item_movie, viewGroup, false);
 
-        this.context = viewGroup.getContext();
+        this.mContext = viewGroup.getContext();
 
-        return new MovieViewHolder(rowView, recyclerViewClickListener);
-
+        return new MovieViewHolder(rowView, mRecyclerClickListener);
     }
 
     @Override
     public void onBindViewHolder(final MovieViewHolder holder, final int position) {
 
-        TvMovie selectedMovie = movieList.get(position);
+        TvMovie selectedMovie = mMovieList.get(position);
 
         holder.titleTextView.setText(selectedMovie.getTitle());
 
@@ -64,13 +63,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
         String posterURL = Constants.BASIC_STATIC_URL + selectedMovie.getPoster_path();
 
-        Picasso.with(context)
+        Picasso.with(mContext)
             .load(posterURL)
             .into(holder.coverImageView, new Callback() {
                 @Override
                 public void onSuccess() {
 
-                    movieList.get(position).setMovieReady(true);
+                    mMovieList.get(position).setMovieReady(true);
                 }
 
                 @Override
@@ -82,17 +81,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
     public boolean isMovieReady(int position) {
 
-        return movieList.get(position).isMovieReady();
+        return mMovieList.get(position).isMovieReady();
     }
 
     @Override
     public int getItemCount() {
 
-        return movieList.size();
+        return mMovieList.size();
+    }
+
+    public void appendMovies(List<TvMovie> movieList) {
+
+        mMovieList.addAll(movieList);
+        notifyDataSetChanged();
     }
 }
 
-class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener{
+class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
     private final RecyclerViewClickListener onClickListener;
     TextView titleTextView;
@@ -115,11 +120,6 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         coverImageView.setTag(ready);
     }
 
-    @Override
-    public void onClick(View v) {
-
-
-    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {

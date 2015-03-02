@@ -14,28 +14,48 @@ import com.squareup.otto.Subscribe;
 public class MoviesPresenter extends Presenter {
 
     private final MoviesView mMoviesView;
+    private GetMoviesUsecaseController mGetPopularShows;
+    private boolean isLoading = false;
 
-    public MoviesPresenter(MoviesView mMoviesView) {
 
-        this.mMoviesView = mMoviesView;
+    public MoviesPresenter(MoviesView moviesView) {
+
+        mMoviesView = moviesView;
+
+        mGetPopularShows = new GetMoviesUsecaseController(
+            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
     }
 
     @Subscribe
     public void onPopularMoviesReceived(PopularMoviesApiResponse popularMovies) {
 
-        mMoviesView.hideLoading();
-        mMoviesView.showMovies(popularMovies.getResults());
+        if (mMoviesView.isTheListEmpty()) {
+
+            mMoviesView.hideLoading();
+            mMoviesView.showMovies(popularMovies.getResults());
+
+        } else {
+
+            mMoviesView.hideActionLabel();
+            mMoviesView.appendMovies(popularMovies.getResults());
+        }
+
+        isLoading = false;
     }
 
     @Subscribe
     public void onConfigurationFinished (String baseImageUrl) {
 
         Constants.BASIC_STATIC_URL = baseImageUrl;
+        mGetPopularShows.execute();
+    }
 
-        Usecase getPopularShows = new GetMoviesUsecaseController(
-            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
 
-        getPopularShows.execute();
+    public void onEndListReached () {
+
+        mGetPopularShows.execute();
+        mMoviesView.showLoadingLabel ();
+        isLoading = true;
     }
 
     @Override
@@ -55,5 +75,16 @@ public class MoviesPresenter extends Presenter {
     public void stop() {
 
         BusProvider.getUIBusInstance().unregister(this);
+        mGetPopularShows.unRegister();
+    }
+
+    public boolean isLoading() {
+
+        return isLoading;
+    }
+
+    public void setLoading(boolean isLoading) {
+
+        this.isLoading = isLoading;
     }
 }

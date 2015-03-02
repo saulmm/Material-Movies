@@ -1,8 +1,8 @@
 package com.hackvg.domain;
 
 import com.hackvg.common.utils.BusProvider;
-import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.rest.RestDataSource;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -11,8 +11,9 @@ import com.squareup.otto.Subscribe;
  */
 public class GetMoviesUsecaseController implements GetMoviesUsecase {
 
-    private final MediaDataSource mDataSource;
+    private final RestDataSource mDataSource;
     private final Bus mUiBus;
+    private int mCurrentPage = 1;
 
     /**
      * Constructor of the class.
@@ -20,7 +21,7 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
      * @param uiBus The bus to communicate the domain module and the app module
      * @param dataSource The data source to retrieve the list of movies
      */
-    public GetMoviesUsecaseController(MediaDataSource dataSource, Bus uiBus) {
+    public GetMoviesUsecaseController(RestDataSource dataSource, Bus uiBus) {
 
         if (dataSource == null)
             throw new IllegalArgumentException("MediaDataSource cannot be null");
@@ -38,7 +39,7 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
     @Override
     public void requestPopularMovies() {
 
-        mDataSource.getMovies();
+        mDataSource.getMoviesByPage(mCurrentPage);
     }
 
     @Subscribe
@@ -53,12 +54,19 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
 
         mUiBus.post(response);
 
+    }
+
+    @Override
+    public void unRegister() {
+
         BusProvider.getRestBusInstance().unregister(this);
+
     }
 
     @Override
     public void execute() {
 
         requestPopularMovies();
+        mCurrentPage++;
     }
 }

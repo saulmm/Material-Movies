@@ -3,7 +3,6 @@ package com.hackvg.model.rest;
 
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
-import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.PopularMoviesApiResponse;
@@ -16,7 +15,7 @@ import retrofit.client.Response;
 /**
  * Created by saulmm on 31/01/15.
  */
-public class RestMovieSource implements MediaDataSource {
+public class RestMovieSource implements RestDataSource {
 
     public static RestMovieSource INSTANCE;
     private final MovieDatabaseAPI moviesDBApi;
@@ -25,6 +24,7 @@ public class RestMovieSource implements MediaDataSource {
 
         RestAdapter movieAPIRest = new RestAdapter.Builder()
             .setEndpoint(Constants.MOVIE_DB_HOST)
+            .setLogLevel(RestAdapter.LogLevel.HEADERS_AND_ARGS)
             .build();
 
         moviesDBApi = movieAPIRest.create(MovieDatabaseAPI.class);
@@ -94,4 +94,14 @@ public class RestMovieSource implements MediaDataSource {
             System.out.printf("[DEBUG] RestMovieSource failure - " + error.getMessage());
         }
     };
+
+    @Override
+    public void getMoviesByPage(int page) {
+
+        moviesDBApi.getPopularMoviesByPage(
+            Constants.API_KEY,
+            page + "",
+            retrofitCallback
+        );
+    }
 }

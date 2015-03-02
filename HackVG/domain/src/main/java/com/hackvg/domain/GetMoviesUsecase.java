@@ -28,4 +28,6 @@ public interface GetMoviesUsecase extends Usecase {
      * @param response the response containing a list with movies
      */
     public void sendMoviesToPresenter (PopularMoviesApiResponse response);
+
+    public void unRegister ();
 }

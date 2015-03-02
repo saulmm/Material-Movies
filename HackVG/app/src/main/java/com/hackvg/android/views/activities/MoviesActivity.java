@@ -28,7 +28,10 @@ import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.android.views.adapters.MoviesAdapter;
 import com.hackvg.android.views.fragments.NavigationDrawerFragment;
 import com.hackvg.model.entities.TvMovie;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -51,9 +54,11 @@ public class MoviesActivity extends ActionBarActivity implements
 
     private MoviesAdapter mMoviesAdapter;
     private MoviesPresenter mMoviesPresenter;
+    private GridLayoutManager mGridLayoutManager;
+
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
@@ -72,9 +77,12 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         mToolbar.setNavigationOnClickListener(this);
 
-        mRecycler.setLayoutManager(new GridLayoutManager(this, COLUMNS));
+        mGridLayoutManager = new GridLayoutManager(this, COLUMNS);
+        mRecycler.setLayoutManager(mGridLayoutManager);
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
         mRecycler.setOnScrollListener(recyclerScrollListener);
+
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
             getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -106,10 +114,10 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void showMovies(List<TvMovie> movieList) {
+    public void showMovies(ArrayList<TvMovie> movieList) {
 
         mMoviesAdapter = new MoviesAdapter(movieList);
-        mMoviesAdapter.setRecyclerViewClickListener(this);
+        mMoviesAdapter.setRecyclerListListener(this);
         mRecycler.setAdapter(mMoviesAdapter);
     }
 
@@ -135,6 +143,38 @@ public class MoviesActivity extends ActionBarActivity implements
     public void hideError() {
 
         // TODO
+    }
+
+    @Override
+    public void showLoadingLabel() {
+
+        Snackbar loadingSnackBar = Snackbar.with(this)
+            .text("Loading more films")
+            .actionLabel("Cancel")
+            .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
+            .color(getResources().getColor(R.color.theme_primary))
+            .actionColor(getResources().getColor(R.color.theme_accent));
+
+        SnackbarManager.show(loadingSnackBar);
+    }
+
+    @Override
+    public void hideActionLabel() {
+
+        SnackbarManager.dismiss();
+    }
+
+    @Override
+    public boolean isTheListEmpty() {
+
+        return (mMoviesAdapter == null) || mMoviesAdapter.getMovieList().isEmpty();
+
+    }
+
+    @Override
+    public void appendMovies(List<TvMovie> movieList) {
+
+        mMoviesAdapter.appendMovies(movieList);
     }
 
 
@@ -188,10 +228,19 @@ public class MoviesActivity extends ActionBarActivity implements
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
         public boolean flag;
 
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
             super.onScrolled(recyclerView, dx, dy);
+
+            visibleItemCount = mGridLayoutManager.getChildCount();
+            totalItemCount = mGridLayoutManager.getItemCount();
+            pastVisiblesItems = mGridLayoutManager.findFirstVisibleItemPosition();
+
+            if((visibleItemCount+pastVisiblesItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
+                mMoviesPresenter.onEndListReached();
+            }
 
             // Is scrolling up
             if (dy > 10) {
