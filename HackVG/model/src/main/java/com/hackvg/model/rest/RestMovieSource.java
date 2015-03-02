@@ -24,6 +24,7 @@ public class RestMovieSource implements RestDataSource {
 
         RestAdapter movieAPIRest = new RestAdapter.Builder()
             .setEndpoint(Constants.MOVIE_DB_HOST)
+            .setLogLevel(RestAdapter.LogLevel.HEADERS_AND_ARGS)
             .build();
 
         moviesDBApi = movieAPIRest.create(MovieDatabaseAPI.class);

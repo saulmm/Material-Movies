@@ -29,8 +29,18 @@ public class MoviesPresenter extends Presenter {
     @Subscribe
     public void onPopularMoviesReceived(PopularMoviesApiResponse popularMovies) {
 
-        mMoviesView.hideLoading();
-        mMoviesView.showMovies(popularMovies.getResults());
+        if (mMoviesView.isTheListEmpty()) {
+
+            mMoviesView.hideLoading();
+            mMoviesView.showMovies(popularMovies.getResults());
+
+        } else {
+
+            mMoviesView.hideActionLabel();
+            mMoviesView.appendMovies(popularMovies.getResults());
+        }
+
+        isLoading = false;
     }
 
     @Subscribe
@@ -43,7 +53,7 @@ public class MoviesPresenter extends Presenter {
 
     public void onEndListReached () {
 
-//        mGetPopularShows.execute();
+        mGetPopularShows.execute();
         mMoviesView.showLoadingLabel ();
         isLoading = true;
     }
@@ -65,6 +75,7 @@ public class MoviesPresenter extends Presenter {
     public void stop() {
 
         BusProvider.getUIBusInstance().unregister(this);
+        mGetPopularShows.unRegister();
     }
 
     public boolean isLoading() {

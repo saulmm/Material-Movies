@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -32,6 +31,7 @@ import com.hackvg.model.entities.TvMovie;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -82,6 +82,8 @@ public class MoviesActivity extends ActionBarActivity implements
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
         mRecycler.setOnScrollListener(recyclerScrollListener);
 
+
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
             getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
@@ -112,10 +114,10 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void showMovies(List<TvMovie> movieList) {
+    public void showMovies(ArrayList<TvMovie> movieList) {
 
         mMoviesAdapter = new MoviesAdapter(movieList);
-        mMoviesAdapter.setRecyclerViewClickListener(this);
+        mMoviesAdapter.setRecyclerListListener(this);
         mRecycler.setAdapter(mMoviesAdapter);
     }
 
@@ -160,6 +162,19 @@ public class MoviesActivity extends ActionBarActivity implements
     public void hideActionLabel() {
 
         SnackbarManager.dismiss();
+    }
+
+    @Override
+    public boolean isTheListEmpty() {
+
+        return (mMoviesAdapter == null) || mMoviesAdapter.getMovieList().isEmpty();
+
+    }
+
+    @Override
+    public void appendMovies(List<TvMovie> movieList) {
+
+        mMoviesAdapter.appendMovies(movieList);
     }
 
 
@@ -213,19 +228,11 @@ public class MoviesActivity extends ActionBarActivity implements
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
         public boolean flag;
 
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-            super.onScrollStateChanged(recyclerView, newState);
-            Log.d("[DEBUG]", "MoviesActivity onScrollStateChanged - NewState: "+newState);
-        }
-
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
             super.onScrolled(recyclerView, dx, dy);
-            Log.d("[DEBUG]", "MoviesActivity onScrolled - DX: "+dx + " DY: "+dy);
 
             visibleItemCount = mGridLayoutManager.getChildCount();
             totalItemCount = mGridLayoutManager.getItemCount();

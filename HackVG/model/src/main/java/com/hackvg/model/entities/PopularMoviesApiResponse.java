@@ -1,12 +1,12 @@
 
 package com.hackvg.model.entities;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class PopularMoviesApiResponse {
     private Number page;
 
-    private List<TvMovie> results;
+    private ArrayList<TvMovie> results;
 
     private Number total_pages;
     private Number total_results;
@@ -21,7 +21,7 @@ public class PopularMoviesApiResponse {
         this.page = page;
     }
 
-    public List<TvMovie> getResults() {
+    public ArrayList<TvMovie> getResults() {
 
         return results;
     }

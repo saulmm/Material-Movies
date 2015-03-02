@@ -54,7 +54,13 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
 
         mUiBus.post(response);
 
+    }
+
+    @Override
+    public void unRegister() {
+
         BusProvider.getRestBusInstance().unregister(this);
+
     }
 
     @Override
