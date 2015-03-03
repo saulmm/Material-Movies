@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -58,6 +59,7 @@ public class MoviesActivity extends ActionBarActivity implements
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
+    @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
 
 
     @Override
@@ -253,6 +255,10 @@ public class MoviesActivity extends ActionBarActivity implements
                 mMoviesPresenter.onEndListReached();
             }
 
+            if (mTabletBackground != null)
+                mTabletBackground.setTranslationY(mTabletBackground.getY() - (dy /2));
+
+            Log.d("[DEBUG]", "MoviesActivity onScrolled - dy");
             // Is scrolling up
             if (dy > 10) {
 
