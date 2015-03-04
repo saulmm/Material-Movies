@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
 import butterknife.OnClick;
-import butterknife.Optional;
 
 public class MovieDetailActivity extends Activity implements DetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
