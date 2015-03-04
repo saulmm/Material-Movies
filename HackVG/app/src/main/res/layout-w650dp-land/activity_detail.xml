@@ -136,7 +136,6 @@
                     android:id="@+id/activity_detail_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:lineSpacingExtra="6dp"
                     android:textColor="#FFF"
                     android:text="@string/lorem"

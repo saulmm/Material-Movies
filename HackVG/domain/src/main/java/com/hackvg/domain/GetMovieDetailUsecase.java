@@ -2,6 +2,7 @@ package com.hackvg.domain;
 
 
 import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.ReviewsWrapper;
 
 /**
  * Representation of an use case to get the details of a specific film
@@ -24,6 +25,9 @@ public interface GetMovieDetailUsecase extends Usecase {
      * @param response the response containing the details of the film
      */
     public void onMovieDetailResponse (MovieDetailResponse response);
+
+
+    void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper);
 
     /**
      * Sends the MovieDetailResponse thought the communication system

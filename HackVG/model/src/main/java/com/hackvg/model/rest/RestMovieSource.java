@@ -61,7 +61,7 @@ public class RestMovieSource implements RestDataSource {
     @Override
     public void getReviews(String id) {
 
-        moviesDBApi.getMovieDetail(Constants.API_KEY, id,
+        moviesDBApi.getReviews(Constants.API_KEY, id,
             retrofitCallback);
     }
 

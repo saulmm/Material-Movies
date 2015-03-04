@@ -23,4 +23,14 @@ public class Review {
 
         return content;
     }
+
+    @Override
+    public String toString() {
+
+        return "Review{" +
+            "id='" + id + '\'' +
+            ", author='" + author + '\'' +
+            ", content='" + content + '\'' +
+            '}';
+    }
 }

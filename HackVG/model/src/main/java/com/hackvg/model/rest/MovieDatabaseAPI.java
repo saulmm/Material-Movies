@@ -44,6 +44,7 @@ public interface MovieDatabaseAPI {
     @GET("/movie/{id}/reviews")
     void getReviews (
         @Query("api_key") String apiKey,
+        @Path("id") String id,
         Callback<ReviewsWrapper> response
     );
 }
