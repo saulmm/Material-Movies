@@ -1,6 +1,6 @@
 package com.hackvg.domain;
 
-import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.entities.MoviesWrapper;
 
 /**
  * Representation of an use case to get the most popular movies
@@ -14,7 +14,7 @@ public interface GetMoviesUsecase extends Usecase {
      *
      * @param response the response containing a list with movies
      */
-    public void onPopularMoviesReceived(PopularMoviesApiResponse response);
+    public void onPopularMoviesReceived(MoviesWrapper response);
 
     /**
      * Request datasource the most popular movies
@@ -27,7 +27,7 @@ public interface GetMoviesUsecase extends Usecase {
      *
      * @param response the response containing a list with movies
      */
-    public void sendMoviesToPresenter (PopularMoviesApiResponse response);
+    public void sendMoviesToPresenter (MoviesWrapper response);
 
     public void unRegister ();
 }
