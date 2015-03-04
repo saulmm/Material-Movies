@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public class MovieDetailActivity extends Activity implements DetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
@@ -44,6 +45,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private static final int COMPANY       = 3;
     private static final int TAGLINE       = 4;
     private static final int CONFIRMATION  = 5;
+
+    // Boolean that indicates if the activity is shown in a tablet or not
+    boolean mIsTablet;
 
     // The time that the confirmation view will be shown (milliseconds)
     private static final int CONFIRMATION_VIEW_DELAY = 1500;
@@ -80,6 +84,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.inject(this);
+
+        mIsTablet = getContext().getResources()
+            .getBoolean(R.bool.is_tablet);
 
         // Completes the SharedElement transition on Lollipop and higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -126,7 +133,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         String movieID = getIntent().getStringExtra("movie_id");
         mDetailPresenter = new MovieDetailPresenter(this, movieID);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mIsTablet)
             mObservableScrollView.setScrollViewListener(this);
     }
 
@@ -162,7 +169,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void setDescription(String description) {
 
-        movieInfoTextViews.get(DESCRIPTION).setText(description);
+        String lorem = getString(R.string.lorem);
+        movieInfoTextViews.get(DESCRIPTION).setText(lorem + "\n" + lorem + "\n" +lorem);
     }
 
     @Override
@@ -240,6 +248,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
                 else
                     MovieDetailActivity.this. finish();
+
             }
 
         }, CONFIRMATION_VIEW_DELAY);
@@ -314,8 +323,12 @@ public class MovieDetailActivity extends Activity implements DetailView,
         }
 
         movieInfoTextViews.get(CONFIRMATION).setTextColor(brightSwatch.getRgb());
-        movieInfoTextViews.get(TITLE).setTextColor(brightSwatch.getTitleTextColor());
-        movieInfoTextViews.get(TITLE).setBackgroundColor(brightSwatch.getRgb());
+
+        movieInfoTextViews.get(TITLE).setTextColor(
+            brightSwatch.getTitleTextColor());
+
+        movieInfoTextViews.get(TITLE).setBackgroundColor(
+            brightSwatch.getRgb());
 
         mBrightSwatch = brightSwatch;
 

@@ -51,6 +51,7 @@ public class MoviesActivity extends ActionBarActivity implements
     private MoviesAdapter mMoviesAdapter;
     private MoviesPresenter mMoviesPresenter;
     private GridLayoutManager mGridLayoutManager;
+    public float mBackgroundTranslation;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
@@ -93,6 +94,13 @@ public class MoviesActivity extends ActionBarActivity implements
             MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
                 .getSerializable("movies_wrapper");
 
+            if (mTabletBackground != null) {
+
+                mBackgroundTranslation = savedInstanceState.getFloat("background_translation");
+                Log.d("[DEBUG]", "MoviesActivity onCreate - Recovering: "+mBackgroundTranslation);
+                mTabletBackground.setTranslationY(mBackgroundTranslation);
+            }
+
             mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
         }
     }
@@ -115,8 +123,11 @@ public class MoviesActivity extends ActionBarActivity implements
     protected void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState(outState);
+
         outState.putSerializable("movies_wrapper",
             new MoviesWrapper(mMoviesAdapter.getMovieList()));
+
+        outState.putFloat("background_translation", mBackgroundTranslation);
 
     }
 
@@ -237,9 +248,9 @@ public class MoviesActivity extends ActionBarActivity implements
                 .show();
         }
     }
-
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
         public boolean flag;
+
 
 
         @Override
@@ -255,8 +266,11 @@ public class MoviesActivity extends ActionBarActivity implements
                 mMoviesPresenter.onEndListReached();
             }
 
-            if (mTabletBackground != null)
-                mTabletBackground.setTranslationY(mTabletBackground.getY() - (dy /2));
+            if (mTabletBackground != null) {
+
+                mBackgroundTranslation = mTabletBackground.getY() - (dy / 2);
+                mTabletBackground.setTranslationY(mBackgroundTranslation);
+            }
 
             Log.d("[DEBUG]", "MoviesActivity onScrolled - dy");
             // Is scrolling up

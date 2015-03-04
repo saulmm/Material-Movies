@@ -14,8 +14,9 @@ public class MoviesPresenter extends Presenter {
 
     private final MoviesView mMoviesView;
     private GetMoviesUsecaseController mGetPopularShows;
-    private boolean isLoading = false;
     private ConfigurationUsecaseController mConfigureUsecase;
+
+    private boolean isLoading = false;
 
 
     public MoviesPresenter(MoviesView moviesView) {
