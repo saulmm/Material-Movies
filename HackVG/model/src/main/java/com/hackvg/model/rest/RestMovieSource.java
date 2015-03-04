@@ -6,6 +6,7 @@ import com.hackvg.common.utils.Constants;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.MoviesWrapper;
+import com.hackvg.model.entities.ReviewsWrapper;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -53,7 +54,15 @@ public class RestMovieSource implements RestDataSource {
     @Override
     public void getDetailMovie(String id) {
 
-        moviesDBApi.getMovieDetail(Constants.API_KEY, id, retrofitCallback);
+        moviesDBApi.getMovieDetail(Constants.API_KEY, id,
+            retrofitCallback);
+    }
+
+    @Override
+    public void getReviews(String id) {
+
+        moviesDBApi.getMovieDetail(Constants.API_KEY, id,
+            retrofitCallback);
     }
 
     @Override
@@ -84,6 +93,14 @@ public class RestMovieSource implements RestDataSource {
 
                 BusProvider.getRestBusInstance().post(
                     configurationResponse
+                );
+
+            } else if (o instanceof ReviewsWrapper) {
+
+                ReviewsWrapper reviewsWrapper = (ReviewsWrapper) o;
+
+                BusProvider.getRestBusInstance().post(
+                    reviewsWrapper
                 );
             }
         }

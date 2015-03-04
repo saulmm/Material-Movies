@@ -32,4 +32,10 @@ public interface GetMovieDetailUsecase extends Usecase {
      * @param response the response containing the details of the film
      */
     public void sendDetailMovieToPresenter (MovieDetailResponse response);
+
+    /**
+     * Request datasource the reviews written about that movie
+     * @param id of the film
+     */
+    public void requestMovieReviews (String id);
 }
