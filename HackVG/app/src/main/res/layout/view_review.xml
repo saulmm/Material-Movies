@@ -1,36 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+
+<TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="0.48"
-    android:orientation="vertical"
-    >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textStyle="italic"
+    android:visibility="visible"
+    style="@style/MaterialMoviesDetailField"
+    tools:text="@string/lorem"
+    />
 
-    <TextView
-        android:id="@+id/view_review_author"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:textSize="15sp"
-        android:gravity="center"
-        android:textColor="#FFF"
-        android:fontFamily="sans-serif-condensed"
-        tools:text="Marting L. King"
-        />
-
-    <TextView
-        android:id="@+id/view_review_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        style="@style/MaterialMoviesDetailField"
-        tools:text="@string/lorem"
-        tools:visibility="visible"
-        />
-
-</LinearLayout>
 
 
 

@@ -9,6 +9,7 @@ import com.hackvg.domain.GetMovieDetailUsecaseController;
 import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.Production_companies;
+import com.hackvg.model.entities.ReviewsWrapper;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Subscribe;
 
@@ -92,6 +93,13 @@ public class MovieDetailPresenter extends Presenter {
         showTagline(response.getTagline());
         showCompanies(response.getProduction_companies());
         showHomepage(response.getHomepage());
+    }
+
+    @Subscribe
+    public void onReviewsReceived (ReviewsWrapper reviewsWrapper) {
+
+        if (reviewsWrapper.getResults().size() > 0)
+            mMovieDetailView.showReviews(reviewsWrapper.getResults());
     }
 
     public void showHomepage(String homepage) {

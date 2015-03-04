@@ -40,4 +40,5 @@
             C 255.048,238.561 254.706,187.75 248.302,183.489
             C 221.536,165.677 218.848,144.628 223.42,133.484 z
     </string>
+    <string name="activity_detail_reviews_description">Reviews</string>
 </resources>

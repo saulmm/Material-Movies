@@ -3,6 +3,7 @@ package com.hackvg.android.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,12 +12,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.graphics.Palette;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.transition.Slide;
 import android.transition.Transition;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +33,7 @@ import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.utils.GUIUtils;
 import com.hackvg.android.views.custom_views.ObservableScrollView;
 import com.hackvg.android.views.custom_views.ScrollViewListener;
+import com.hackvg.model.entities.Review;
 
 import java.util.List;
 
@@ -37,6 +44,8 @@ import butterknife.OnClick;
 
 public class MovieDetailActivity extends Activity implements DetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
+
+    private static final int REVIEWS_HEADER = 2;
 
     private static final int TITLE         = 0;
     private static final int DESCRIPTION   = 1;
@@ -66,16 +75,17 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     @InjectViews({
         R.id.activity_detail_header_tagline,
-        R.id.activity_detail_header_description
-    }) List<TextView> headers;
+        R.id.activity_detail_header_description,
+        R.id.activity_detail_header_reviews
+    }) List<TextView> movieHeaders;
 
-    @InjectView(R.id.activity_detail_book_info)                 View mMovieDescriptionContainer;
+    @InjectView(R.id.activity_detail_book_info)                 LinearLayout mMovieDescriptionContainer;
     @InjectView(R.id.activity_detail_fab)                       ImageView mFabButton;
     @InjectView(R.id.activity_detail_cover)                     ImageView mCoverImageView;
     @InjectView(R.id.activity_detail_confirmation_image)        ImageView mConfirmationView;
     @InjectView(R.id.activity_detail_confirmation_container)    FrameLayout mConfirmationContainer;
     @InjectView(R.id.activity_movie_detail_scroll)              ObservableScrollView mObservableScrollView;
-
+    private Palette.Swatch mLightSwatch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,8 +178,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void setDescription(String description) {
 
-        String lorem = getString(R.string.lorem);
-        movieInfoTextViews.get(DESCRIPTION).setText(lorem + "\n" + lorem + "\n" +lorem);
+        movieInfoTextViews.get(DESCRIPTION).setText(description);
     }
 
     @Override
@@ -254,6 +263,34 @@ public class MovieDetailActivity extends Activity implements DetailView,
     }
 
     @Override
+    public void showReviews(List<Review> results) {
+
+        movieHeaders.get(REVIEWS_HEADER).setVisibility(View.VISIBLE);
+
+        for (Review result : results) {
+
+            TextView reviewTextView = (TextView) LayoutInflater.from(this)
+                .inflate(R.layout.view_review, null);
+
+            String reviewCredit = "Review written by "+result.getAuthor();
+
+            String reviewText = String.format("%s - %s",
+                reviewCredit, result.getContent());
+
+
+
+            Spannable spanColorString = new SpannableString("Review written by "+result.getAuthor());
+
+            spanColorString.setSpan(new ForegroundColorSpan(Color.BLUE), 0, reviewCredit.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            reviewTextView.setText(reviewText);
+
+            mMovieDescriptionContainer.addView(reviewTextView);
+        }
+    }
+
+    @Override
     public void setHomepage(String homepage) {
 
         movieInfoTextViews.get(HOMEPAGE).setVisibility(View.VISIBLE);
@@ -280,16 +317,17 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
             Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-            Palette.Swatch lightSwatch = palette.getLightVibrantSwatch();
+            mLightSwatch = palette.getLightVibrantSwatch();
 
-            if (lightSwatch != null) {
+            if (mLightSwatch != null) {
 
-                mMovieDescriptionContainer.setBackgroundColor(lightSwatch.getRgb());
 
-                ButterKnife.apply(movieInfoTextViews, GUIUtils.setter, lightSwatch.getTitleTextColor());
+                mMovieDescriptionContainer.setBackgroundColor(mLightSwatch.getRgb());
 
-                mFabButton.getBackground().setColorFilter(lightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-                mConfirmationContainer.setBackgroundColor(lightSwatch.getRgb());
+                ButterKnife.apply(movieInfoTextViews, GUIUtils.setter, mLightSwatch.getTitleTextColor());
+
+                mFabButton.getBackground().setColorFilter(mLightSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                mConfirmationContainer.setBackgroundColor(mLightSwatch.getRgb());
 
             } else {
 
@@ -301,15 +339,19 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 mMovieDescriptionContainer.setBackgroundColor(primaryColor);
             }
 
-            if (lightSwatch == null && vibrantSwatch != null)
+            if (mLightSwatch == null && vibrantSwatch != null) {
                 colorBrightElements(vibrantSwatch);
+            }
 
-            if (darkVibrantSwatch != null && lightSwatch != null)
+            if (darkVibrantSwatch != null && mLightSwatch != null)
                 colorBrightElements(darkVibrantSwatch);
         }
     }
 
     public void colorBrightElements (Palette.Swatch brightSwatch) {
+
+
+        mBrightSwatch = brightSwatch;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -326,10 +368,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
         movieInfoTextViews.get(TITLE).setTextColor(
             brightSwatch.getTitleTextColor());
 
-        movieInfoTextViews.get(TITLE).setBackgroundColor(
-            brightSwatch.getRgb());
+        if (!mIsTablet)
+            movieInfoTextViews.get(TITLE).setBackgroundColor(
+                brightSwatch.getRgb());
 
-        mBrightSwatch = brightSwatch;
 
         if (brightSwatch != null) {
 
@@ -341,7 +383,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
                     brightSwatch.getRgb(), movieInfoTextViews.get(COMPANY));
 
-            ButterKnife.apply(headers, GUIUtils.setter, brightSwatch.getRgb());
+            ButterKnife.apply(movieHeaders, GUIUtils.setter, brightSwatch.getRgb());
         }
     }
 

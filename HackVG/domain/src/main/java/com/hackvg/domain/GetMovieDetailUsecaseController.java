@@ -3,12 +3,9 @@ package com.hackvg.domain;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.MovieDetailResponse;
-import com.hackvg.model.entities.Review;
 import com.hackvg.model.entities.ReviewsWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import java.util.List;
 
 /**
  * This class is an implementation of {@link com.hackvg.domain.GetMovieDetailUsecase}
@@ -64,13 +61,7 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     @Override
     public void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper) {
 
-        List<Review> reviewList = reviewsWrapper.getResults();
-
-        for (Review review : reviewList) {
-
-            System.out.println("Revi: "+review.toString());
-        }
-
+        mUiBus.post(reviewsWrapper);
         BusProvider.getRestBusInstance().unregister(this);
 
     }

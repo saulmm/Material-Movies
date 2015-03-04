@@ -10,7 +10,6 @@
 
     <style name="MaterialMoviesHeaderTextView" parent="android:Widget.TextView">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textAllCaps">true</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:textColor">?colorAccent</item>
     </style>
