@@ -15,6 +15,13 @@
         tools:context=".MainActivity"
         >
 
+        <View
+            android:id="@+id/activity_movies_background_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_movies_background_view_height"
+            android:background="@color/theme_primary"
+            />
+
         <com.hackvg.android.views.custom_views.AutofitRecyclerView
             android:id="@+id/recycler_popular_movies"
             android:layout_width="match_parent"

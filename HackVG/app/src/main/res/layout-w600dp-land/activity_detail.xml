@@ -76,6 +76,19 @@
                     tools:text="An awesome title"
                     />
 
+                <ProgressBar
+                    android:id="@+id/activity_detail_progress"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_below="@id/activity_detail_title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    style="?android:attr/progressBarStyleLarge"
+                    />
+
                 <TextView
                     android:id="@+id/activity_detail_homepage"
                     android:layout_width="match_parent"

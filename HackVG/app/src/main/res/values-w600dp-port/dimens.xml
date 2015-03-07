@@ -5,13 +5,13 @@
     <dimen name="activity_vertical_margin_double">32dp</dimen>
     <dimen name="activity_vertical_margin_double_double">64dp</dimen>
 
-    <dimen name="activity_movies_margins">7dp</dimen>
+    <dimen name="activity_movies_margins">10dp</dimen>
 
     <dimen name="activity_horizontal_margin">56dp</dimen>
     <dimen name="activity_horizontal_margin_half">32dp</dimen>
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
     <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
-    <dimen name="insets">3dp</dimen>
+    <dimen name="insets">5dp</dimen>
     <dimen name="fab_size">55dp</dimen>
 
     <dimen name="item_movie_with">180dp</dimen>
