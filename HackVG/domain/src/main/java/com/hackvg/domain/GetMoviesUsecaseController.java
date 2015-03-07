@@ -47,20 +47,19 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
     public void onPopularMoviesReceived(MoviesWrapper response) {
 
         sendMoviesToPresenter(response);
+        unRegister();
     }
 
     @Override
     public void sendMoviesToPresenter (MoviesWrapper response) {
 
         mUiBus.post(response);
-
     }
 
     @Override
     public void unRegister() {
 
         BusProvider.getRestBusInstance().unregister(this);
-
     }
 
     @Override
