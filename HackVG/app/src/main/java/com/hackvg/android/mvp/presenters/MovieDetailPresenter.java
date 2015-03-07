@@ -18,8 +18,6 @@ import java.util.List;
 
 public class MovieDetailPresenter extends Presenter {
 
-    // Boolean that indicates if this activity is shown in a tablet or not
-
     private final DetailView mMovieDetailView;
     private final String mMovieID;
 

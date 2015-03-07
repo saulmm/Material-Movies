@@ -6,6 +6,8 @@
     <dimen name="activity_vertical_margin_double">32dp</dimen>
     <dimen name="activity_vertical_margin_double_double">64dp</dimen>
 
+    <dimen name="activity_movies_margins">@dimen/activity_horizontal_margin</dimen>
+
     <dimen name="activity_horizontal_margin_half">8dp</dimen>
     <dimen name="activity_horizontal_margin_double">32dp</dimen>
     <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
