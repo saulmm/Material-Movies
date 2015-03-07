@@ -100,7 +100,6 @@ public class MoviesActivity extends ActionBarActivity implements
             if (mTabletBackground != null) {
 
                 mBackgroundTranslation = savedInstanceState.getFloat("background_translation");
-                Log.d("[DEBUG]", "MoviesActivity onCreate - Recovering: "+mBackgroundTranslation);
                 mTabletBackground.setTranslationY(mBackgroundTranslation);
             }
 

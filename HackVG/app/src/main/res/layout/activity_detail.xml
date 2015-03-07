@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_detail_information_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     >
 
     <com.hackvg.android.views.custom_views.ObservableScrollView
@@ -17,7 +17,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             >
 
             <ImageView
@@ -63,6 +63,19 @@
                 android:stateListAnimator="@anim/fab_animation"
                 />
 
+            <ProgressBar
+                android:id="@+id/activity_detail_progress"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_below="@id/activity_detail_title"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible"
+                style="?android:attr/progressBarStyleLarge"
+                />
+
             <LinearLayout
                 android:id="@+id/activity_detail_book_info"
                 android:layout_below="@id/activity_detail_title"
@@ -75,13 +88,12 @@
                 android:paddingTop="@dimen/activity_vertical_margin_half"
                 >
 
-
                 <TextView
                     android:id="@+id/activity_detail_homepage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="http://awesome.title.com"
-                    tools:visibility="visible"
+                    android:visibility="gone"
                     style="@style/MaterialMoviesDetailField"
                     />
 
@@ -89,17 +101,17 @@
                     android:id="@+id/activity_detail_company"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:visibility="visible"
+                    android:visibility="gone"
                     tools:text="Warner Bros, Paramount Pictures"
                     style="@style/MaterialMoviesDetailField"
                     />
-
 
                 <TextView
                     android:id="@+id/activity_detail_header_tagline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/activity_detail_label_tagline"
+                    android:visibility="gone"
                     style="@style/MaterialMoviesHeaderTextView"
                     />
 
@@ -110,6 +122,7 @@
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="6dp"
                     android:textColor="#FFF"
+                    android:visibility="gone"
                     tools:text="Mankind was born on Earth. It was never meant to die here."
                     />
 
@@ -120,6 +133,7 @@
                     android:layout_marginTop="@dimen/activity_vertical_margin_half"
                     android:textColor="@color/theme_accent"
                     android:text="@string/activity_detail_label_description"
+                    android:visibility="gone"
                     style="@style/MaterialMoviesHeaderTextView"
                     />
 
@@ -130,7 +144,8 @@
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="6dp"
                     android:textColor="#FFF"
-                    android:text="@string/lorem"
+                    android:visibility="gone"
+                    tools:text="@string/lorem"
                     />
 
                 <TextView
@@ -139,8 +154,7 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="@dimen/activity_vertical_margin_half"
                     android:text="@string/activity_detail_reviews_description"
-                    android:visibility="invisible"
-                    tools:visibility="visible"
+                    android:visibility="gone"
                     style="@style/MaterialMoviesHeaderTextView"
                     />
             </LinearLayout>

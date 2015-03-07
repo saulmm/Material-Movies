@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,6 +81,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
         R.id.activity_detail_header_reviews
     })
     List<TextView> movieHeaders;
+
+    @InjectView(R.id.activity_detail_progress)              ProgressBar progressBar;
+
     @InjectView(R.id.activity_detail_book_info)             LinearLayout mMovieDescriptionContainer;
     @InjectView(R.id.activity_detail_fab)                   ImageView mFabButton;
     @InjectView(R.id.activity_detail_cover)                 ImageView mCoverImageView;
@@ -166,12 +169,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
     }
 
     @Override
-    public void setImage(String url) {
+    public void showFilmCover(Bitmap bitmap) {
 
-        Bitmap bookCoverBitmap = MoviesActivity.sPhotoCache.get(0);
-        mCoverImageView.setBackground(new BitmapDrawable(getResources(), bookCoverBitmap));
-
-        Palette.generateAsync(bookCoverBitmap, this);
+        mCoverImageView.setImageBitmap(bitmap);
+        Palette.generateAsync(bitmap, this);
     }
 
     @Override
@@ -304,6 +305,18 @@ public class MovieDetailActivity extends Activity implements DetailView,
             mMovieDescriptionContainer.addView(reviewTextView,
                 layoutParams);
         }
+    }
+
+    @Override
+    public void showLoadingIndicator() {
+
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoadingIndicator() {
+
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override

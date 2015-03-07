@@ -4,10 +4,9 @@ import android.os.Handler;
 import android.text.TextUtils;
 
 import com.hackvg.android.mvp.views.DetailView;
+import com.hackvg.android.views.activities.MoviesActivity;
 import com.hackvg.common.utils.BusProvider;
-import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.GetMovieDetailUsecaseController;
-import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.Production_companies;
 import com.hackvg.model.entities.ReviewsWrapper;
@@ -28,6 +27,14 @@ public class MovieDetailPresenter extends Presenter {
 
         mMovieDetailView = movieDetailView;
         mMovieID = movieID;
+
+        mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));
+
+        mMovieDetailView.showLoadingIndicator();
+
+        new GetMovieDetailUsecaseController(mMovieID,
+            BusProvider.getUIBusInstance(), RestMovieSource.getInstance())
+        .execute();
     }
 
     public void showDescription(String description) {
@@ -35,21 +42,10 @@ public class MovieDetailPresenter extends Presenter {
         mMovieDetailView.setDescription(description);
     }
 
-    public void showCover(String url) {
-
-        String coverUrl = Constants.BASIC_STATIC_URL + url;
-        mMovieDetailView.setImage(coverUrl);
-    }
-
     @Override
     public void start() {
 
         BusProvider.getUIBusInstance().register(this);
-
-        Usecase getDetailUsecase = new GetMovieDetailUsecaseController(
-            mMovieID, BusProvider.getUIBusInstance(), RestMovieSource.getInstance());
-
-        getDetailUsecase.execute();
     }
 
     @Override
@@ -88,9 +84,10 @@ public class MovieDetailPresenter extends Presenter {
     @Subscribe
     public void onDetailInformationReceived(MovieDetailResponse response) {
 
+        mMovieDetailView.hideLoadingIndicator();
+
         showDescription(response.getOverview());
         showTitle(response.getTitle());
-        showCover(response.getPoster_path());
         showTagline(response.getTagline());
         showCompanies(response.getProduction_companies());
         showHomepage(response.getHomepage());
