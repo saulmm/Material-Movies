@@ -22,41 +22,39 @@
             android:scaleType="fitXY"
             />
 
-
+        <ImageButton
+            android:id="@+id/activity_detail_fab"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="-27dp"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:src="@drawable/ic_fab_star"
+            android:background="@drawable/fab"
+            android:elevation="4dp"
+            android:stateListAnimator="@anim/fab_animation"
+            />
     </FrameLayout>
 
-    <com.hackvg.android.views.custom_views.ObservableScrollView
-        android:id="@+id/activity_movie_detail_scroll"
+    <FrameLayout
+        android:id="@+id/activity_detail_information_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.47"
-        tools:visibility="visible"
         >
 
-        <RelativeLayout
+        <com.hackvg.android.views.custom_views.ObservableScrollView
+            android:id="@+id/activity_movie_detail_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:visibility="visible"
             >
-
-            <ImageButton
-                android:id="@+id/activity_detail_fab"
-                android:layout_width="@dimen/fab_size"
-                android:layout_height="@dimen/fab_size"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="-27dp"
-                android:scaleX="0"
-                android:scaleY="0"
-                android:src="@drawable/ic_fab_star"
-                android:background="@drawable/fab"
-                android:elevation="4dp"
-                android:stateListAnimator="@anim/fab_animation"
-                />
 
             <LinearLayout
                 android:id="@+id/activity_detail_book_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/activity_horizontal_margin_half"
                 android:paddingRight="@dimen/activity_horizontal_margin_half"
@@ -64,26 +62,19 @@
                 android:paddingTop="@dimen/activity_vertical_margin_half"
                 >
 
-
                 <com.hackvg.android.views.custom_views.LobsterTextView
                     android:id="@+id/activity_detail_title"
                     android:layout_width="match_parent"
                     android:layout_height="96dp"
-                    android:paddingLeft="48dp"
-                    android:paddingRight="48dp"
                     android:gravity="center_vertical"
                     android:fontFamily="sans-serif-medium"
                     android:textSize="28sp"
                     android:textColor="#FFF"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:background="@color/theme_primary"
-                    android:visibility="gone"
-                    android:elevation="4dp"
                     android:layout_gravity="bottom"
                     tools:text="An awesome title"
                     />
-
 
                 <TextView
                     android:id="@+id/activity_detail_homepage"
@@ -102,7 +93,6 @@
                     tools:text="Warner Bros, Paramount Pictures"
                     style="@style/MaterialMoviesDetailField"
                     />
-
 
                 <TextView
                     android:id="@+id/activity_detail_header_tagline"
@@ -127,7 +117,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="@dimen/activity_vertical_margin_half"
-                    android:textColor="@color/theme_accent"
                     android:text="@string/activity_detail_label_description"
                     style="@style/MaterialMoviesHeaderTextView"
                     />
@@ -142,11 +131,20 @@
                     android:text="@string/lorem"
                     />
 
+                <TextView
+                    android:id="@+id/activity_detail_header_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin_half"
+                    android:text="@string/activity_detail_reviews_description"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    style="@style/MaterialMoviesHeaderTextView"
+                    />
 
             </LinearLayout>
-        </RelativeLayout>
-    </com.hackvg.android.views.custom_views.ObservableScrollView>
-
+        </com.hackvg.android.views.custom_views.ObservableScrollView>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/activity_detail_confirmation_container"

@@ -3,6 +3,7 @@ package com.hackvg.domain;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.ReviewsWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -51,14 +52,30 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     @Override
     public void onMovieDetailResponse(MovieDetailResponse response) {
 
-        BusProvider.getRestBusInstance().unregister(this);
+
+        requestMovieReviews(response.getId()+"");
         sendDetailMovieToPresenter(response);
+    }
+
+    @Subscribe
+    @Override
+    public void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper) {
+
+        mUiBus.post(reviewsWrapper);
+        BusProvider.getRestBusInstance().unregister(this);
+
     }
 
     @Override
     public void sendDetailMovieToPresenter(MovieDetailResponse response) {
 
         mUiBus.post(response);
+    }
+
+    @Override
+    public void requestMovieReviews(String id) {
+
+        mMovieDataSource.getReviews(id);
     }
 
     @Override

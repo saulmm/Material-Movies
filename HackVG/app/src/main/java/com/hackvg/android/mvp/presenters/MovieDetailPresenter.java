@@ -1,5 +1,6 @@
 package com.hackvg.android.mvp.presenters;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.hackvg.android.mvp.views.DetailView;
@@ -9,6 +10,7 @@ import com.hackvg.domain.GetMovieDetailUsecaseController;
 import com.hackvg.domain.Usecase;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.Production_companies;
+import com.hackvg.model.entities.ReviewsWrapper;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Subscribe;
 
@@ -92,6 +94,22 @@ public class MovieDetailPresenter extends Presenter {
         showTagline(response.getTagline());
         showCompanies(response.getProduction_companies());
         showHomepage(response.getHomepage());
+    }
+
+    @Subscribe
+    public void onReviewsReceived (final ReviewsWrapper reviewsWrapper) {
+
+        // Wait 300 milliseconds to ensure that Palette generate the colors
+        // before show the reviews
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (reviewsWrapper.getResults().size() > 0)
+                    mMovieDetailView.showReviews(reviewsWrapper.getResults());
+            }
+        }, 300);
+
     }
 
     public void showHomepage(String homepage) {

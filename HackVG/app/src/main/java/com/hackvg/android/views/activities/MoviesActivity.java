@@ -37,6 +37,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.Optional;
 
 
 public class MoviesActivity extends ActionBarActivity implements
@@ -60,7 +61,9 @@ public class MoviesActivity extends ActionBarActivity implements
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
-    @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
+
+    @Optional @InjectView(R.id.activity_movies_background_view)
+    View mTabletBackground;
 
 
     @Override

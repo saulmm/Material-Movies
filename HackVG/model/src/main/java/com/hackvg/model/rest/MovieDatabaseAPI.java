@@ -3,6 +3,7 @@ package com.hackvg.model.rest;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.MoviesWrapper;
+import com.hackvg.model.entities.ReviewsWrapper;
 
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -38,5 +39,12 @@ public interface MovieDatabaseAPI {
     void getConfiguration (
         @Query("api_key") String apiKey,
         Callback<ConfigurationResponse> response
+    );
+
+    @GET("/movie/{id}/reviews")
+    void getReviews (
+        @Query("api_key") String apiKey,
+        @Path("id") String id,
+        Callback<ReviewsWrapper> response
     );
 }
