@@ -52,6 +52,7 @@ public class MoviesActivity extends ActionBarActivity implements
     private MoviesAdapter mMoviesAdapter;
     private MoviesPresenter mMoviesPresenter;
     private GridLayoutManager mGridLayoutManager;
+
     public float mBackgroundTranslation;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -62,8 +63,8 @@ public class MoviesActivity extends ActionBarActivity implements
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
 
-    @Optional @InjectView(R.id.activity_movies_background_view)
-    View mTabletBackground;
+    @Optional
+    @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
 
 
     @Override
@@ -77,6 +78,7 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setTitle("");
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+
         mToolbar.setNavigationOnClickListener(this);
 
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
@@ -100,7 +102,6 @@ public class MoviesActivity extends ActionBarActivity implements
             if (mTabletBackground != null) {
 
                 mBackgroundTranslation = savedInstanceState.getFloat("background_translation");
-                Log.d("[DEBUG]", "MoviesActivity onCreate - Recovering: "+mBackgroundTranslation);
                 mTabletBackground.setTranslationY(mBackgroundTranslation);
             }
 

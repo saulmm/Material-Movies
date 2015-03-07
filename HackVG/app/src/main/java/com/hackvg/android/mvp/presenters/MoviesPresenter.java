@@ -17,6 +17,7 @@ public class MoviesPresenter extends Presenter {
     private ConfigurationUsecaseController mConfigureUsecase;
 
     private boolean isLoading = false;
+    private boolean mRegistered;
 
 
     public MoviesPresenter(MoviesView moviesView) {
@@ -77,6 +78,7 @@ public class MoviesPresenter extends Presenter {
         if (mMoviesView.isTheListEmpty()) {
 
             BusProvider.getUIBusInstance().register(this);
+            mRegistered = true;
 
             mMoviesView.showLoading();
             mConfigureUsecase.execute();
@@ -85,17 +87,6 @@ public class MoviesPresenter extends Presenter {
 
     @Override
     public void stop() {
-
-        if (mGetPopularShows != null) {
-
-            mGetPopularShows.unRegister();
-        }
-
-        if (mConfigureUsecase != null) {
-
-            BusProvider.getUIBusInstance()
-                .unregister(this);
-        }
     }
 
     public boolean isLoading() {
