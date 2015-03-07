@@ -68,7 +68,6 @@
                 android:textColor="#FFF"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:background="@color/theme_primary"
                 android:layout_gravity="bottom"
                 tools:text="An awesome title"
                 />

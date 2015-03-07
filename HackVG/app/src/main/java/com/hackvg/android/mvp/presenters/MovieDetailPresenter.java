@@ -1,5 +1,6 @@
 package com.hackvg.android.mvp.presenters;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.hackvg.android.mvp.views.DetailView;
@@ -96,10 +97,19 @@ public class MovieDetailPresenter extends Presenter {
     }
 
     @Subscribe
-    public void onReviewsReceived (ReviewsWrapper reviewsWrapper) {
+    public void onReviewsReceived (final ReviewsWrapper reviewsWrapper) {
 
-        if (reviewsWrapper.getResults().size() > 0)
-            mMovieDetailView.showReviews(reviewsWrapper.getResults());
+        // Wait 300 milliseconds to ensure that Palette generate the colors
+        // before show the reviews
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (reviewsWrapper.getResults().size() > 0)
+                    mMovieDetailView.showReviews(reviewsWrapper.getResults());
+            }
+        }, 300);
+
     }
 
     public void showHomepage(String homepage) {
