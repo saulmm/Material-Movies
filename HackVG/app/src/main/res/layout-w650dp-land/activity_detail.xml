@@ -35,113 +35,116 @@
             android:elevation="4dp"
             android:stateListAnimator="@anim/fab_animation"
             />
-
-
     </FrameLayout>
 
-    <com.hackvg.android.views.custom_views.ObservableScrollView
-        android:id="@+id/activity_movie_detail_scroll"
+    <FrameLayout
+        android:id="@+id/activity_detail_information_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.47"
-        tools:visibility="visible"
         >
 
-        <LinearLayout
-            android:id="@+id/activity_detail_book_info"
+        <com.hackvg.android.views.custom_views.ObservableScrollView
+            android:id="@+id/activity_movie_detail_scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_horizontal_margin_half"
-            android:paddingRight="@dimen/activity_horizontal_margin_half"
-            android:paddingBottom="@dimen/activity_vertical_margin_double_double"
-            android:paddingTop="@dimen/activity_vertical_margin_half"
+            android:layout_height="wrap_content"
+            tools:visibility="visible"
             >
 
-            <com.hackvg.android.views.custom_views.LobsterTextView
-                android:id="@+id/activity_detail_title"
+            <LinearLayout
+                android:id="@+id/activity_detail_book_info"
                 android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:gravity="center_vertical"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="28sp"
-                android:textColor="#FFF"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:layout_gravity="bottom"
-                tools:text="An awesome title"
-                />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin_half"
+                android:paddingRight="@dimen/activity_horizontal_margin_half"
+                android:paddingBottom="@dimen/activity_vertical_margin_double_double"
+                android:paddingTop="@dimen/activity_vertical_margin_half"
+                >
 
+                <com.hackvg.android.views.custom_views.LobsterTextView
+                    android:id="@+id/activity_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:gravity="center_vertical"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="28sp"
+                    android:textColor="#FFF"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:layout_gravity="bottom"
+                    tools:text="An awesome title"
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_homepage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="http://awesome.title.com"
-                tools:visibility="visible"
-                style="@style/MaterialMoviesDetailField"
-                />
+                <TextView
+                    android:id="@+id/activity_detail_homepage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="http://awesome.title.com"
+                    tools:visibility="visible"
+                    style="@style/MaterialMoviesDetailField"
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_company"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:visibility="visible"
-                tools:text="Warner Bros, Paramount Pictures"
-                style="@style/MaterialMoviesDetailField"
-                />
+                <TextView
+                    android:id="@+id/activity_detail_company"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:visibility="visible"
+                    tools:text="Warner Bros, Paramount Pictures"
+                    style="@style/MaterialMoviesDetailField"
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_header_tagline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_detail_label_tagline"
-                style="@style/MaterialMoviesHeaderTextView"
-                />
+                <TextView
+                    android:id="@+id/activity_detail_header_tagline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_detail_label_tagline"
+                    style="@style/MaterialMoviesHeaderTextView"
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_tagline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="6dp"
-                android:textColor="#FFF"
-                tools:text="Mankind was born on Earth. It was never meant to die here."
-                />
+                <TextView
+                    android:id="@+id/activity_detail_tagline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#FFF"
+                    tools:text="Mankind was born on Earth. It was never meant to die here."
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_header_description"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin_half"
-                android:text="@string/activity_detail_label_description"
-                style="@style/MaterialMoviesHeaderTextView"
-                />
+                <TextView
+                    android:id="@+id/activity_detail_header_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin_half"
+                    android:text="@string/activity_detail_label_description"
+                    style="@style/MaterialMoviesHeaderTextView"
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="6dp"
-                android:textColor="#FFF"
-                android:text="@string/lorem"
-                />
+                <TextView
+                    android:id="@+id/activity_detail_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#FFF"
+                    android:text="@string/lorem"
+                    />
 
-            <TextView
-                android:id="@+id/activity_detail_header_reviews"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin_half"
-                android:text="@string/activity_detail_reviews_description"
-                android:visibility="invisible"
-                tools:visibility="visible"
-                style="@style/MaterialMoviesHeaderTextView"
-                />
+                <TextView
+                    android:id="@+id/activity_detail_header_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin_half"
+                    android:text="@string/activity_detail_reviews_description"
+                    android:visibility="invisible"
+                    tools:visibility="visible"
+                    style="@style/MaterialMoviesHeaderTextView"
+                    />
 
-        </LinearLayout>
-    </com.hackvg.android.views.custom_views.ObservableScrollView>
-
+            </LinearLayout>
+        </com.hackvg.android.views.custom_views.ObservableScrollView>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/activity_detail_confirmation_container"

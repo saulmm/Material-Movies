@@ -16,8 +16,8 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.transition.Slide;
 import android.transition.Transition;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -87,7 +87,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @InjectView(R.id.activity_detail_confirmation_image)    ImageView mConfirmationView;
     @InjectView(R.id.activity_detail_confirmation_container)FrameLayout mConfirmationContainer;
 
-        @InjectView(R.id.activity_movie_detail_scroll)          ObservableScrollView mObservableScrollView;
+    @InjectView(R.id.activity_movie_detail_scroll)          ObservableScrollView mObservableScrollView;
+    @InjectView(R.id.activity_detail_information_container) View mInformationContainer;
 
 
     @Override
@@ -273,8 +274,17 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         for (Review result : results) {
 
-            TextView reviewTextView = (TextView) LayoutInflater.from(this)
-                .inflate(R.layout.view_review, null);
+            TextView reviewTextView = new TextView(this);
+            reviewTextView.setTextAppearance(this, R.style.MaterialMoviesReviewTextView);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            int reviewMarginTop = getResources().getDimensionPixelOffset(
+                R.dimen.activity_vertical_margin_half);
+
+            layoutParams.setMargins(0, reviewMarginTop, 0, 0);
 
             if (mReviewsColor != -1)
                 reviewTextView.setTextColor(mReviewsColor);
@@ -291,7 +301,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             reviewTextView.setText(spanColorString);
 
-            mMovieDescriptionContainer.addView(reviewTextView);
+            mMovieDescriptionContainer.addView(reviewTextView,
+                layoutParams);
         }
     }
 
@@ -328,7 +339,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
                 mReviewsColor = lightVibrantSwatch.getTitleTextColor();
 
-                mMovieDescriptionContainer.setBackgroundColor(
+                mInformationContainer.setBackgroundColor(
                     lightVibrantSwatch.getRgb());
 
                 mConfirmationContainer.setBackgroundColor(
@@ -349,7 +360,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
                     PorterDuff.Mode.MULTIPLY);
 
                 mConfirmationView.setBackgroundColor(primaryColor);
-                mMovieDescriptionContainer.setBackgroundColor(primaryColor);
+                mInformationContainer.setBackgroundColor(primaryColor);
             }
 
             if (lightVibrantSwatch == null && vibrantSwatch != null)
