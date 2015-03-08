@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.hackvg.android.R;
 import com.hackvg.android.utils.RecyclerViewClickListener;
-import com.hackvg.model.entities.TvMovie;
+import com.hackvg.model.entities.Movie;
 import com.hackvg.common.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -23,15 +23,15 @@ import java.util.List;
 public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
     private Context mContext;
-    private List<TvMovie> mMovieList;
+    private List<Movie> mMovieList;
     private RecyclerViewClickListener mRecyclerClickListener;
 
-    public MoviesAdapter(List<TvMovie> mMovieList) {
+    public MoviesAdapter(List<Movie> mMovieList) {
 
         this.mMovieList = mMovieList;
     }
 
-    public List<TvMovie> getMovieList() {
+    public List<Movie> getMovieList() {
 
         return mMovieList;
     }
@@ -54,7 +54,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     @Override
     public void onBindViewHolder(final MovieViewHolder holder, final int position) {
 
-        TvMovie selectedMovie = mMovieList.get(position);
+        Movie selectedMovie = mMovieList.get(position);
 
         holder.titleTextView.setText(selectedMovie.getTitle());
 
@@ -90,7 +90,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         return mMovieList.size();
     }
 
-    public void appendMovies(List<TvMovie> movieList) {
+    public void appendMovies(List<Movie> movieList) {
 
         mMovieList.addAll(movieList);
         notifyDataSetChanged();

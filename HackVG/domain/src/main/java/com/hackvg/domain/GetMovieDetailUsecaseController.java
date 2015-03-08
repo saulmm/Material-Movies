@@ -2,7 +2,8 @@ package com.hackvg.domain;
 
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.ImagesWrapper;
+import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.ReviewsWrapper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -15,6 +16,7 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     private final MediaDataSource mMovieDataSource;
     private final String mMovieId;
     private final Bus mUiBus;
+    private MovieDetail mMovieDetail;
 
     /**
      * Constructor of the class.
@@ -50,24 +52,35 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
 
     @Subscribe
     @Override
-    public void onMovieDetailResponse(MovieDetailResponse response) {
+    public void onMovieDetailResponse(MovieDetail movieDetail) {
 
 
-        requestMovieReviews(response.getId()+"");
-        sendDetailMovieToPresenter(response);
+        mMovieDetail = movieDetail;
+        requestMovieImages(mMovieId);
+
     }
 
     @Subscribe
     @Override
     public void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper) {
 
+        sendDetailMovieToPresenter(mMovieDetail);
+
         mUiBus.post(reviewsWrapper);
         BusProvider.getRestBusInstance().unregister(this);
 
     }
 
+    @Subscribe
     @Override
-    public void sendDetailMovieToPresenter(MovieDetailResponse response) {
+    public void onMovieImagesResponse(ImagesWrapper imageWrapper) {
+
+        mMovieDetail.setMovieImagesList(imageWrapper.getBackdrops());
+        requestMovieReviews(mMovieId);
+    }
+
+    @Override
+    public void sendDetailMovieToPresenter(MovieDetail response) {
 
         mUiBus.post(response);
     }
@@ -76,6 +89,12 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     public void requestMovieReviews(String movieId) {
 
         mMovieDataSource.getReviews(movieId);
+    }
+
+    @Override
+    public void requestMovieImages(String movieId) {
+
+        mMovieDataSource.getImages(movieId);
     }
 
     @Override

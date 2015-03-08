@@ -1,7 +1,8 @@
 package com.hackvg.domain;
 
 
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.ImagesWrapper;
+import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.ReviewsWrapper;
 
 /**
@@ -37,11 +38,18 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param response the response containing the details of the film
      */
-    public void onMovieDetailResponse (MovieDetailResponse response);
+    public void onMovieDetailResponse (MovieDetail response);
 
     void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper);
 
-    void onMovieImagesResponse (MovieImageWrapper imageWrapper);
+    /**
+     * Callback used to be notified when the request to obtain a list
+     * of images about a film is end
+     *
+     * @param imageWrapper the response containing the information
+     *                     about the images
+     */
+    void onMovieImagesResponse (ImagesWrapper imageWrapper);
 
     /**
      * Sends the MovieDetailResponse thought the communication system
@@ -49,5 +57,5 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param response the response containing the details of the film
      */
-    public void sendDetailMovieToPresenter (MovieDetailResponse response);
+    public void sendDetailMovieToPresenter (MovieDetail response);
 }

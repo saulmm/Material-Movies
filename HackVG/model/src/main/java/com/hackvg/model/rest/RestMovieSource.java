@@ -5,7 +5,7 @@ import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.ImagesWrapper;
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.ReviewsWrapper;
 
@@ -83,9 +83,9 @@ public class RestMovieSource implements RestDataSource {
         @Override
         public void success(Object o, Response response) {
 
-            if (o instanceof MovieDetailResponse) {
+            if (o instanceof MovieDetail) {
 
-                MovieDetailResponse detailResponse = (MovieDetailResponse) o;
+                MovieDetail detailResponse = (MovieDetail) o;
                 BusProvider.getRestBusInstance().post(detailResponse);
 
             } else if (o instanceof MoviesWrapper) {

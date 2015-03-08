@@ -7,7 +7,7 @@ import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.views.activities.MoviesActivity;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.domain.GetMovieDetailUsecaseController;
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.Production_companies;
 import com.hackvg.model.entities.ReviewsWrapper;
 import com.hackvg.model.rest.RestMovieSource;
@@ -80,7 +80,7 @@ public class MovieDetailPresenter extends Presenter {
     }
 
     @Subscribe
-    public void onDetailInformationReceived(MovieDetailResponse response) {
+    public void onDetailInformationReceived(MovieDetail response) {
 
         mMovieDetailView.hideLoadingIndicator();
 

@@ -1,12 +1,12 @@
 package com.hackvg.android.mvp.views;
 
-import com.hackvg.model.entities.TvMovie;
+import com.hackvg.model.entities.Movie;
 
 import java.util.List;
 
 public interface MoviesView extends MVPView {
 
-    void showMovies(List<TvMovie> movieList);
+    void showMovies(List<Movie> movieList);
 
     void showLoading ();
 
@@ -22,5 +22,5 @@ public interface MoviesView extends MVPView {
 
     boolean isTheListEmpty ();
 
-    void appendMovies (List<TvMovie> movieList);
+    void appendMovies (List<Movie> movieList);
 }
