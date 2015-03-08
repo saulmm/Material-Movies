@@ -43,9 +43,9 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     }
 
     @Override
-    public void requestMovieDetail(String id) {
+    public void requestMovieDetail(String movieId) {
 
-        mMovieDataSource.getDetailMovie(id);
+        mMovieDataSource.getDetailMovie(movieId);
     }
 
     @Subscribe
@@ -73,9 +73,9 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     }
 
     @Override
-    public void requestMovieReviews(String id) {
+    public void requestMovieReviews(String movieId) {
 
-        mMovieDataSource.getReviews(id);
+        mMovieDataSource.getReviews(movieId);
     }
 
     @Override
