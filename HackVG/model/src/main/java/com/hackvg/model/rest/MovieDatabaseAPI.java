@@ -1,6 +1,7 @@
 package com.hackvg.model.rest;
 
 import com.hackvg.model.entities.ConfigurationResponse;
+import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetailResponse;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.ReviewsWrapper;
@@ -46,5 +47,12 @@ public interface MovieDatabaseAPI {
         @Query("api_key") String apiKey,
         @Path("id") String id,
         Callback<ReviewsWrapper> response
+    );
+
+    @GET("/movie/{id}/images")
+    void getImages (
+        @Query("api_key") String apiKey,
+        @Path("id") String movieId,
+        Callback<ImagesWrapper> response
     );
 }
