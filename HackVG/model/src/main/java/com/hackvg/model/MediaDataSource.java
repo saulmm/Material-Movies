@@ -19,4 +19,12 @@ public interface MediaDataSource {
     public void getReviews (String id);
 
     public void getConfiguration ();
+
+    /**
+     * Get a list of images represented by a MoviesWrapper
+     * class
+     *
+     * @param movieId the movie id
+     */
+    public void getImages (String movieId);
 }

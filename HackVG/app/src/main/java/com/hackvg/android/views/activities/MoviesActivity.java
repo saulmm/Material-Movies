@@ -28,8 +28,8 @@ import com.hackvg.android.utils.RecyclerInsetsDecoration;
 import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.android.views.adapters.MoviesAdapter;
 import com.hackvg.android.views.fragments.NavigationDrawerFragment;
+import com.hackvg.model.entities.Movie;
 import com.hackvg.model.entities.MoviesWrapper;
-import com.hackvg.model.entities.TvMovie;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 
@@ -142,7 +142,7 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void showMovies(List<TvMovie> movieList) {
+    public void showMovies(List<Movie> movieList) {
 
         mMoviesAdapter = new MoviesAdapter(movieList);
         mMoviesAdapter.setRecyclerListListener(this);
@@ -200,7 +200,7 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void appendMovies(List<TvMovie> movieList) {
+    public void appendMovies(List<Movie> movieList) {
 
         mMoviesAdapter.appendMovies(movieList);
     }

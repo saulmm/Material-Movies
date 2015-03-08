@@ -7,12 +7,12 @@ import java.util.List;
 public class MoviesWrapper implements Serializable {
     private Number page;
 
-    private List<TvMovie> results;
+    private List<Movie> results;
 
     private Number total_pages;
     private Number total_results;
 
-    public MoviesWrapper(List<TvMovie> results) {
+    public MoviesWrapper(List<Movie> results) {
 
         this.results = results;
     }
@@ -27,7 +27,7 @@ public class MoviesWrapper implements Serializable {
         this.page = page;
     }
 
-    public List<TvMovie> getResults() {
+    public List<Movie> getResults() {
 
         return results;
     }

@@ -1,7 +1,7 @@
 import com.hackvg.domain.GetMovieDetailUsecase;
 import com.hackvg.domain.GetMovieDetailUsecaseController;
 import com.hackvg.model.MediaDataSource;
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.MovieDetail;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
@@ -48,9 +48,9 @@ public class GetMovieDetailsUsecaseTest {
     public void testConfigurationPost () {
 
         mGetMovieDetailUsecase.onMovieDetailResponse(
-            new MovieDetailResponse());
+            new MovieDetail());
 
         verify(mockUiBus, times(1)).post(
-            any(MovieDetailResponse.class));
+            any(MovieDetail.class));
     }
 }
