@@ -127,10 +127,13 @@ public class MoviesActivity extends ActionBarActivity implements
 
         super.onSaveInstanceState(outState);
 
-        outState.putSerializable("movies_wrapper",
-            new MoviesWrapper(mMoviesAdapter.getMovieList()));
+        if (mMoviesAdapter != null) {
 
-        outState.putFloat("background_translation", mBackgroundTranslation);
+            outState.putSerializable("movies_wrapper",
+                new MoviesWrapper(mMoviesAdapter.getMovieList()));
+
+            outState.putFloat("background_translation", mBackgroundTranslation);
+        }
 
     }
 

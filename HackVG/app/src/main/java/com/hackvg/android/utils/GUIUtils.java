@@ -27,7 +27,10 @@ import butterknife.ButterKnife;
  */
 public class GUIUtils {
 
-    public static final int DEFAULT_DELAY = 30;
+    public static final int DEFAULT_DELAY           = 30;
+    public static final int SCALE_DELAY             = 600;
+    public static final float SCALE_START_ANCHOR    = 0.3f;
+
 
     public static void tintAndSetCompoundDrawable (Context context, @DrawableRes
         int drawableRes, int color, TextView textview) {
@@ -107,8 +110,7 @@ public class GUIUtils {
     public static void startScaleAnimationFromPivot (int pivotX, int pivotY, final View v,
         final Animator.AnimatorListener animatorListener) {
 
-        v.setScaleX(0);
-        v.setScaleY(0);
+        v.setScaleY(SCALE_START_ANCHOR);
         v.setPivotX(pivotX);
         v.setPivotY(pivotY);
 
@@ -120,8 +122,8 @@ public class GUIUtils {
 
                 ViewPropertyAnimator viewPropertyAnimator = v.animate()
                     .setInterpolator(new AccelerateDecelerateInterpolator())
-                    .scaleX(1).scaleY(1)
-                    .setDuration(400);
+                    .scaleY(1)
+                    .setDuration(SCALE_DELAY);
 
                 if (animatorListener != null)
                     viewPropertyAnimator.setListener(animatorListener);
@@ -130,5 +132,19 @@ public class GUIUtils {
                 return true;
             }
         });
+    }
+
+    public static void hideScaleAnimationFromPivot(View v, Animator.AnimatorListener animatorListener) {
+
+        ViewPropertyAnimator viewPropertyAnimator = v.animate()
+            .setInterpolator(new AccelerateDecelerateInterpolator())
+            .scaleY(SCALE_START_ANCHOR)
+            .setDuration(SCALE_DELAY);
+
+        if (animatorListener != null)
+            viewPropertyAnimator.setListener(animatorListener);
+
+        viewPropertyAnimator.start();
+
     }
 }

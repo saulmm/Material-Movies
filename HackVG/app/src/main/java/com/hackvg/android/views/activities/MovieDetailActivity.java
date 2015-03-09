@@ -160,7 +160,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
                 GUIUtils.startScaleAnimationFromPivot(
                     mViewLastLocation[0], mViewLastLocation[1],
-                    mObservableScrollView, mIsTablet, null);
+                    mObservableScrollView, null);
             }
         }
 
@@ -176,7 +176,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 
-            GUIUtils.hideScaleAnimationFromPivot(mObservableScrollView, mIsTablet,
+            GUIUtils.hideScaleAnimationFromPivot(mObservableScrollView,
                 new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
@@ -199,6 +199,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
                     }
                 });
+
+        } else {
+            overridedBackPressed();
         }
     }
 
