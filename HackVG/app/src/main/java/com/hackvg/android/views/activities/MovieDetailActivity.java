@@ -380,7 +380,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             mObservableScrollView.setBackgroundColor(swatch.getRgb());
 
-            mConfirmationView.setBackgroundColor(swatch.getRgb());
+            mConfirmationContainer.setBackgroundColor(swatch.getRgb());
 
             ButterKnife.apply(mMovieInfoTextViews, GUIUtils.setter,
                 swatch.getTitleTextColor());
@@ -423,19 +423,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
                     PorterDuff.Mode.MULTIPLY);
             }
 
-            if (!mIsTablet) {
-
-                mMovieInfoTextViews.get(TITLE).setBackgroundColor(
-                    swatch.getRgb());
-
-                mMovieInfoTextViews.get(TITLE).setTextColor(
-                    swatch.getTitleTextColor());
-
-            } else {
-
-                mMovieInfoTextViews.get(TITLE).setTextColor(
-                    swatch.getRgb());
-            }
 
         }  // else use colors of the layout
     }
@@ -449,6 +436,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
             Palette.Swatch darkMutedSwatch      = palette.getDarkMutedSwatch();
             Palette.Swatch lightVibrantSwatch   = palette.getLightVibrantSwatch();
             Palette.Swatch lightMutedSwatch     = palette.getLightMutedSwatch();
+            Palette.Swatch vibrantSwatch        = palette.getVibrantSwatch();
+
+            setVibrantElements (vibrantSwatch);
 
             setBackgroundAndContentColors((darkVibrantSwatch != null)
                 ? darkVibrantSwatch : darkMutedSwatch);
@@ -456,6 +446,16 @@ public class MovieDetailActivity extends Activity implements DetailView,
             setHeadersTitleAndFabColors((darkVibrantSwatch != null)
                 ? lightVibrantSwatch : lightMutedSwatch);
         }
+    }
+
+    private void setVibrantElements(Palette.Swatch swatch) {
+
+        mMovieInfoTextViews.get(TITLE).setBackgroundColor(
+            swatch.getRgb());
+
+        mMovieInfoTextViews.get(TITLE).setTextColor(
+            swatch.getTitleTextColor());
+
     }
 
     @OnClick(R.id.activity_detail_fab)
