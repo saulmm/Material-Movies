@@ -79,7 +79,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         R.id.activity_detail_tagline,
         R.id.activity_detail_confirmation_text,
     })
-    List<TextView> movieInfoTextViews;
+    List<TextView> mMovieInfoTextViews;
 
     @InjectViews({
         R.id.activity_detail_header_tagline,
@@ -180,15 +180,15 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void setHomepage(String homepage) {
 
-        movieInfoTextViews.get(HOMEPAGE).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(HOMEPAGE).setText(homepage);
+        mMovieInfoTextViews.get(HOMEPAGE).setVisibility(View.VISIBLE);
+        mMovieInfoTextViews.get(HOMEPAGE).setText(homepage);
     }
 
     @Override
     public void setCompanies(String companies) {
 
-        movieInfoTextViews.get(COMPANY).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(COMPANY).setText(companies);
+        mMovieInfoTextViews.get(COMPANY).setVisibility(View.VISIBLE);
+        mMovieInfoTextViews.get(COMPANY).setText(companies);
     }
 
     @Override
@@ -212,23 +212,23 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void setName(String title) {
 
-        movieInfoTextViews.get(TITLE).setText(title);
+        mMovieInfoTextViews.get(TITLE).setText(title);
     }
 
     @Override
     public void setDescription(String description) {
 
         movieHeaders.get(DESCRIPTION_HEADER).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(DESCRIPTION).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(DESCRIPTION).setText(description);
+        mMovieInfoTextViews.get(DESCRIPTION).setVisibility(View.VISIBLE);
+        mMovieInfoTextViews.get(DESCRIPTION).setText(description);
     }
 
     @Override
     public void setTagline(String tagline) {
 
         movieHeaders.get(TAGLINE_HEADER).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(TAGLINE).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(TAGLINE).setText(tagline);
+        mMovieInfoTextViews.get(TAGLINE).setVisibility(View.VISIBLE);
+        mMovieInfoTextViews.get(TAGLINE).setText(tagline);
     }
 
     /**
@@ -372,95 +372,89 @@ public class MovieDetailActivity extends Activity implements DetailView,
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onGenerated(Palette palette) {
+    public void setBackgroundAndContentColors (Palette.Swatch swatch) {
 
-        if (palette != null) {
+        if (swatch != null) {
 
-            Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
-            Palette.Swatch darkVibrantSwatch = palette.getDarkVibrantSwatch();
-            Palette.Swatch lightVibrantSwatch = palette.getLightVibrantSwatch();
+            mReviewsColor = swatch.getTitleTextColor();
 
-            if (lightVibrantSwatch != null) {
+            mObservableScrollView.setBackgroundColor(swatch.getRgb());
 
-                mReviewsColor = lightVibrantSwatch.getTitleTextColor();
+            mConfirmationView.setBackgroundColor(swatch.getRgb());
 
-                mInformationContainer.setBackgroundColor(
-                    lightVibrantSwatch.getRgb());
+            ButterKnife.apply(mMovieInfoTextViews, GUIUtils.setter,
+                swatch.getTitleTextColor());
 
-                mConfirmationContainer.setBackgroundColor(
-                    lightVibrantSwatch.getRgb());
-
-                mFabButton.getBackground().setColorFilter(
-                    lightVibrantSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-
-                ButterKnife.apply(movieInfoTextViews, GUIUtils.setter,
-                    lightVibrantSwatch.getTitleTextColor());
-
-            } else {
-
-                int primaryColor = getResources().getColor(
-                    R.color.theme_primary);
-
-                mFabButton.getBackground().setColorFilter(primaryColor,
-                    PorterDuff.Mode.MULTIPLY);
-
-                mConfirmationView.setBackgroundColor(primaryColor);
-                mInformationContainer.setBackgroundColor(primaryColor);
-            }
-
-            if (lightVibrantSwatch == null && vibrantSwatch != null)
-                colorBrightElements(vibrantSwatch);
-
-            if (darkVibrantSwatch != null && lightVibrantSwatch != null)
-                colorBrightElements(darkVibrantSwatch);
-        }
+        } // else use colors of the layout
     }
 
-    public void colorBrightElements(Palette.Swatch brightSwatch) {
+    public void setHeadersTitleAndFabColors (Palette.Swatch swatch) {
 
-        mBrightSwatch = brightSwatch;
-        mReviewsAuthorColor = brightSwatch.getRgb();
+        if (swatch != null) {
 
-        if (brightSwatch != null) {
+            mBrightSwatch = swatch;
 
-            movieInfoTextViews.get(CONFIRMATION).setTextColor(
-                brightSwatch.getRgb());
+            mReviewsAuthorColor = swatch.getRgb();
+
+            mFabButton.getBackground().setColorFilter(swatch.getRgb(),
+                PorterDuff.Mode.MULTIPLY);
+
+            mMovieInfoTextViews.get(CONFIRMATION).setTextColor(
+                swatch.getRgb());
+
+            GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
+                swatch.getRgb(), mMovieInfoTextViews.get(HOMEPAGE));
+
+            GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
+                swatch.getRgb(), mMovieInfoTextViews.get(COMPANY));
+
+            ButterKnife.apply(movieHeaders, GUIUtils.setter,
+                swatch.getRgb());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                 Drawable drawable = mConfirmationView.getDrawable();
-                drawable.setColorFilter(brightSwatch.getRgb(),
+                drawable.setColorFilter(swatch.getRgb(),
                     PorterDuff.Mode.MULTIPLY);
 
             } else {
 
-                mConfirmationView.setColorFilter(brightSwatch.getRgb(),
+                mConfirmationView.setColorFilter(swatch.getRgb(),
                     PorterDuff.Mode.MULTIPLY);
             }
 
             if (!mIsTablet) {
 
-                movieInfoTextViews.get(TITLE).setBackgroundColor(
-                    brightSwatch.getRgb());
+                mMovieInfoTextViews.get(TITLE).setBackgroundColor(
+                    swatch.getRgb());
 
-                movieInfoTextViews.get(TITLE).setTextColor(
-                    brightSwatch.getTitleTextColor());
+                mMovieInfoTextViews.get(TITLE).setTextColor(
+                    swatch.getTitleTextColor());
 
             } else {
 
-                movieInfoTextViews.get(TITLE).setTextColor(
-                    brightSwatch.getRgb());
+                mMovieInfoTextViews.get(TITLE).setTextColor(
+                    swatch.getRgb());
             }
 
-                GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
-                    brightSwatch.getRgb(), movieInfoTextViews.get(HOMEPAGE));
+        }  // else use colors of the layout
+    }
 
-                GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
-                    brightSwatch.getRgb(), movieInfoTextViews.get(COMPANY));
+    @Override
+    public void onGenerated(Palette palette) {
 
-            ButterKnife.apply(movieHeaders, GUIUtils.setter,
-                brightSwatch.getRgb());
+        if (palette != null) {
+
+            Palette.Swatch darkVibrantSwatch    = palette.getDarkVibrantSwatch();
+            Palette.Swatch darkMutedSwatch      = palette.getDarkMutedSwatch();
+            Palette.Swatch lightVibrantSwatch   = palette.getLightVibrantSwatch();
+            Palette.Swatch lightMutedSwatch     = palette.getLightMutedSwatch();
+
+            setBackgroundAndContentColors((darkVibrantSwatch != null)
+                ? darkVibrantSwatch : darkMutedSwatch);
+
+            setHeadersTitleAndFabColors((darkVibrantSwatch != null)
+                ? lightVibrantSwatch : lightMutedSwatch);
         }
     }
 
@@ -477,7 +471,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (y > mCoverImageView.getHeight()) {
 
-            movieInfoTextViews.get(TITLE).setTranslationY(
+            mMovieInfoTextViews.get(TITLE).setTranslationY(
                 y - mCoverImageView.getHeight());
 
             if (!isTranslucent) {
@@ -494,7 +488,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (y < mCoverImageView.getHeight() && isTranslucent) {
 
-            movieInfoTextViews.get(TITLE).setTranslationY(0);
+            mMovieInfoTextViews.get(TITLE).setTranslationY(0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
