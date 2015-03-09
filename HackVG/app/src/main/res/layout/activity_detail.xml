@@ -90,7 +90,7 @@
                 <TextView
                     android:id="@+id/activity_detail_homepage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     tools:text="http://awesome.title.com"
                     android:visibility="gone"
                     style="@style/MaterialMoviesDetailField"
@@ -100,6 +100,7 @@
                     android:id="@+id/activity_detail_company"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:visibility="gone"
                     tools:text="Warner Bros, Paramount Pictures"
                     style="@style/MaterialMoviesDetailField"
@@ -119,8 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:lineSpacingExtra="6dp"
-                    android:textColor="#FFF"
+                    style="@style/MaterialMoviesDetailField"
                     tools:text="Mankind was born on Earth. It was never meant to die here."
                     />
 

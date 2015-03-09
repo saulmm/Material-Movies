@@ -1,21 +1,7 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_vertical_margin">56dp</dimen>
-    <dimen name="activity_vertical_margin_half">32dp</dimen>
-    <dimen name="activity_vertical_margin_double">32dp</dimen>
-    <dimen name="activity_vertical_margin_double_double">64dp</dimen>
-
     <dimen name="activity_movies_margins">10dp</dimen>
-
-    <dimen name="activity_horizontal_margin">56dp</dimen>
-    <dimen name="activity_horizontal_margin_half">32dp</dimen>
-    <dimen name="activity_horizontal_margin_double">32dp</dimen>
-    <dimen name="activity_horizontal_margin_double_double">64dp</dimen>
-    <dimen name="insets">5dp</dimen>
-    <dimen name="fab_size">55dp</dimen>
 
     <dimen name="item_movie_width">190dp</dimen>
     <dimen name="item_movie_height">295dp</dimen>
-    <dimen name="navigation_drawer_width">350dp</dimen>
-    <dimen name="activity_movies_background_view_height">178dp</dimen>
+
 </resources>

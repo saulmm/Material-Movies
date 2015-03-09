@@ -43,6 +43,8 @@ import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static android.widget.LinearLayout.LayoutParams;
+
 public class MovieDetailActivity extends Activity implements DetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
 
@@ -217,6 +219,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
     public void setDescription(String description) {
 
         movieHeaders.get(DESCRIPTION_HEADER).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(DESCRIPTION).setVisibility(View.VISIBLE);
         movieInfoTextViews.get(DESCRIPTION).setText(description);
     }
 
@@ -224,6 +227,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
     public void setTagline(String tagline) {
 
         movieHeaders.get(TAGLINE_HEADER).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(TAGLINE).setVisibility(View.VISIBLE);
         movieInfoTextViews.get(TAGLINE).setText(tagline);
     }
 
@@ -237,6 +241,15 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void showReviews(List<Review> reviewList) {
 
+        final int reviewMarginTop = getResources().getDimensionPixelOffset(
+            R.dimen.activity_vertical_margin_half);
+
+        final LayoutParams layoutParams = new LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(0, reviewMarginTop, 0, 0);
+
         movieHeaders.get(REVIEWS_HEADER).setVisibility(View.VISIBLE);
 
         for (Review result : reviewList) {
@@ -245,15 +258,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
             TextView reviewTextView = new TextView(this);
             reviewTextView.setTextAppearance(this,
                 R.style.MaterialMoviesReviewTextView);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            int reviewMarginTop = getResources().getDimensionPixelOffset(
-                R.dimen.activity_vertical_margin_half);
-
-            layoutParams.setMargins(0, reviewMarginTop, 0, 0);
 
             if (mReviewsColor != -1)
                 reviewTextView.setTextColor(mReviewsColor);
@@ -449,11 +453,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
                     brightSwatch.getRgb());
             }
 
-            if (movieInfoTextViews.get(HOMEPAGE).getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
                     brightSwatch.getRgb(), movieInfoTextViews.get(HOMEPAGE));
 
-            if (movieInfoTextViews.get(COMPANY).getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
                     brightSwatch.getRgb(), movieInfoTextViews.get(COMPANY));
 

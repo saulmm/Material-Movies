@@ -54,10 +54,8 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     @Override
     public void onMovieDetailResponse(MovieDetail movieDetail) {
 
-
         mMovieDetail = movieDetail;
         requestMovieImages(mMovieId);
-
     }
 
     @Subscribe
