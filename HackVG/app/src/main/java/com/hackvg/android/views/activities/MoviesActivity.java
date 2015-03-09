@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -276,7 +275,6 @@ public class MoviesActivity extends ActionBarActivity implements
                 mTabletBackground.setTranslationY(mBackgroundTranslation);
             }
 
-            Log.d("[DEBUG]", "MoviesActivity onScrolled - dy");
             // Is scrolling up
             if (dy > 10) {
 

@@ -14,7 +14,7 @@
     <dimen name="insets">5dp</dimen>
     <dimen name="fab_size">55dp</dimen>
 
-    <dimen name="item_movie_with">230dp</dimen>
+    <dimen name="item_movie_width">230dp</dimen>
     <dimen name="item_movie_height">410dp</dimen>
     <dimen name="navigation_drawer_width">300dp</dimen>
     <dimen name="activity_movies_background_view_height">128dp</dimen>

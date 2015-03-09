@@ -2,7 +2,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/item_movie_with"
+    android:layout_width="@dimen/item_movie_width"
     android:layout_height="@dimen/item_movie_height"
     >
 
