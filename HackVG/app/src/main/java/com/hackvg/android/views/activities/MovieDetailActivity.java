@@ -33,6 +33,7 @@ import com.hackvg.android.utils.GUIUtils;
 import com.hackvg.android.views.custom_views.ObservableScrollView;
 import com.hackvg.android.views.custom_views.ScrollViewListener;
 import com.hackvg.model.entities.Review;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -40,21 +41,26 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
 import butterknife.OnClick;
+import butterknife.Optional;
+
+import static android.widget.LinearLayout.LayoutParams;
 
 public class MovieDetailActivity extends Activity implements DetailView,
     Palette.PaletteAsyncListener, ScrollViewListener {
 
-    private static final int REVIEWS_HEADER = 2;
+    private static final int TAGLINE_HEADER         = 0;
+    private static final int DESCRIPTION_HEADER     = 1;
+    private static final int REVIEWS_HEADER         = 2;
 
-    private static final int TITLE          = 0;
-    private static final int DESCRIPTION    = 1;
-    private static final int HOMEPAGE       = 2;
-    private static final int COMPANY        = 3;
-    private static final int TAGLINE        = 4;
-    private static final int CONFIRMATION   = 5;
+    private static final int TITLE                  = 0;
+    private static final int DESCRIPTION            = 1;
+    private static final int HOMEPAGE               = 2;
+    private static final int COMPANY                = 3;
+    private static final int TAGLINE                = 4;
+    private static final int CONFIRMATION           = 5;
 
-    private int mReviewsColor       = -1;
-    private int mReviewsAuthorColor = -1;
+    private int mReviewsColor                       = -1;
+    private int mReviewsAuthorColor                 = -1;
 
     // Boolean that indicates if the activity is shown in a tablet or not
     boolean mIsTablet;
@@ -92,6 +98,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     @InjectView(R.id.activity_movie_detail_scroll)          ObservableScrollView mObservableScrollView;
     @InjectView(R.id.activity_detail_information_container) View mInformationContainer;
+
+    @Optional
+    @InjectView(R.id.activity_detail_image)                 ImageView mMovieImageView;
 
 
     @Override
@@ -169,10 +178,35 @@ public class MovieDetailActivity extends Activity implements DetailView,
     }
 
     @Override
+    public void setHomepage(String homepage) {
+
+        movieInfoTextViews.get(HOMEPAGE).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(HOMEPAGE).setText(homepage);
+    }
+
+    @Override
+    public void setCompanies(String companies) {
+
+        movieInfoTextViews.get(COMPANY).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(COMPANY).setText(companies);
+    }
+
+    @Override
     public void showFilmCover(Bitmap bitmap) {
 
         mCoverImageView.setImageBitmap(bitmap);
         Palette.generateAsync(bitmap, this);
+    }
+
+    @Override
+    public void showMovieImage(String url) {
+
+        if (mIsTablet && mMovieImageView != null) {
+
+            Picasso.with(this).load(url)
+                .fit().centerCrop()
+                .into(mMovieImageView);
+        }
     }
 
     @Override
@@ -184,7 +218,65 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void setDescription(String description) {
 
+        movieHeaders.get(DESCRIPTION_HEADER).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(DESCRIPTION).setVisibility(View.VISIBLE);
         movieInfoTextViews.get(DESCRIPTION).setText(description);
+    }
+
+    @Override
+    public void setTagline(String tagline) {
+
+        movieHeaders.get(TAGLINE_HEADER).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(TAGLINE).setVisibility(View.VISIBLE);
+        movieInfoTextViews.get(TAGLINE).setText(tagline);
+    }
+
+    /**
+     * Creates a TextView with a Spannable format programmatically
+     * containing the author by whom was the review written and the
+     * review text
+     *
+     * @param reviewList a list containing reviews of the film
+     */
+    @Override
+    public void showReviews(List<Review> reviewList) {
+
+        final int reviewMarginTop = getResources().getDimensionPixelOffset(
+            R.dimen.activity_vertical_margin_half);
+
+        final LayoutParams layoutParams = new LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(0, reviewMarginTop, 0, 0);
+
+        movieHeaders.get(REVIEWS_HEADER).setVisibility(View.VISIBLE);
+
+        for (Review result : reviewList) {
+
+            // Creates a TextView from programmatically
+            TextView reviewTextView = new TextView(this);
+            reviewTextView.setTextAppearance(this,
+                R.style.MaterialMoviesReviewTextView);
+
+            if (mReviewsColor != -1)
+                reviewTextView.setTextColor(mReviewsColor);
+
+            // Configure the review text
+            String reviewCredit = "Review written by " + result.getAuthor();
+
+            String reviewText = String.format("%s - %s",
+                reviewCredit, result.getContent());
+
+            Spannable spanColorString = new SpannableString(reviewText);
+            spanColorString.setSpan(new ForegroundColorSpan(mReviewsAuthorColor),
+                0, reviewCredit.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            reviewTextView.setText(spanColorString);
+
+            mMovieDescriptionContainer.addView(reviewTextView,
+                layoutParams);
+        }
     }
 
     @Override
@@ -269,45 +361,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
     }
 
     @Override
-    public void showReviews(List<Review> results) {
-
-        movieHeaders.get(REVIEWS_HEADER).setVisibility(View.VISIBLE);
-
-        for (Review result : results) {
-
-            TextView reviewTextView = new TextView(this);
-            reviewTextView.setTextAppearance(this, R.style.MaterialMoviesReviewTextView);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            int reviewMarginTop = getResources().getDimensionPixelOffset(
-                R.dimen.activity_vertical_margin_half);
-
-            layoutParams.setMargins(0, reviewMarginTop, 0, 0);
-
-            if (mReviewsColor != -1)
-                reviewTextView.setTextColor(mReviewsColor);
-
-            String reviewCredit = "Review written by " + result.getAuthor();
-
-            String reviewText = String.format("%s - %s",
-                reviewCredit, result.getContent());
-
-            Spannable spanColorString = new SpannableString(reviewText);
-
-            spanColorString.setSpan(new ForegroundColorSpan(mReviewsAuthorColor),
-                0, reviewCredit.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            reviewTextView.setText(spanColorString);
-
-            mMovieDescriptionContainer.addView(reviewTextView,
-                layoutParams);
-        }
-    }
-
-    @Override
     public void showLoadingIndicator() {
 
         progressBar.setVisibility(View.VISIBLE);
@@ -317,26 +370,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
     public void hideLoadingIndicator() {
 
         progressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void setHomepage(String homepage) {
-
-        movieInfoTextViews.get(HOMEPAGE).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(HOMEPAGE).setText(homepage);
-    }
-
-    @Override
-    public void setCompanies(String companies) {
-
-        movieInfoTextViews.get(COMPANY).setVisibility(View.VISIBLE);
-        movieInfoTextViews.get(COMPANY).setText(companies);
-    }
-
-    @Override
-    public void setTagline(String tagline) {
-
-        movieInfoTextViews.get(TAGLINE).setText(tagline);
     }
 
     @Override
@@ -420,11 +453,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
                     brightSwatch.getRgb());
             }
 
-            if (movieInfoTextViews.get(HOMEPAGE).getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_domain_white_24dp,
                     brightSwatch.getRgb(), movieInfoTextViews.get(HOMEPAGE));
 
-            if (movieInfoTextViews.get(COMPANY).getVisibility() == View.VISIBLE)
                 GUIUtils.tintAndSetCompoundDrawable(this, R.drawable.ic_public_white_24dp,
                     brightSwatch.getRgb(), movieInfoTextViews.get(COMPANY));
 

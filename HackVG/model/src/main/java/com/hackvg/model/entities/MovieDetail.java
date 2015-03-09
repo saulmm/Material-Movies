@@ -166,4 +166,9 @@ public class MovieDetail {
 
         this.movieImagesList = movieImagesList;
     }
+
+    public List<ImagesWrapper.MovieImage> getMovieImagesList() {
+
+        return movieImagesList;
+    }
 }

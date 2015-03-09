@@ -85,14 +85,13 @@
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    tools:visibility="visible"
                     style="?android:attr/progressBarStyleLarge"
                     />
 
                 <TextView
                     android:id="@+id/activity_detail_homepage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     tools:text="http://awesome.title.com"
                     tools:visibility="visible"
                     style="@style/MaterialMoviesDetailField"
@@ -102,6 +101,7 @@
                     android:id="@+id/activity_detail_company"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     tools:visibility="visible"
                     tools:text="Warner Bros, Paramount Pictures"
                     style="@style/MaterialMoviesDetailField"

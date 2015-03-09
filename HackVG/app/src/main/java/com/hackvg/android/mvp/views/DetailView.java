@@ -35,4 +35,6 @@ public interface DetailView extends MVPView {
     public void showLoadingIndicator ();
 
     public void hideLoadingIndicator ();
+
+    void showMovieImage(String url);
 }

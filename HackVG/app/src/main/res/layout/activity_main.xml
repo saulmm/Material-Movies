@@ -17,7 +17,7 @@
         <com.hackvg.android.views.custom_views.AutofitRecyclerView
             android:id="@+id/recycler_popular_movies"
             android:layout_width="match_parent"
-            android:columnWidth="@dimen/item_movie_with"
+            android:columnWidth="@dimen/item_movie_width"
             android:layout_height="match_parent"
             />
 
