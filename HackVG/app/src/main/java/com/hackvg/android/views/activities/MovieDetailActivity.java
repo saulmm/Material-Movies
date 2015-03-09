@@ -1,5 +1,6 @@
 package com.hackvg.android.views.activities;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -43,6 +44,7 @@ import butterknife.InjectViews;
 import butterknife.OnClick;
 import butterknife.Optional;
 
+import static android.support.v7.graphics.Palette.Swatch;
 import static android.widget.LinearLayout.LayoutParams;
 
 public class MovieDetailActivity extends Activity implements DetailView,
@@ -69,7 +71,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private static final int CONFIRMATION_VIEW_DELAY = 1500;
     private MovieDetailPresenter mDetailPresenter;
 
-    private Palette.Swatch mBrightSwatch;
+    private Swatch mBrightSwatch;
 
     @InjectViews({
         R.id.activity_detail_title,
@@ -101,6 +103,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     @Optional
     @InjectView(R.id.activity_detail_image)                 ImageView mMovieImageView;
+    private int[] mViewLastLocation;
 
 
     @Override
@@ -151,9 +154,14 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         } else {
 
-            int[] viewLastLocation = getIntent().getIntArrayExtra("view_location");
+            mViewLastLocation = getIntent().getIntArrayExtra("view_location");
 
-            GUIUtils.startScaleAnimationFromPivot(viewLastLocation[0], viewLastLocation[1], mObservableScrollView, null);
+            if (!mIsTablet) {
+
+                GUIUtils.startScaleAnimationFromPivot(
+                    mViewLastLocation[0], mViewLastLocation[1],
+                    mObservableScrollView, mIsTablet, null);
+            }
         }
 
         String movieID = getIntent().getStringExtra("movie_id");
@@ -161,6 +169,41 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !mIsTablet)
             mObservableScrollView.setScrollViewListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+            GUIUtils.hideScaleAnimationFromPivot(mObservableScrollView, mIsTablet,
+                new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+
+                        overridedBackPressed();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+        }
+    }
+
+    public void overridedBackPressed () {
+        super.onBackPressed();
     }
 
     @Override
@@ -372,7 +415,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         progressBar.setVisibility(View.GONE);
     }
 
-    public void setBackgroundAndContentColors (Palette.Swatch swatch) {
+    public void setBackgroundAndContentColors (Swatch swatch) {
 
         if (swatch != null) {
 
@@ -388,7 +431,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         } // else use colors of the layout
     }
 
-    public void setHeadersTitleAndFabColors (Palette.Swatch swatch) {
+    public void setHeadersTitleAndFabColors (Swatch swatch) {
 
         if (swatch != null) {
 
@@ -422,8 +465,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 mConfirmationView.setColorFilter(swatch.getRgb(),
                     PorterDuff.Mode.MULTIPLY);
             }
-
-
         }  // else use colors of the layout
     }
 
@@ -432,30 +473,34 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (palette != null) {
 
-            Palette.Swatch darkVibrantSwatch    = palette.getDarkVibrantSwatch();
-            Palette.Swatch darkMutedSwatch      = palette.getDarkMutedSwatch();
-            Palette.Swatch lightVibrantSwatch   = palette.getLightVibrantSwatch();
-            Palette.Swatch lightMutedSwatch     = palette.getLightMutedSwatch();
-            Palette.Swatch vibrantSwatch        = palette.getVibrantSwatch();
+            final Swatch darkVibrantSwatch    = palette.getDarkVibrantSwatch();
+            final Swatch darkMutedSwatch      = palette.getDarkMutedSwatch();
+            final Swatch lightVibrantSwatch   = palette.getLightVibrantSwatch();
+            final Swatch lightMutedSwatch     = palette.getLightMutedSwatch();
 
-            setVibrantElements (vibrantSwatch);
+            final Swatch backgroundAndContentColors = (darkVibrantSwatch != null)
+                ? darkVibrantSwatch : darkMutedSwatch;
 
-            setBackgroundAndContentColors((darkVibrantSwatch != null)
-                ? darkVibrantSwatch : darkMutedSwatch);
+            final Swatch titleAndFabColors = (darkVibrantSwatch != null)
+                ? lightVibrantSwatch : lightMutedSwatch;
 
-            setHeadersTitleAndFabColors((darkVibrantSwatch != null)
-                ? lightVibrantSwatch : lightMutedSwatch);
+            setBackgroundAndContentColors(backgroundAndContentColors);
+
+            setHeadersTitleAndFabColors(titleAndFabColors);
+
+            setVibrantElements(backgroundAndContentColors, titleAndFabColors);
         }
     }
 
-    private void setVibrantElements(Palette.Swatch swatch) {
+    private void setVibrantElements(Swatch lightSwatch, Swatch darkSwatch) {
 
-        mMovieInfoTextViews.get(TITLE).setBackgroundColor(
-            swatch.getRgb());
+        if (mBrightSwatch != null)
+            mMovieInfoTextViews.get(TITLE).setBackgroundColor(
+                mBrightSwatch.getRgb());
 
-        mMovieInfoTextViews.get(TITLE).setTextColor(
-            swatch.getTitleTextColor());
-
+        if (darkSwatch != null)
+            mMovieInfoTextViews.get(TITLE).setTextColor(
+                darkSwatch.getTitleTextColor());
     }
 
     @OnClick(R.id.activity_detail_fab)
