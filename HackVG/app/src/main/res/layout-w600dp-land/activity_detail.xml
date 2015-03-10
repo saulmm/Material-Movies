@@ -16,7 +16,7 @@
         >
 
         <ImageView
-            android:id="@+id/activity_detail_cover"
+            android:id="@+id/item_movie_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"

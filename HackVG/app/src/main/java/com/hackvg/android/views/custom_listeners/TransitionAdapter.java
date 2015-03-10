@@ -3,7 +3,7 @@ package com.hackvg.android.views.custom_listeners;
 import android.transition.Transition;
 
 
-public class CustomTransitionListener implements Transition.TransitionListener {
+public class TransitionAdapter implements Transition.TransitionListener {
 
     @Override
     public void onTransitionStart(Transition transition) {

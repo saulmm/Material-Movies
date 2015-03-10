@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/item_movie_width"
     android:layout_height="@dimen/item_movie_height"
+    android:clipChildren="false"
+
     >
 
     <ImageView

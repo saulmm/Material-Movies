@@ -30,7 +30,7 @@
                 />
 
             <ImageView
-                android:id="@+id/activity_detail_cover"
+                android:id="@+id/item_movie_cover"
                 android:layout_width="@dimen/item_movie_width"
                 android:layout_height="@dimen/item_movie_height"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"

@@ -1,5 +1,6 @@
 package com.hackvg.android.views.activities;
 
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -64,6 +66,7 @@ public class MoviesActivity extends ActionBarActivity implements
 
     @Optional
     @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
+    private ImageView mCoverImage;
 
 
     @Override
@@ -107,6 +110,14 @@ public class MoviesActivity extends ActionBarActivity implements
 
             mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+
+        super.onActivityReenter(resultCode, data);
+        Log.d("[DEBUG]", "MoviesActivity onActivityReenter - Re-enter");
     }
 
     @Override
@@ -218,8 +229,8 @@ public class MoviesActivity extends ActionBarActivity implements
         String movieID = mMoviesAdapter.getMovieList().get(position).getId();
         movieDetailActivityIntent.putExtra("movie_id", movieID);
 
-        ImageView coverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
-        sPhotoCache.put(0, ((BitmapDrawable)coverImage.getDrawable()).getBitmap());
+        mCoverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
+        sPhotoCache.put(0, ((BitmapDrawable) mCoverImage.getDrawable()).getBitmap());
 
         if (mMoviesAdapter.isMovieReady(position)) {
 
@@ -246,6 +257,7 @@ public class MoviesActivity extends ActionBarActivity implements
 
                 int [] finalLocation = {finalLocationX, finalLocationY};
                 movieDetailActivityIntent.putExtra("view_location", finalLocation);
+
                 startActivity(movieDetailActivityIntent);
             }
 
@@ -300,6 +312,8 @@ public class MoviesActivity extends ActionBarActivity implements
 
         }
     };
+
+
 
     private void showToolbar() {
 

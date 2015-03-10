@@ -65,6 +65,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
         Picasso.with(mContext)
             .load(posterURL)
+            .fit()
+            .centerCrop()
             .into(holder.coverImageView, new Callback() {
                 @Override
                 public void onSuccess() {

@@ -3,7 +3,7 @@ package com.hackvg.android.views.custom_listeners;
 
 import android.animation.Animator;
 
-public class CustomAnimatorListener implements Animator.AnimatorListener {
+public class AnimatorAdapter implements Animator.AnimatorListener {
 
     @Override
     public void onAnimationStart(Animator animation) {
