@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="480dp"
                 android:scaleType="fitXY"
-                tools:layout_height="10dp"
+                tools:layout_height="410dp"
                 />
 
             <com.hackvg.android.views.custom_views.LobsterTextView
@@ -51,13 +51,12 @@
                 android:layout_height="@dimen/fab_size"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="-27dp"
-                android:layout_gravity="right"
+                android:layout_alignParentRight="true"
                 android:scaleX="0"
                 android:scaleY="0"
-                android:layout_alignParentRight="true"
                 android:src="@drawable/ic_fab_star"
                 android:background="@drawable/fab"
-                android:layout_below="@id/activity_detail_title"
+                android:layout_below="@id/activity_detail_cover"
                 android:elevation="4dp"
                 android:stateListAnimator="@anim/fab_animation"
                 />

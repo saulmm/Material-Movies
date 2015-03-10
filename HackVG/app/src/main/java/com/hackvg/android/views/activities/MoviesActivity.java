@@ -76,7 +76,8 @@ public class MoviesActivity extends ActionBarActivity implements
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(
+            R.drawable.ic_menu_white_24dp);
 
         mToolbar.setNavigationOnClickListener(this);
 

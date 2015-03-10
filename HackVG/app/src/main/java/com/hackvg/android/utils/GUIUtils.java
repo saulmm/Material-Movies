@@ -12,7 +12,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewPropertyAnimator;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -22,13 +21,15 @@ import com.hackvg.android.R;
 
 import butterknife.ButterKnife;
 
+import static android.animation.Animator.AnimatorListener;
+
 /**
  * Created by saulmm on 08/02/15.
  */
 public class GUIUtils {
 
     public static final int DEFAULT_DELAY           = 30;
-    public static final int SCALE_DELAY             = 600;
+    public static final int SCALE_DELAY             = 300;
     public static final float SCALE_START_ANCHOR    = 0.3f;
 
 
@@ -108,20 +109,22 @@ public class GUIUtils {
     };
 
     public static void startScaleAnimationFromPivot (int pivotX, int pivotY, final View v,
-        final Animator.AnimatorListener animatorListener) {
+        final AnimatorListener animatorListener) {
+
+        final AccelerateDecelerateInterpolator interpolator =
+            new AccelerateDecelerateInterpolator();
 
         v.setScaleY(SCALE_START_ANCHOR);
         v.setPivotX(pivotX);
         v.setPivotY(pivotY);
 
-        v.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-
-                v.getViewTreeObserver().removeOnPreDrawListener(this);
+//        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                v.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 ViewPropertyAnimator viewPropertyAnimator = v.animate()
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .setInterpolator(interpolator)
                     .scaleY(1)
                     .setDuration(SCALE_DELAY);
 
@@ -129,12 +132,11 @@ public class GUIUtils {
                     viewPropertyAnimator.setListener(animatorListener);
 
                 viewPropertyAnimator.start();
-                return true;
-            }
-        });
+//            }
+//        });
     }
 
-    public static void hideScaleAnimationFromPivot(View v, Animator.AnimatorListener animatorListener) {
+    public static void hideScaleAnimationFromPivot(View v, AnimatorListener animatorListener) {
 
         ViewPropertyAnimator viewPropertyAnimator = v.animate()
             .setInterpolator(new AccelerateDecelerateInterpolator())
