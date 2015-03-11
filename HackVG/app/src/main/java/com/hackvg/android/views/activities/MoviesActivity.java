@@ -221,7 +221,7 @@ public class MoviesActivity extends ActionBarActivity implements
 
 
     @Override
-    public void onClick(View v, int position, float x, float y) {
+    public void onClick(View touchedView, int position, float touchedX, float touchedY) {
 
         Intent movieDetailActivityIntent = new Intent (
             MoviesActivity.this, MovieDetailActivity.class);
@@ -229,37 +229,19 @@ public class MoviesActivity extends ActionBarActivity implements
         String movieID = mMoviesAdapter.getMovieList().get(position).getId();
         movieDetailActivityIntent.putExtra("movie_id", movieID);
 
-        mCoverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
+        mCoverImage = (ImageView) touchedView.findViewById(R.id.item_movie_cover);
         sPhotoCache.put(0, ((BitmapDrawable) mCoverImage.getDrawable()).getBitmap());
 
         if (mMoviesAdapter.isMovieReady(position)) {
 
-            // Perform a SharedElement transition on Lollipop and higher
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                movieDetailActivityIntent.putExtra("movie_position", position);
-
-                // Setup the transition to the detail activity
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    this, new Pair<>(v, "cover" + position));
-
-                startActivity(movieDetailActivityIntent, options.toBundle());
-
-            // Collect the necessary parameters for scaling
-            } else {
-
-                int[] location = {(int) x, (int) y};
-                int[] locationAtScreen = new int [2];
-                v.getLocationOnScreen(locationAtScreen);
-
-                int finalLocationX = locationAtScreen[0] + location[0];
-                int finalLocationY = locationAtScreen[1] + location[1];
-
-                int [] finalLocation = {finalLocationX, finalLocationY};
-                movieDetailActivityIntent.putExtra("view_location", finalLocation);
-
-                startActivity(movieDetailActivityIntent);
+                startSharedElementPosition(touchedView,
+                    position, movieDetailActivityIntent);
             }
+
+            else
+                startDetailActivityByAnimation(touchedView,
+                    (int) touchedX, (int) touchedY, movieDetailActivityIntent);
 
         } else {
 
@@ -267,10 +249,36 @@ public class MoviesActivity extends ActionBarActivity implements
                 .show();
         }
     }
+
+    private void startDetailActivityByAnimation(View touchedView,
+        int touchedX, int touchedY, Intent movieDetailActivityIntent) {
+
+        int[] touchedLocation = {touchedX, touchedY};
+        int[] locationAtScreen = new int [2];
+        touchedView.getLocationOnScreen(locationAtScreen);
+
+        int finalLocationX = locationAtScreen[0] + touchedLocation[0];
+        int finalLocationY = locationAtScreen[1] + touchedLocation[1];
+
+        int [] finalLocation = {finalLocationX, finalLocationY};
+        movieDetailActivityIntent.putExtra("view_location", finalLocation);
+
+        startActivity(movieDetailActivityIntent);
+    }
+
+    private void startSharedElementPosition(View v, int position, Intent movieDetailActivityIntent) {
+
+        movieDetailActivityIntent.putExtra("movie_position", position);
+
+        // Setup the transition to the detail activity
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+            this, new Pair<>(v, "cover" + position));
+
+        startActivity(movieDetailActivityIntent, options.toBundle());
+    }
+
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
         public boolean flag;
-
-
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

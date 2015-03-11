@@ -32,8 +32,6 @@ public class MovieDetailPresenter extends Presenter {
 
         mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));
 
-        mMovieDetailView.showLoadingIndicator();
-
         new GetMovieDetailUsecaseController(mMovieID,
             BusProvider.getUIBusInstance(), RestMovieSource.getInstance())
         .execute();
@@ -85,8 +83,6 @@ public class MovieDetailPresenter extends Presenter {
 
     @Subscribe
     public void onDetailInformationReceived(MovieDetail response) {
-
-        mMovieDetailView.hideLoadingIndicator();
 
         showDescription(response.getOverview());
         showTitle(response.getTitle());

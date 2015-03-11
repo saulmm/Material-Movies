@@ -24,7 +24,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,8 +94,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
     })
     List<TextView> movieHeaders;
 
-    @InjectView(R.id.activity_detail_progress)              ProgressBar progressBar;
-
     @InjectView(R.id.activity_detail_book_info)             LinearLayout mMovieDescriptionContainer;
     @InjectView(R.id.activity_detail_fab)                   ImageView mFabButton;
     @InjectView(R.id.item_movie_cover)                      ImageView mCoverImageView;
@@ -150,10 +147,11 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
                         super.onAnimationEnd(animation);
                         GUIUtils.showViewByScale(mFabButton);
-
                     }
                 }
             );
+
+            animateElementsByScale();
         }
     }
 
@@ -180,7 +178,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
                     startPostponedEnterTransition();
                     return true;
                 }
-            });
+            }
+        );
 
         getWindow().getSharedElementEnterTransition().addListener(
             new TransitionAdapter() {
@@ -189,44 +188,25 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 public void onTransitionEnd(Transition transition) {
 
                     super.onTransitionEnd(transition);
-                    GUIUtils.showViewByScale(mFabButton);
-
-                    GUIUtils.showViewByScaleY(mMovieInfoTextViews.get(TITLE), new AnimatorAdapter() {
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-
-                            super.onAnimationEnd(animation);
-                            GUIUtils.showViewByScale(mMovieDescriptionContainer);
-                        }
-                    });
+                    animateElementsByScale();
                 }
-            });
+            }
+        );
     }
 
-    @Override
-    public void onBackPressed() {
+    private void animateElementsByScale() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        GUIUtils.showViewByScale(mFabButton);
 
-            GUIUtils.hideScaleAnimationFromPivot(mCoverImageView,
-                new AnimatorAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
+        GUIUtils.showViewByScaleY(mMovieInfoTextViews.get(TITLE), new AnimatorAdapter() {
 
-                        super.onAnimationEnd(animation);
-                        overrideBackPressed();
-                    }
-                });
+            @Override
+            public void onAnimationEnd(Animator animation) {
 
-        } else {
-
-            overrideBackPressed();
-        }
-    }
-
-    public void overrideBackPressed() {
-        super.onBackPressed();
+                super.onAnimationEnd(animation);
+                GUIUtils.showViewByScale(mMovieDescriptionContainer);
+            }
+        });
     }
 
     @Override
@@ -436,18 +416,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
             }
 
         }, CONFIRMATION_VIEW_DELAY);
-    }
-
-    @Override
-    public void showLoadingIndicator() {
-
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideLoadingIndicator() {
-
-        progressBar.setVisibility(View.GONE);
     }
 
     public void setBackgroundAndFabContentColors(Swatch swatch) {
