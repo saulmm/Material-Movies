@@ -57,6 +57,4 @@ public class AutofitRecyclerView extends RecyclerView {
             mLayoutManager.setSpanCount(spanCount);
         }
     }
-
-
 }

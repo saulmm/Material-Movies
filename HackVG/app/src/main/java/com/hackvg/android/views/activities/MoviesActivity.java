@@ -1,5 +1,6 @@
 package com.hackvg.android.views.activities;
 
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -65,6 +67,8 @@ public class MoviesActivity extends ActionBarActivity implements
     @Optional
     @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
 
+    private ImageView mCoverImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,8 @@ public class MoviesActivity extends ActionBarActivity implements
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(
+            R.drawable.ic_menu_white_24dp);
 
         mToolbar.setNavigationOnClickListener(this);
 
@@ -98,14 +103,16 @@ public class MoviesActivity extends ActionBarActivity implements
             MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
                 .getSerializable("movies_wrapper");
 
-            if (mTabletBackground != null) {
-
-                mBackgroundTranslation = savedInstanceState.getFloat("background_translation");
-                mTabletBackground.setTranslationY(mBackgroundTranslation);
-            }
-
             mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+
+        super.onActivityReenter(resultCode, data);
+        Log.d("[DEBUG]", "MoviesActivity onActivityReenter - Re-enter");
     }
 
     @Override
@@ -127,10 +134,13 @@ public class MoviesActivity extends ActionBarActivity implements
 
         super.onSaveInstanceState(outState);
 
-        outState.putSerializable("movies_wrapper",
-            new MoviesWrapper(mMoviesAdapter.getMovieList()));
+        if (mMoviesAdapter != null) {
 
-        outState.putFloat("background_translation", mBackgroundTranslation);
+            outState.putSerializable("movies_wrapper",
+                new MoviesWrapper(mMoviesAdapter.getMovieList()));
+
+            outState.putFloat("background_translation", mBackgroundTranslation);
+        }
 
     }
 
@@ -206,44 +216,30 @@ public class MoviesActivity extends ActionBarActivity implements
 
 
     @Override
-    public void onClick(View v, int position, float x, float y) {
+    public void onClick(View touchedView, int moviePosition, float touchedX, float touchedY) {
 
         Intent movieDetailActivityIntent = new Intent (
             MoviesActivity.this, MovieDetailActivity.class);
 
-        String movieID = mMoviesAdapter.getMovieList().get(position).getId();
+        String movieID = mMoviesAdapter.getMovieList().get(moviePosition).getId();
         movieDetailActivityIntent.putExtra("movie_id", movieID);
+        movieDetailActivityIntent.putExtra("movie_position", moviePosition);
 
-        ImageView coverImage = (ImageView) v.findViewById(R.id.item_movie_cover);
-        sPhotoCache.put(0, ((BitmapDrawable)coverImage.getDrawable()).getBitmap());
+        mCoverImage = (ImageView) touchedView.findViewById(R.id.item_movie_cover);
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) mCoverImage.getDrawable();
 
-        if (mMoviesAdapter.isMovieReady(position)) {
+        if (mMoviesAdapter.isMovieReady(moviePosition) || bitmapDrawable != null) {
 
-            // Perform a SharedElement transition on Lollipop and higher
+            sPhotoCache.put(0, bitmapDrawable.getBitmap());
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                movieDetailActivityIntent.putExtra("movie_position", position);
-
-                // Setup the transition to the detail activity
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-                    this, new Pair<>(v, "cover" + position));
-
-                startActivity(movieDetailActivityIntent, options.toBundle());
-
-            // Collect the necessary parameters for scaling
-            } else {
-
-                int[] location = {(int) x, (int) y};
-                int[] locationAtScreen = new int [2];
-                v.getLocationOnScreen(locationAtScreen);
-
-                int finalLocationX = locationAtScreen[0] + location[0];
-                int finalLocationY = locationAtScreen[1] + location[1];
-
-                int [] finalLocation = {finalLocationX, finalLocationY};
-                movieDetailActivityIntent.putExtra("view_location", finalLocation);
-                startActivity(movieDetailActivityIntent);
+                startSharedElementPosition(touchedView,
+                    moviePosition, movieDetailActivityIntent);
             }
+
+            else
+                startDetailActivityByAnimation(touchedView,
+                    (int) touchedX, (int) touchedY, movieDetailActivityIntent);
 
         } else {
 
@@ -251,10 +247,36 @@ public class MoviesActivity extends ActionBarActivity implements
                 .show();
         }
     }
+
+    private void startDetailActivityByAnimation(View touchedView,
+        int touchedX, int touchedY, Intent movieDetailActivityIntent) {
+
+        int[] touchedLocation = {touchedX, touchedY};
+        int[] locationAtScreen = new int [2];
+        touchedView.getLocationOnScreen(locationAtScreen);
+
+        int finalLocationX = locationAtScreen[0] + touchedLocation[0];
+        int finalLocationY = locationAtScreen[1] + touchedLocation[1];
+
+        int [] finalLocation = {finalLocationX, finalLocationY};
+        movieDetailActivityIntent.putExtra("view_location",
+            finalLocation);
+
+        startActivity(movieDetailActivityIntent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startSharedElementPosition(View touchedView,
+        int moviePosition, Intent movieDetailActivityIntent) {
+
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+            this, new Pair<>(touchedView, "cover" + moviePosition));
+
+        startActivity(movieDetailActivityIntent, options.toBundle());
+    }
+
     private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
         public boolean flag;
-
-
 
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -296,6 +318,8 @@ public class MoviesActivity extends ActionBarActivity implements
 
         }
     };
+
+
 
     private void showToolbar() {
 

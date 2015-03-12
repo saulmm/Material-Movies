@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_detail_information_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     >
 
     <com.hackvg.android.views.custom_views.ObservableScrollView
@@ -20,11 +20,10 @@
             >
 
             <ImageView
-                android:id="@+id/activity_detail_cover"
+                android:id="@+id/item_movie_cover"
                 android:layout_width="match_parent"
-                android:layout_height="480dp"
-                android:scaleType="fitXY"
-                tools:layout_height="10dp"
+                android:layout_height="@dimen/item_movie_height"
+                android:scaleType="centerCrop"
                 />
 
             <com.hackvg.android.views.custom_views.LobsterTextView
@@ -33,7 +32,9 @@
                 android:layout_height="96dp"
                 android:paddingLeft="48dp"
                 android:paddingRight="48dp"
-                android:layout_below="@id/activity_detail_cover"
+                android:scaleY="0"
+                android:transformPivotY="0dp"
+                android:layout_below="@id/item_movie_cover"
                 android:gravity="center_vertical"
                 android:fontFamily="sans-serif-medium"
                 android:textSize="28sp"
@@ -51,13 +52,12 @@
                 android:layout_height="@dimen/fab_size"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="-27dp"
-                android:layout_gravity="right"
+                android:layout_alignParentRight="true"
                 android:scaleX="0"
                 android:scaleY="0"
-                android:layout_alignParentRight="true"
                 android:src="@drawable/ic_fab_star"
                 android:background="@drawable/fab"
-                android:layout_below="@id/activity_detail_title"
+                android:layout_below="@id/item_movie_cover"
                 android:elevation="4dp"
                 android:stateListAnimator="@anim/fab_animation"
                 />
@@ -81,6 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:scaleY="0"
+                android:transformPivotY="0dp"
                 android:paddingLeft="@dimen/activity_horizontal_margin_half"
                 android:paddingRight="@dimen/activity_horizontal_margin_half"
                 android:paddingBottom="@dimen/activity_vertical_margin_double_double"
@@ -161,7 +163,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/theme_primary"
-        android:visibility="gone"
+        style="@style/MaterialMoviesDetailConfirmation"
         >
 
         <com.hackvg.android.views.custom_views.LobsterTextView

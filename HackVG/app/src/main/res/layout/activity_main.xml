@@ -17,8 +17,10 @@
         <com.hackvg.android.views.custom_views.AutofitRecyclerView
             android:id="@+id/recycler_popular_movies"
             android:layout_width="match_parent"
+            android:paddingTop="?android:attr/actionBarSize"
             android:columnWidth="@dimen/item_movie_width"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
             />
 
         <android.support.v7.widget.Toolbar
