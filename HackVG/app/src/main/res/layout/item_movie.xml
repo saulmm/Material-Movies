@@ -2,28 +2,29 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="196dp"
-    android:layout_height="248dp"
+    android:layout_width="@dimen/item_movie_width"
+    android:layout_height="@dimen/item_movie_height"
+    android:clipChildren="false"
+
     >
 
     <ImageView
         android:id="@+id/item_movie_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_dark"
-        android:src="@drawable/placeholder"
+        android:background="@color/movie_placeholder"
         android:scaleType="centerCrop"
         />
 
-    <TextView
+    <com.hackvg.android.views.custom_views.LobsterTextView
         android:id="@+id/item_movie_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin_half"
+        android:paddingRight="@dimen/activity_horizontal_margin_half"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:background="#88000000"
+        android:background="#AA000000"
         android:maxLines="2"
         android:ellipsize="end"
         android:textColor="#FFF"

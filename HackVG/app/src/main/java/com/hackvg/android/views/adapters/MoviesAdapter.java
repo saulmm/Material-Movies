@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 
 import com.hackvg.android.R;
 import com.hackvg.android.utils.RecyclerViewClickListener;
-import com.hackvg.model.entities.TvMovie;
+import com.hackvg.model.entities.Movie;
 import com.hackvg.common.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -21,22 +22,22 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
-    private final List<TvMovie> movieList;
-    public RecyclerViewClickListener recyclerViewClickListener;
-    private Context context;
+    private Context mContext;
+    private List<Movie> mMovieList;
+    private RecyclerViewClickListener mRecyclerClickListener;
 
-    public MoviesAdapter(List<TvMovie> movieList) {
+    public MoviesAdapter(List<Movie> mMovieList) {
 
-        this.movieList = movieList;
+        this.mMovieList = mMovieList;
     }
 
-    public List<TvMovie> getMovieList() {
+    public List<Movie> getMovieList() {
 
-        return movieList;
+        return mMovieList;
     }
 
-    public void setRecyclerViewClickListener(RecyclerViewClickListener recyclerViewClickListener) {
-        this.recyclerViewClickListener = recyclerViewClickListener;
+    public void setRecyclerListListener(RecyclerViewClickListener mRecyclerClickListener) {
+        this.mRecyclerClickListener = mRecyclerClickListener;
     }
 
     @Override
@@ -45,16 +46,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
         View rowView = LayoutInflater.from(viewGroup.getContext())
             .inflate(R.layout.item_movie, viewGroup, false);
 
-        this.context = viewGroup.getContext();
+        this.mContext = viewGroup.getContext();
 
-        return new MovieViewHolder(rowView, recyclerViewClickListener);
-
+        return new MovieViewHolder(rowView, mRecyclerClickListener);
     }
 
     @Override
     public void onBindViewHolder(final MovieViewHolder holder, final int position) {
 
-        TvMovie selectedMovie = movieList.get(position);
+        Movie selectedMovie = mMovieList.get(position);
 
         holder.titleTextView.setText(selectedMovie.getTitle());
 
@@ -63,13 +63,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
         String posterURL = Constants.BASIC_STATIC_URL + selectedMovie.getPoster_path();
 
-        Picasso.with(context)
+        Picasso.with(mContext)
             .load(posterURL)
+            .fit().centerCrop()
             .into(holder.coverImageView, new Callback() {
                 @Override
                 public void onSuccess() {
 
-                    movieList.get(position).setMovieReady(true);
+                    mMovieList.get(position).setMovieReady(true);
                 }
 
                 @Override
@@ -81,17 +82,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
     public boolean isMovieReady(int position) {
 
-        return movieList.get(position).isMovieReady();
+        return mMovieList.get(position).isMovieReady();
     }
 
     @Override
     public int getItemCount() {
 
-        return movieList.size();
+        return mMovieList.size();
+    }
+
+    public void appendMovies(List<Movie> movieList) {
+
+        mMovieList.addAll(movieList);
+        notifyDataSetChanged();
     }
 }
 
-class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
     private final RecyclerViewClickListener onClickListener;
     TextView titleTextView;
@@ -105,7 +112,7 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         titleTextView = (TextView) itemView.findViewById(R.id.item_movie_title);
         coverImageView = (ImageView) itemView.findViewById(R.id.item_movie_cover);
         coverImageView.setDrawingCacheEnabled(true);
-        coverImageView.setOnClickListener(this);
+        coverImageView.setOnTouchListener(this);
         this.onClickListener = onClickListener;
     }
 
@@ -114,10 +121,15 @@ class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         coverImageView.setTag(ready);
     }
 
-    @Override
-    public void onClick(View v) {
 
-        onClickListener.onClick(v, getPosition());
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        if (event.getAction() == MotionEvent.ACTION_UP && event.getAction() != MotionEvent.ACTION_MOVE) {
+
+            onClickListener.onClick(v, getPosition(), event.getX(), event.getY());
+        }
+        return true;
     }
 }
 

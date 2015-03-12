@@ -1,18 +1,23 @@
 package com.hackvg.android.mvp.presenters;
 
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hackvg.android.mvp.views.DetailView;
+import com.hackvg.android.views.activities.MoviesActivity;
 import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.GetMovieDetailUsecaseController;
-import com.hackvg.domain.Usecase;
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.ImagesWrapper;
+import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.Production_companies;
+import com.hackvg.model.entities.ReviewsWrapper;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
+import java.util.Random;
 
 
 public class MovieDetailPresenter extends Presenter {
@@ -24,6 +29,12 @@ public class MovieDetailPresenter extends Presenter {
 
         mMovieDetailView = movieDetailView;
         mMovieID = movieID;
+
+        mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));
+
+        new GetMovieDetailUsecaseController(mMovieID,
+            BusProvider.getUIBusInstance(), RestMovieSource.getInstance())
+        .execute();
     }
 
     public void showDescription(String description) {
@@ -31,21 +42,10 @@ public class MovieDetailPresenter extends Presenter {
         mMovieDetailView.setDescription(description);
     }
 
-    public void showCover(String url) {
-
-        String coverUrl = Constants.BASIC_STATIC_URL + url;
-        mMovieDetailView.setImage(coverUrl);
-    }
-
     @Override
     public void start() {
 
         BusProvider.getUIBusInstance().register(this);
-
-        Usecase getDetailUsecase = new GetMovieDetailUsecaseController(
-            mMovieID, BusProvider.getUIBusInstance(), RestMovieSource.getInstance());
-
-        getDetailUsecase.execute();
     }
 
     @Override
@@ -82,14 +82,42 @@ public class MovieDetailPresenter extends Presenter {
     }
 
     @Subscribe
-    public void onDetailInformationReceived(MovieDetailResponse response) {
+    public void onDetailInformationReceived(MovieDetail response) {
 
         showDescription(response.getOverview());
         showTitle(response.getTitle());
-        showCover(response.getPoster_path());
         showTagline(response.getTagline());
         showCompanies(response.getProduction_companies());
         showHomepage(response.getHomepage());
+        showFilmImage(response.getMovieImagesList());
+    }
+
+    private void showFilmImage(List<ImagesWrapper.MovieImage> movieImagesList) {
+
+        if (movieImagesList.size() > 0) {
+
+            int randomIndex = new Random().nextInt(movieImagesList.size());
+            Log.d("[DEBUG]", "MovieDetailPresenter showFilmImage - Random index: "+randomIndex);
+
+            mMovieDetailView.showMovieImage (Constants.BASIC_STATIC_URL +
+                movieImagesList.get(randomIndex).getFile_path());
+        }
+    }
+
+    @Subscribe
+    public void onReviewsReceived (final ReviewsWrapper reviewsWrapper) {
+
+        // Wait 300 milliseconds to ensure that Palette generate the colors
+        // before show the reviews
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                if (reviewsWrapper.getResults().size() > 0)
+                    mMovieDetailView.showReviews(reviewsWrapper.getResults());
+            }
+        }, 300);
+
     }
 
     public void showHomepage(String homepage) {

@@ -10,9 +10,9 @@
 
     <style name="MaterialMoviesHeaderTextView" parent="android:Widget.TextView">
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textAllCaps">true</item>
         <item name="android:minHeight">48dp</item>
-        <item name="android:textColor">?colorAccent</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
     </style>
     
     <style name="MaterialMoviesDetailField" parent="android:Widget.TextView">
@@ -20,10 +20,21 @@
         <item name="android:lineSpacingExtra">6dp</item>
         <item name="android:textColor">#FFF</item>
         <item name="android:visibility">gone</item>
-        <item name="android:minHeight">48dp</item>
+
     </style>
 
-    <style name="MaterialMoviesFabLabel">
+    <style name="MaterialMoviesReviewTextView" parent="MaterialMoviesDetailField">
+        <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:padding">100dp</item>
+    </style>
 
+    <style name="MaterialMoviesFabLabel" />
+
+
+    <style name="MaterialMoviesDetailConfirmation">
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:visibility">visible</item>
     </style>
 </resources>

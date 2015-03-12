@@ -1,7 +1,9 @@
 package com.hackvg.domain;
 
 
-import com.hackvg.model.entities.MovieDetailResponse;
+import com.hackvg.model.entities.ImagesWrapper;
+import com.hackvg.model.entities.MovieDetail;
+import com.hackvg.model.entities.ReviewsWrapper;
 
 /**
  * Representation of an use case to get the details of a specific film
@@ -13,9 +15,22 @@ public interface GetMovieDetailUsecase extends Usecase {
      * Request datasource the details of a
      * movie.
      *
-     * @param id of the movie
+     * @param movieId of the movie
      */
-    public void requestMovieDetail (String id);
+    public void requestMovieDetail (String movieId);
+
+    /**
+     * Request datasource the reviews written about that movie
+     * @param movieId of the film
+     */
+    public void requestMovieReviews (String movieId);
+
+    /**
+     * Request datasource the images of the film submited to the API
+     *
+     * @param movieId the id of the film
+     */
+    public void requestMovieImages(String movieId);
 
     /**
      * Callback used to be notified when the MovieDetail has been
@@ -23,7 +38,18 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param response the response containing the details of the film
      */
-    public void onMovieDetailResponse (MovieDetailResponse response);
+    public void onMovieDetailResponse (MovieDetail response);
+
+    void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper);
+
+    /**
+     * Callback used to be notified when the request to obtain a list
+     * of images about a film is end
+     *
+     * @param imageWrapper the response containing the information
+     *                     about the images
+     */
+    void onMovieImagesResponse (ImagesWrapper imageWrapper);
 
     /**
      * Sends the MovieDetailResponse thought the communication system
@@ -31,5 +57,5 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param response the response containing the details of the film
      */
-    public void sendDetailMovieToPresenter (MovieDetailResponse response);
+    public void sendDetailMovieToPresenter (MovieDetail response);
 }

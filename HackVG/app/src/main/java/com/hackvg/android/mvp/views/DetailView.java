@@ -1,12 +1,16 @@
 package com.hackvg.android.mvp.views;
 
 
-/**
- * Created by saulmm on 31/01/15.
- */
+import android.graphics.Bitmap;
+
+import com.hackvg.model.entities.Review;
+
+import java.util.List;
+
+
 public interface DetailView extends MVPView {
 
-    public void setImage (String url);
+    void showFilmCover(Bitmap bitmap);
 
     public void setName (String title);
 
@@ -25,4 +29,8 @@ public interface DetailView extends MVPView {
     public void animateConfirmationView ();
 
     public void startClosingConfirmationView();
+
+    public void showReviews(List<Review> results);
+
+    void showMovieImage(String url);
 }

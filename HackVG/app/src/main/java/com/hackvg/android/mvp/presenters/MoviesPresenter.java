@@ -5,8 +5,7 @@ import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.domain.ConfigurationUsecaseController;
 import com.hackvg.domain.GetMoviesUsecaseController;
-import com.hackvg.domain.Usecase;
-import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Subscribe;
 
@@ -14,46 +13,89 @@ import com.squareup.otto.Subscribe;
 public class MoviesPresenter extends Presenter {
 
     private final MoviesView mMoviesView;
+    private GetMoviesUsecaseController mGetPopularShows;
+    private ConfigurationUsecaseController mConfigureUsecase;
 
-    public MoviesPresenter(MoviesView mMoviesView) {
+    private boolean isLoading = false;
+    private boolean mRegistered;
 
-        this.mMoviesView = mMoviesView;
+
+    public MoviesPresenter(MoviesView moviesView) {
+
+        mMoviesView = moviesView;
+
+        mGetPopularShows = new GetMoviesUsecaseController(
+            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+
+        mConfigureUsecase = new ConfigurationUsecaseController(
+            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+    }
+
+    public MoviesPresenter(MoviesView moviesView, MoviesWrapper moviesWrapper) {
+
+        mMoviesView = moviesView;
+
+        mGetPopularShows = new GetMoviesUsecaseController(
+            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+
+        onPopularMoviesReceived(moviesWrapper);
     }
 
     @Subscribe
-    public void onPopularMoviesReceived(PopularMoviesApiResponse popularMovies) {
+    public void onPopularMoviesReceived(MoviesWrapper moviesWrapper) {
 
-        mMoviesView.hideLoading();
-        mMoviesView.showMovies(popularMovies.getResults());
+        if (mMoviesView.isTheListEmpty()) {
+
+            mMoviesView.hideLoading();
+            mMoviesView.showMovies(moviesWrapper.getResults());
+
+        } else {
+
+            mMoviesView.hideActionLabel();
+            mMoviesView.appendMovies(moviesWrapper.getResults());
+        }
+
+        isLoading = false;
     }
 
     @Subscribe
     public void onConfigurationFinished (String baseImageUrl) {
 
         Constants.BASIC_STATIC_URL = baseImageUrl;
+        mGetPopularShows.execute();
+    }
 
-        Usecase getPopularShows = new GetMoviesUsecaseController(
-            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+    public void onEndListReached () {
 
-        getPopularShows.execute();
+        mGetPopularShows.execute();
+        mMoviesView.showLoadingLabel ();
+        isLoading = true;
     }
 
     @Override
     public void start() {
 
-        BusProvider.getUIBusInstance().register(this);
+        if (mMoviesView.isTheListEmpty()) {
 
-        mMoviesView.showLoading();
+            BusProvider.getUIBusInstance().register(this);
+            mRegistered = true;
 
-        Usecase configureUsecase = new ConfigurationUsecaseController(
-            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
-
-        configureUsecase.execute();
+            mMoviesView.showLoading();
+            mConfigureUsecase.execute();
+        }
     }
 
     @Override
     public void stop() {
+    }
 
-        BusProvider.getUIBusInstance().unregister(this);
+    public boolean isLoading() {
+
+        return isLoading;
+    }
+
+    public void setLoading(boolean isLoading) {
+
+        this.isLoading = isLoading;
     }
 }

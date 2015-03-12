@@ -11,21 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="#ff54646c"
         tools:context=".MainActivity"
         >
 
         <com.hackvg.android.views.custom_views.AutofitRecyclerView
             android:id="@+id/recycler_popular_movies"
             android:layout_width="match_parent"
-            android:paddingTop="?android:attr/actionBarSize"
-            android:columnWidth="@dimen/item_movie_width"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_movies_margins"
+            android:layout_marginRight="@dimen/activity_movies_margins"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:columnWidth="@dimen/item_movie_width"
             android:clipToPadding="false"
             />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/activity_movies_toolbar"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
             android:background="@color/theme_primary"

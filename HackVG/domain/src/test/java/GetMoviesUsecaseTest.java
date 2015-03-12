@@ -1,7 +1,7 @@
 import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;
 import com.hackvg.model.MediaDataSource;
-import com.hackvg.model.entities.PopularMoviesApiResponse;
+import com.hackvg.model.entities.MoviesWrapper;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
@@ -52,9 +52,9 @@ public class GetMoviesUsecaseTest {
 
         // Called from rest
         getMoviesUsecase.onPopularMoviesReceived(
-            any(PopularMoviesApiResponse.class));
+            any(MoviesWrapper.class));
 
         verify(mockUiBus, times(1)).post(
-            any(PopularMoviesApiResponse.class));
+            any(MoviesWrapper.class));
     }
 }
