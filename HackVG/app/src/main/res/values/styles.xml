@@ -29,7 +29,12 @@
         <item name="android:padding">100dp</item>
     </style>
 
-    <style name="MaterialMoviesFabLabel">
+    <style name="MaterialMoviesFabLabel" />
 
+
+    <style name="MaterialMoviesDetailConfirmation">
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:visibility">visible</item>
     </style>
 </resources>

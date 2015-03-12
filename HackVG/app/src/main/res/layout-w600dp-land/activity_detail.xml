@@ -12,42 +12,74 @@
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.53"
+        android:layout_weight="0.60"
         >
+
+
+        <ImageView
+            android:id="@+id/activity_detail_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:background="@color/movie_placeholder"
+            android:tint="#AA000000"
+            />
 
         <ImageView
             android:id="@+id/item_movie_cover"
+            android:layout_width="@dimen/item_movie_width"
+            android:layout_height="@dimen/item_movie_height"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:scaleType="centerCrop"
+            />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/activity_detail_information_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.40"
+        >
+
+        <com.hackvg.android.views.custom_views.LobsterTextView
+            android:id="@+id/activity_detail_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
+            android:layout_height="96dp"
+            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-medium"
+            android:paddingLeft="@dimen/activity_horizontal_margin_half"
+            android:textSize="28sp"
+            android:textColor="#FFF"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_gravity="bottom"
+            android:elevation="10dp"
+            tools:text="An awesome title"
             />
 
         <ImageButton
             android:id="@+id/activity_detail_fab"
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin_half"
             android:layout_marginTop="-27dp"
+            android:layout_below="@id/activity_detail_title"
+            android:layout_alignParentRight="true"
             android:scaleX="0"
             android:scaleY="0"
             android:src="@drawable/ic_fab_star"
             android:background="@drawable/fab"
-            android:elevation="4dp"
+            android:elevation="15dp"
             android:stateListAnimator="@anim/fab_animation"
             />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/activity_detail_information_container"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.47"
-        >
 
         <com.hackvg.android.views.custom_views.ObservableScrollView
             android:id="@+id/activity_movie_detail_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/activity_detail_title"
             tools:visibility="visible"
             >
 
@@ -61,20 +93,6 @@
                 android:paddingBottom="@dimen/activity_vertical_margin_double_double"
                 android:paddingTop="@dimen/activity_vertical_margin_half"
                 >
-
-                <com.hackvg.android.views.custom_views.LobsterTextView
-                    android:id="@+id/activity_detail_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="96dp"
-                    android:gravity="center_vertical"
-                    android:fontFamily="sans-serif-medium"
-                    android:textSize="28sp"
-                    android:textColor="#FFF"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:layout_gravity="bottom"
-                    tools:text="An awesome title"
-                    />
 
                 <ProgressBar
                     android:id="@+id/activity_detail_progress"
@@ -157,32 +175,34 @@
 
             </LinearLayout>
         </com.hackvg.android.views.custom_views.ObservableScrollView>
-    </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/activity_detail_confirmation_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/theme_primary"
-        android:visibility="gone"
-        >
+        <FrameLayout
+            android:id="@+id/activity_detail_confirmation_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/theme_primary"
+            style="@style/MaterialMoviesDetailConfirmation"
+            >
 
-        <com.hackvg.android.views.custom_views.LobsterTextView
-            android:id="@+id/activity_detail_confirmation_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Saved !! "
-            android:layout_gravity="center_horizontal"
-            android:textSize="40sp"
-            android:layout_marginTop="@dimen/activity_vertical_margin_double_double"
-            android:textColor="#FFFFFF"
-            />
+            <com.hackvg.android.views.custom_views.LobsterTextView
+                android:id="@+id/activity_detail_confirmation_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved !! "
+                android:layout_gravity="center_horizontal"
+                android:textSize="40sp"
+                android:layout_marginTop="@dimen/activity_vertical_margin_double_double"
+                android:textColor="#FFFFFF"
+                />
 
-        <include
-            layout="@layout/imageview_star"
-            />
+            <include
+                layout="@layout/imageview_star"
+                />
 
-    </FrameLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+
 
 
 </LinearLayout>

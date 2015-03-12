@@ -58,12 +58,11 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private static final int DESCRIPTION_HEADER     = 1;
     private static final int REVIEWS_HEADER         = 2;
 
-    private static final int TITLE                  = 0;
-    private static final int DESCRIPTION            = 1;
-    private static final int HOMEPAGE               = 2;
-    private static final int COMPANY                = 3;
-    private static final int TAGLINE                = 4;
-    private static final int CONFIRMATION           = 5;
+    private static final int DESCRIPTION            = 0;
+    private static final int HOMEPAGE               = 1;
+    private static final int COMPANY                = 2;
+    private static final int TAGLINE                = 3;
+    private static final int CONFIRMATION           = 4;
 
     private int mReviewsColor                       = -1;
     private int mReviewsAuthorColor                 = -1;
@@ -77,8 +76,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     private Swatch mBrightSwatch;
 
+    @InjectView(R.id.activity_detail_title)                 TextView    mTitle;
+
     @InjectViews({
-        R.id.activity_detail_title,
         R.id.activity_detail_content,
         R.id.activity_detail_homepage,
         R.id.activity_detail_company,
@@ -118,10 +118,17 @@ public class MovieDetailActivity extends Activity implements DetailView,
         mIsTablet = getContext().getResources().getBoolean(
             R.bool.is_tablet);
 
+        mDetailPresenter = new MovieDetailPresenter(this, getIntent()
+            .getStringExtra("movie_id"));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            mObservableScrollView.setScrollViewListener(this);
-            GUIUtils.makeTheStatusbarTranslucent(this);
+            if (!mIsTablet) {
+
+                GUIUtils.makeTheStatusbarTranslucent(this);
+                mObservableScrollView.setScrollViewListener(this);
+            }
+
             configureEnterTransition ();
 
         } else {
@@ -129,16 +136,13 @@ public class MovieDetailActivity extends Activity implements DetailView,
             mViewLastLocation = getIntent().getIntArrayExtra("view_location");
             configureEnterAnimation ();
         }
-
-        String movieID = getIntent().getStringExtra("movie_id");
-        mDetailPresenter = new MovieDetailPresenter(this, movieID);
     }
 
     private void configureEnterAnimation() {
 
         if (!mIsTablet) {
 
-            GUIUtils.startScaleAnimationFromPivot(
+            GUIUtils.startScaleAnimationFromPivotY(
                 mViewLastLocation[0], mViewLastLocation[1],
                 mObservableScrollView, new AnimatorAdapter() {
 
@@ -197,8 +201,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private void animateElementsByScale() {
 
         GUIUtils.showViewByScale(mFabButton);
-
-        GUIUtils.showViewByScaleY(mMovieInfoTextViews.get(TITLE), new AnimatorAdapter() {
+        GUIUtils.showViewByScaleY(mTitle, new AnimatorAdapter() {
 
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -258,7 +261,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void setName(String title) {
 
-        mMovieInfoTextViews.get(TITLE).setText(title);
+        mTitle.setText(title);
     }
 
     @Override
@@ -346,15 +349,14 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Override
     public void showConfirmationView() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             GUIUtils.showViewByRevealEffect(mConfirmationContainer,
                 mFabButton, GUIUtils.getWindowWidth(this));
 
-        } else {
-
-            mConfirmationContainer.setVisibility(View.VISIBLE);
-        }
+         else
+            GUIUtils.startScaleAnimationFromPivot(
+                (int) mFabButton.getX(),(int) mFabButton.getY(),
+                mConfirmationContainer, null);
 
         animateConfirmationView();
         startClosingConfirmationView();
@@ -400,17 +402,16 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
                 else {
 
-                    mConfirmationContainer.animate()
-                        .translationY(1)
-                        .setDuration(400)
-                        .setListener(new AnimatorAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
 
-                                super.onAnimationEnd(animation);
-                                MovieDetailActivity.this.finish();
-                            }
-                        });
+                    GUIUtils.hideViewByScaleY(mConfirmationContainer, new AnimatorAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+
+                            super.onAnimationEnd(animation);
+                            MovieDetailActivity.this.finish();
+                        }
+                    });
+
                 }
 
             }
@@ -424,15 +425,12 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             mReviewsColor = swatch.getTitleTextColor();
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                mObservableScrollView.setBackgroundColor(swatch.getRgb());
-            else
-                mMovieDescriptionContainer.setBackgroundColor(swatch.getRgb());
-
+            mInformationContainer.setBackgroundColor(swatch.getRgb());
             mConfirmationContainer.setBackgroundColor(swatch.getRgb());
 
-            mFabButton.getBackground().setColorFilter(swatch.getRgb(),
-                PorterDuff.Mode.MULTIPLY);
+
+
+            mTitle.setTextColor(swatch.getRgb());
 
             ButterKnife.apply(mMovieInfoTextViews, GUIUtils.setter,
                 swatch.getTitleTextColor());
@@ -445,6 +443,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
         if (swatch != null) {
 
             mBrightSwatch = swatch;
+
+            mTitle.setBackgroundColor(
+                mBrightSwatch.getRgb());
 
             mReviewsAuthorColor = swatch.getRgb();
 
@@ -483,6 +484,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
             final Swatch darkMutedSwatch      = palette.getDarkMutedSwatch();
             final Swatch lightVibrantSwatch   = palette.getLightVibrantSwatch();
             final Swatch lightMutedSwatch     = palette.getLightMutedSwatch();
+            final Swatch vibrantSwatch        = palette.getVibrantSwatch();
 
             final Swatch backgroundAndContentColors = (darkVibrantSwatch != null)
                 ? darkVibrantSwatch : darkMutedSwatch;
@@ -494,19 +496,17 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             setHeadersTitlColors(titleAndFabColors);
 
-            setVibrantElements(backgroundAndContentColors, titleAndFabColors);
+            setVibrantElements(vibrantSwatch);
         }
     }
 
-    private void setVibrantElements(Swatch lightSwatch, Swatch darkSwatch) {
+    private void setVibrantElements(Swatch vibrantSwatch) {
 
-        if (mBrightSwatch != null)
-            mMovieInfoTextViews.get(TITLE).setBackgroundColor(
-                mBrightSwatch.getRgb());
+        mFabButton.getBackground().setColorFilter(vibrantSwatch.getRgb(),
+            PorterDuff.Mode.MULTIPLY);
 
-        if (darkSwatch != null)
-            mMovieInfoTextViews.get(TITLE).setTextColor(
-                darkSwatch.getTitleTextColor());
+
+
     }
 
     @OnClick(R.id.activity_detail_fab)
@@ -522,7 +522,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (y > mCoverImageView.getHeight()) {
 
-            mMovieInfoTextViews.get(TITLE).setTranslationY(
+            mTitle.setTranslationY(
                 y - mCoverImageView.getHeight());
 
             if (!isTranslucent) {
@@ -539,7 +539,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         if (y < mCoverImageView.getHeight() && isTranslucent) {
 
-            mMovieInfoTextViews.get(TITLE).setTranslationY(0);
+            mTitle.setTranslationY(0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 

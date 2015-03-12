@@ -47,7 +47,6 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
     public void onPopularMoviesReceived(MoviesWrapper response) {
 
         sendMoviesToPresenter(response);
-        unRegister();
     }
 
     @Override

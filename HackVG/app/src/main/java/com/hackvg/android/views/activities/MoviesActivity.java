@@ -66,6 +66,7 @@ public class MoviesActivity extends ActionBarActivity implements
 
     @Optional
     @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
+
     private ImageView mCoverImage;
 
 
@@ -101,12 +102,6 @@ public class MoviesActivity extends ActionBarActivity implements
 
             MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
                 .getSerializable("movies_wrapper");
-
-            if (mTabletBackground != null) {
-
-                mBackgroundTranslation = savedInstanceState.getFloat("background_translation");
-                mTabletBackground.setTranslationY(mBackgroundTranslation);
-            }
 
             mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
         }
@@ -221,22 +216,25 @@ public class MoviesActivity extends ActionBarActivity implements
 
 
     @Override
-    public void onClick(View touchedView, int position, float touchedX, float touchedY) {
+    public void onClick(View touchedView, int moviePosition, float touchedX, float touchedY) {
 
         Intent movieDetailActivityIntent = new Intent (
             MoviesActivity.this, MovieDetailActivity.class);
 
-        String movieID = mMoviesAdapter.getMovieList().get(position).getId();
+        String movieID = mMoviesAdapter.getMovieList().get(moviePosition).getId();
         movieDetailActivityIntent.putExtra("movie_id", movieID);
+        movieDetailActivityIntent.putExtra("movie_position", moviePosition);
 
         mCoverImage = (ImageView) touchedView.findViewById(R.id.item_movie_cover);
-        sPhotoCache.put(0, ((BitmapDrawable) mCoverImage.getDrawable()).getBitmap());
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) mCoverImage.getDrawable();
 
-        if (mMoviesAdapter.isMovieReady(position)) {
+        if (mMoviesAdapter.isMovieReady(moviePosition) || bitmapDrawable != null) {
+
+            sPhotoCache.put(0, bitmapDrawable.getBitmap());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 startSharedElementPosition(touchedView,
-                    position, movieDetailActivityIntent);
+                    moviePosition, movieDetailActivityIntent);
             }
 
             else
@@ -261,18 +259,18 @@ public class MoviesActivity extends ActionBarActivity implements
         int finalLocationY = locationAtScreen[1] + touchedLocation[1];
 
         int [] finalLocation = {finalLocationX, finalLocationY};
-        movieDetailActivityIntent.putExtra("view_location", finalLocation);
+        movieDetailActivityIntent.putExtra("view_location",
+            finalLocation);
 
         startActivity(movieDetailActivityIntent);
     }
 
-    private void startSharedElementPosition(View v, int position, Intent movieDetailActivityIntent) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startSharedElementPosition(View touchedView,
+        int moviePosition, Intent movieDetailActivityIntent) {
 
-        movieDetailActivityIntent.putExtra("movie_position", position);
-
-        // Setup the transition to the detail activity
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-            this, new Pair<>(v, "cover" + position));
+            this, new Pair<>(touchedView, "cover" + moviePosition));
 
         startActivity(movieDetailActivityIntent, options.toBundle());
     }

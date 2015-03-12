@@ -12,11 +12,16 @@
     </style>
 
     <style name="TransAppTheme" parent="AppTheme">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">@bool/is_portrait</item>
+        <item name="android:windowTranslucentNavigation">@bool/is_portrait</item>
         <item name="android:windowEnterTransition">@android:transition/fade</item>
         <item name="android:windowExitTransition">@android:transition/fade</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <style name="MaterialMoviesDetailConfirmation">
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>

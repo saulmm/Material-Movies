@@ -178,6 +178,7 @@
         android:layout_height="match_parent"
         android:background="@color/theme_primary"
         android:visibility="gone"
+        style="@style/MaterialMoviesDetailConfirmation"
         >
 
         <com.hackvg.android.views.custom_views.LobsterTextView

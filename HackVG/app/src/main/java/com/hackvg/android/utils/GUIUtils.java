@@ -26,22 +26,18 @@ import butterknife.ButterKnife;
 
 import static android.animation.Animator.AnimatorListener;
 
-/**
- * Created by saulmm on 08/02/15.
- */
+
 public class GUIUtils {
 
     public static final int DEFAULT_DELAY           = 30;
     public static final int SCALE_DELAY             = 300;
     public static final float SCALE_START_ANCHOR    = 0.3f;
 
-
-
     public static void tintAndSetCompoundDrawable (Context context, @DrawableRes
         int drawableRes, int color, TextView textview) {
 
             Resources res = context.getResources();
-            int padding = (int) res.getDimension(R.dimen.activity_horizontal_margin);
+            int padding = (int) res.getDimension(R.dimen.activity_horizontal_margin_half);
 
             Drawable drawable = res.getDrawable(drawableRes);
             drawable.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
@@ -115,7 +111,7 @@ public class GUIUtils {
         }
     };
 
-    public static void startScaleAnimationFromPivot (int pivotX, int pivotY, final View v,
+    public static void startScaleAnimationFromPivotY (int pivotX, int pivotY, final View v,
         final AnimatorListener animatorListener) {
 
         final AccelerateDecelerateInterpolator interpolator =
@@ -145,6 +141,37 @@ public class GUIUtils {
         });
     }
 
+
+    public static void startScaleAnimationFromPivot (int pivotX, int pivotY, final View v,
+        final AnimatorListener animatorListener) {
+
+        final AccelerateDecelerateInterpolator interpolator =
+            new AccelerateDecelerateInterpolator();
+
+        v.setScaleY(SCALE_START_ANCHOR);
+        v.setPivotX(pivotX);
+        v.setPivotY(pivotY);
+
+        v.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                v.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                ViewPropertyAnimator viewPropertyAnimator = v.animate()
+                    .setInterpolator(interpolator)
+                    .scaleY(1).scaleX(1)
+                    .setDuration(SCALE_DELAY);
+
+                if (animatorListener != null)
+                    viewPropertyAnimator.setListener(animatorListener);
+
+                viewPropertyAnimator.start();
+
+                return true;
+            }
+        });
+    }
+
     /**
      * Shows a view by scaling
      *
@@ -156,6 +183,16 @@ public class GUIUtils {
 
         ViewPropertyAnimator propertyAnimator = v.animate().setStartDelay(SCALE_DELAY)
            .scaleY(1);
+
+        propertyAnimator.setListener(animatorListener);
+
+        return propertyAnimator;
+    }
+
+    public static ViewPropertyAnimator showViewByScale (View v, AnimatorListener animatorListener) {
+
+        ViewPropertyAnimator propertyAnimator = v.animate().setStartDelay(SCALE_DELAY)
+            .scaleY(1).scaleX(1);
 
         propertyAnimator.setListener(animatorListener);
 
