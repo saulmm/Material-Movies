@@ -6,8 +6,10 @@ This projects support a series of articles about how to setup an android environ
 
 - [User interface](http://saulmm.github.io/a-useful-stack-on-android-2-user-interface/)
 
+- [Compatibility](http://saulmm.github.io/a-useful-stack-on-android-3-compatibility/)
+
 ### Screenshots
 
-![](http://androcode.es/wp-content/uploads/2015/02/1.png)
-![](http://androcode.es/wp-content/uploads/2015/02/2.png)
-![](http://androcode.es/wp-content/uploads/2015/02/3.png)
+![](http://androcode.es/wp-content/uploads/2015/03/family2.png)
+
+![](http://androcode.es/wp-content/uploads/2015/03/detailFamily-e1426180053215.png)
