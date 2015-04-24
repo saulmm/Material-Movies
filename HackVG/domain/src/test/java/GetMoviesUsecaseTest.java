@@ -2,6 +2,7 @@ import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.domain.GetMoviesUsecaseController;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.MoviesWrapper;
+import com.hackvg.model.rest.RestDataSource;
 import com.squareup.otto.Bus;
 
 import org.junit.Before;
@@ -21,7 +22,7 @@ public class GetMoviesUsecaseTest {
     private GetMoviesUsecase getMoviesUsecase;
 
     @Mock
-    private MediaDataSource mockDataSource;
+    private RestDataSource mockRestDataSource;
 
     @Mock
     private Bus mockUiBus;
@@ -32,8 +33,7 @@ public class GetMoviesUsecaseTest {
         MockitoAnnotations.initMocks(this);
 
         getMoviesUsecase = new GetMoviesUsecaseController(
-            mockDataSource, mockUiBus
-        );
+                mockRestDataSource, mockUiBus);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class GetMoviesUsecaseTest {
 
         getMoviesUsecase.execute();
 
-        verify(mockDataSource, times(1))
+        verify(mockRestDataSource, times(1))
             .getMovies();
 
     }
