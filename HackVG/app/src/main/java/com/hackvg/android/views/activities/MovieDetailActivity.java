@@ -496,7 +496,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             setHeadersTitlColors(titleAndFabColors);
 
-            setVibrantElements(vibrantSwatch);
+            final Swatch vibrantSwatchColors = (vibrantSwatch != null)
+                    ? vibrantSwatch : titleAndFabColors;
+
+            setVibrantElements(vibrantSwatchColors);
         }
     }
 
@@ -504,9 +507,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         mFabButton.getBackground().setColorFilter(vibrantSwatch.getRgb(),
             PorterDuff.Mode.MULTIPLY);
-
-
-
     }
 
     @OnClick(R.id.activity_detail_fab)
