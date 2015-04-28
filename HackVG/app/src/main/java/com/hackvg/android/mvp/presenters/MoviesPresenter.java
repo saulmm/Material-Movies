@@ -9,20 +9,20 @@ import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Subscribe;
 
+import javax.inject.Inject;
+
 
 public class MoviesPresenter extends Presenter {
 
-    private final MoviesView mMoviesView;
+    private MoviesView mMoviesView;
     private GetMoviesUsecaseController mGetPopularShows;
     private ConfigurationUsecaseController mConfigureUsecase;
 
     private boolean isLoading = false;
     private boolean mRegistered;
 
-
-    public MoviesPresenter(MoviesView moviesView) {
-
-        mMoviesView = moviesView;
+    @Inject
+    public MoviesPresenter() {
 
         mGetPopularShows = new GetMoviesUsecaseController(
             RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
@@ -31,15 +31,13 @@ public class MoviesPresenter extends Presenter {
             RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
     }
 
-    public MoviesPresenter(MoviesView moviesView, MoviesWrapper moviesWrapper) {
+
+    public void attachView (MoviesView moviesView) {
 
         mMoviesView = moviesView;
-
-        mGetPopularShows = new GetMoviesUsecaseController(
-            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
-
-        onPopularMoviesReceived(moviesWrapper);
     }
+
+
 
     @Subscribe
     public void onPopularMoviesReceived(MoviesWrapper moviesWrapper) {

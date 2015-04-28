@@ -38,6 +38,8 @@ import com.nispok.snackbar.SnackbarManager;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
@@ -53,9 +55,7 @@ public class MoviesActivity extends ActionBarActivity implements
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
     private MoviesAdapter mMoviesAdapter;
-    private MoviesPresenter mMoviesPresenter;
     private GridLayoutManager mGridLayoutManager;
-
     public float mBackgroundTranslation;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -63,11 +63,13 @@ public class MoviesActivity extends ActionBarActivity implements
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
+
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
-
     @Optional
     @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
+
+    @Inject MoviesPresenter mMoviesPresenter;
 
     private ImageView mCoverImage;
 
@@ -78,6 +80,12 @@ public class MoviesActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+
+        DaggerMainComponent.builder()
+            .mainModule(new MainModule(this))
+            .build().inject(this);
+
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
@@ -98,19 +106,16 @@ public class MoviesActivity extends ActionBarActivity implements
 
         if (savedInstanceState == null) {
 
-            mMoviesPresenter = new MoviesPresenter(this);
+            mMoviesPresenter.attachView(this);
 
         } else {
 
             MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
                 .getSerializable("movies_wrapper");
 
-            mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
+            mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
         }
 
-        DaggerMainComponent.builder()
-            .mainModule(new MainModule(this))
-            .build().inject(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
