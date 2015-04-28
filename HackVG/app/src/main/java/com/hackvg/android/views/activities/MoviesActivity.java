@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.hackvg.android.R;
+import com.hackvg.android.di.DaggerMainComponent;
+import com.hackvg.android.di.MainModule;
 import com.hackvg.android.mvp.presenters.MoviesPresenter;
 import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
@@ -105,6 +107,10 @@ public class MoviesActivity extends ActionBarActivity implements
 
             mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
         }
+
+        DaggerMainComponent.builder()
+            .mainModule(new MainModule(this))
+            .build().inject(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
