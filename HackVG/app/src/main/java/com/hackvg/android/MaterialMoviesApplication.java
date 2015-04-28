@@ -5,11 +5,20 @@ import android.app.Application;
 /**
  * Created by saulmm on 15/02/15.
  */
-public class MaterialMovies extends Application {
+public class MaterialMoviesApplication extends Application {
 
     @Override
     public void onCreate() {
 
         super.onCreate();
+
+        initInjector();
     }
+
+    private void initInjector() {
+
+
+    }
+
+
 }

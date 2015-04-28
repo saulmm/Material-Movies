@@ -81,7 +81,6 @@ public class MoviesActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-
         DaggerMainComponent.builder()
             .mainModule(new MainModule(this))
             .build().inject(this);
