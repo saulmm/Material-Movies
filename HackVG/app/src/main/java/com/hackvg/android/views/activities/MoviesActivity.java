@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.View;
@@ -54,26 +53,22 @@ import butterknife.Optional;
 public class MoviesActivity extends ActionBarActivity implements
     MoviesView, RecyclerViewClickListener, View.OnClickListener {
 
-    /**
-     * A container used between this activity and MovieDetailActivity
-     * to share a Bitmap with a SharedElementTransition
-     */
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
+    private final static String EXTRA_MOVIES_WRAPPER = "movies_wrapper";
+
     private MoviesAdapter mMoviesAdapter;
-    private GridLayoutManager mGridLayoutManager;
     public float mBackgroundTranslation;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
+    @InjectView(R.id.activity_movies_toolbar)                   Toolbar mToolbar;
+    @InjectView(R.id.activity_movies_progress)                  ProgressBar mProgressBar;
+    @InjectView(R.id.activity_movies_recycler)                  RecyclerView mRecycler;
 
-    @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
-    @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
-    @Optional
-    @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
+    @Optional @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
 
     @Inject MoviesPresenter mMoviesPresenter;
 
@@ -85,11 +80,52 @@ public class MoviesActivity extends ActionBarActivity implements
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        initInjector ();
+        initializeDependencyInjector();
+        initializeToolbar();
+        initializeRecycler();
+        initializeDrawer();
+
+        if (savedInstanceState == null)
+            mMoviesPresenter.attachView(this);
+
+         else
+            initializeFromParams(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        mMoviesPresenter.start();
+    }
+
+    private void initializeFromParams(Bundle savedInstanceState) {
+
+        MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
+            .getSerializable(EXTRA_MOVIES_WRAPPER);
+
+        mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
+    }
+
+    private void initializeRecycler() {
+
+        mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
+        mRecycler.setOnScrollListener(recyclerScrollListener);
+    }
+
+    private void initializeDrawer() {
+
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+            getFragmentManager().findFragmentById(R.id.navigation_drawer);
+
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+            (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    private void initializeToolbar() {
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
@@ -98,30 +134,9 @@ public class MoviesActivity extends ActionBarActivity implements
             R.drawable.ic_menu_white_24dp);
 
         mToolbar.setNavigationOnClickListener(this);
-
-        mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
-        mRecycler.setOnScrollListener(recyclerScrollListener);
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-            getFragmentManager().findFragmentById(R.id.navigation_drawer);
-
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-            (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        if (savedInstanceState == null) {
-
-            mMoviesPresenter.attachView(this);
-
-        } else {
-
-            MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
-                .getSerializable("movies_wrapper");
-
-            mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
-        }
     }
 
-    private void initInjector() {
+    private void initializeDependencyInjector() {
 
         MoviesApp app = (MoviesApp) getApplication();
 
@@ -139,28 +154,6 @@ public class MoviesActivity extends ActionBarActivity implements
         activityComponent.inject(this);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onActivityReenter(int resultCode, Intent data) {
-
-        super.onActivityReenter(resultCode, data);
-        Log.d("[DEBUG]", "MoviesActivity onActivityReenter - Re-enter");
-    }
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-        mMoviesPresenter.stop();
-    }
-
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-        mMoviesPresenter.start();
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
@@ -173,7 +166,6 @@ public class MoviesActivity extends ActionBarActivity implements
 
             outState.putFloat("background_translation", mBackgroundTranslation);
         }
-
     }
 
     @Override
@@ -203,18 +195,6 @@ public class MoviesActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void showError(String error) {
-
-        // TODO
-    }
-
-    @Override
-    public void hideError() {
-
-        // TODO
-    }
-
-    @Override
     public void showLoadingLabel() {
 
         Snackbar loadingSnackBar = Snackbar.with(this)
@@ -237,7 +217,6 @@ public class MoviesActivity extends ActionBarActivity implements
     public boolean isTheListEmpty() {
 
         return (mMoviesAdapter == null) || mMoviesAdapter.getMovieList().isEmpty();
-
     }
 
     @Override
@@ -354,7 +333,6 @@ public class MoviesActivity extends ActionBarActivity implements
     };
 
 
-
     private void showToolbar() {
 
         mToolbar.startAnimation(AnimationUtils.loadAnimation(this,
@@ -371,5 +349,12 @@ public class MoviesActivity extends ActionBarActivity implements
     public void onClick(View v) {
 
         mNavigationDrawerFragment.openFragment();
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        mMoviesPresenter.stop();
     }
 }

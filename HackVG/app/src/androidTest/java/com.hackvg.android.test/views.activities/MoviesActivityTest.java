@@ -52,7 +52,7 @@ public class MoviesActivityTest extends ActivityInstrumentationTestCase2<MoviesA
         // Work around, it would be better use Espresso Idling resources
         Thread.sleep(1000);
 
-        Espresso.onView(withId(R.id.recycler_popular_movies))
+        Espresso.onView(withId(R.id.activity_movies_recycler))
             .check(matches(isDisplayed()));
 
         Espresso.onView(withId(R.id.activity_movies_progress))
@@ -64,7 +64,7 @@ public class MoviesActivityTest extends ActivityInstrumentationTestCase2<MoviesA
         // Work around, it would be better use Espresso Idling resources
         Thread.sleep(1000);
 
-        Espresso.onView(withId(R.id.recycler_popular_movies)).perform(
+        Espresso.onView(withId(R.id.activity_movies_recycler)).perform(
             RecyclerViewActions.actionOnItemAtPosition(2, ViewActions.click()));
 
         Espresso.onView(withId(R.id.activity_movie_detail_scroll))
