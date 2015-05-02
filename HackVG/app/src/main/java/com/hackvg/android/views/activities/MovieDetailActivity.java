@@ -28,7 +28,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
+import com.hackvg.android.di.ApplicationModule;
+import com.hackvg.android.di.BasicMoviesUsecasesModule;
+import com.hackvg.android.di.DaggerAppComponent;
+import com.hackvg.android.di.DaggerMoviesComponent;
+import com.hackvg.android.di.DomainModule;
+import com.hackvg.android.di.MovieUsecasesModule;
+import com.hackvg.android.di.MoviesComponent;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.utils.GUIUtils;
@@ -108,6 +116,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @Optional
     @InjectView(R.id.activity_detail_image)                 ImageView mMovieImageView;
     private int[] mViewLastLocation;
+    private String mMovieId;
+    private MoviesComponent activityComponent;
 
 
     @Override
@@ -120,7 +130,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
         mIsTablet = getContext().getResources().getBoolean(
             R.bool.is_tablet);
 
+        mMovieId = getIntent().getStringExtra(MoviesActivity.EXTRA_MOVIE_ID);
+
         initInjector();
+        mDetailPresenter.attachView(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -141,7 +154,20 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     private void initInjector() {
 
-        // TODO INIT INJECTOR
+        MoviesApp app = (MoviesApp) getApplication();
+
+        DaggerAppComponent.builder()
+            .domainModule(new DomainModule())
+            .applicationModule(new ApplicationModule(app))
+            .build();
+
+        activityComponent = DaggerMoviesComponent.builder()
+            .appComponent(app.getAppComponent())
+            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
+            .movieUsecasesModule(new MovieUsecasesModule(mMovieId))
+            .build();
+
+        activityComponent.inject(this);
     }
 
     private void configureEnterAnimation() {

@@ -55,7 +55,10 @@ public class MoviesActivity extends ActionBarActivity implements
 
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
-    private final static String EXTRA_MOVIES_WRAPPER = "movies_wrapper";
+    private final static String BUNDLE_MOVIES_WRAPPER   = "movies_wrapper";
+    private final static String BUNDLE_BACK_TRANSLATION = "background_translation";
+    public final static String EXTRA_MOVIE_ID          = "movie_id";
+    public final static String EXTRA_MOVIE_POSITION = "view_location";
 
     private MoviesAdapter mMoviesAdapter;
     public float mBackgroundTranslation;
@@ -105,7 +108,7 @@ public class MoviesActivity extends ActionBarActivity implements
     private void initializeFromParams(Bundle savedInstanceState) {
 
         MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
-            .getSerializable(EXTRA_MOVIES_WRAPPER);
+            .getSerializable(BUNDLE_MOVIES_WRAPPER);
 
         mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
     }
@@ -161,10 +164,10 @@ public class MoviesActivity extends ActionBarActivity implements
 
         if (mMoviesAdapter != null) {
 
-            outState.putSerializable("movies_wrapper",
-                new MoviesWrapper(mMoviesAdapter.getMovieList()));
+            outState.putSerializable(BUNDLE_MOVIES_WRAPPER, new MoviesWrapper(
+                mMoviesAdapter.getMovieList()));
 
-            outState.putFloat("background_translation", mBackgroundTranslation);
+            outState.putFloat(BUNDLE_BACK_TRANSLATION, mBackgroundTranslation);
         }
     }
 
@@ -233,8 +236,8 @@ public class MoviesActivity extends ActionBarActivity implements
             MoviesActivity.this, MovieDetailActivity.class);
 
         String movieID = mMoviesAdapter.getMovieList().get(moviePosition).getId();
-        movieDetailActivityIntent.putExtra("movie_id", movieID);
-        movieDetailActivityIntent.putExtra("movie_position", moviePosition);
+        movieDetailActivityIntent.putExtra(EXTRA_MOVIE_ID, movieID);
+        movieDetailActivityIntent.putExtra(EXTRA_MOVIE_POSITION, moviePosition);
 
         mCoverImage = (ImageView) touchedView.findViewById(R.id.item_movie_cover);
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mCoverImage.getDrawable();
