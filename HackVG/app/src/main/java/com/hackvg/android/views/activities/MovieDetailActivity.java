@@ -42,6 +42,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
@@ -72,7 +74,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     // The time that the confirmation view will be shown (milliseconds)
     private static final int CONFIRMATION_VIEW_DELAY = 1500;
-    private MovieDetailPresenter mDetailPresenter;
+    @Inject MovieDetailPresenter mDetailPresenter;
 
     private Swatch mBrightSwatch;
 
@@ -118,8 +120,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         mIsTablet = getContext().getResources().getBoolean(
             R.bool.is_tablet);
 
-        mDetailPresenter = new MovieDetailPresenter(this, getIntent()
-            .getStringExtra("movie_id"));
+        initInjector();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -136,6 +137,11 @@ public class MovieDetailActivity extends Activity implements DetailView,
             mViewLastLocation = getIntent().getIntArrayExtra("view_location");
             configureEnterAnimation ();
         }
+    }
+
+    private void initInjector() {
+
+        // TODO INIT INJECTOR
     }
 
     private void configureEnterAnimation() {

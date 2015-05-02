@@ -1,6 +1,5 @@
 package com.hackvg.domain;
 
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetail;
@@ -41,7 +40,7 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
         mUiBus = uiBus;
         mMovieDataSource = dataSource;
 
-        BusProvider.getRestBusInstance().register(this);
+        mUiBus.register(this);
     }
 
     @Override
@@ -65,8 +64,7 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
         sendDetailMovieToPresenter(mMovieDetail);
 
         mUiBus.post(reviewsWrapper);
-        BusProvider.getRestBusInstance().unregister(this);
-
+        mUiBus.unregister(this);
     }
 
     @Subscribe

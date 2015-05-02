@@ -8,13 +8,6 @@ import com.hackvg.model.entities.MoviesWrapper;
 @SuppressWarnings("UnusedDeclaration")
 public interface GetMoviesUsecase extends Usecase {
 
-    /**
-     * Callback used to be notified when the most popular Movies have been
-     * received
-     *
-     * @param response the response containing a list with movies
-     */
-    public void onPopularMoviesReceived(MoviesWrapper response);
 
     /**
      * Request datasource the most popular movies

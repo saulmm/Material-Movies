@@ -1,10 +1,11 @@
 package com.hackvg.domain;
 
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 /**
  * This class is an implementation of {@link ConfigurationUsecase}
@@ -14,7 +15,7 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     private final String DESIRED_QUALITY = "w780";
 
     private final MediaDataSource mMediaDataSource;
-    private final Bus mUiBus;
+    Bus bus;
 
     /**
      * Constructor of the class.
@@ -22,6 +23,7 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
      * @param uiBus The bus to communicate the domain module and the app module
      * @param mediaDataSource The data source to retrieve the  configuariton
      */
+    @Inject
     public ConfigurationUsecaseController(MediaDataSource mediaDataSource, Bus uiBus) {
 
         if (mediaDataSource == null)
@@ -30,10 +32,10 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
         if (uiBus == null)
             throw new IllegalArgumentException("Ui bus cannot be null");
 
+        bus = uiBus;
         mMediaDataSource = mediaDataSource;
-        mUiBus = uiBus;
 
-        BusProvider.getRestBusInstance().register(this);
+        bus.register(this);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     @Override
     public void onConfigurationReceived(ConfigurationResponse configuration) {
 
-        BusProvider.getRestBusInstance().unregister(this);
+        bus.unregister(this);
         configureImageUrl(configuration);
     }
 
@@ -87,6 +89,6 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     @Override
     public void sendConfiguredUrlToPresenter (String url) {
 
-        mUiBus.post(url);
+        bus.post(url);
    }
 }

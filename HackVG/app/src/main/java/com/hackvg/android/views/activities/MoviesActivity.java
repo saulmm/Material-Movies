@@ -22,7 +22,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
+import com.hackvg.android.di.ApplicationModule;
+import com.hackvg.android.di.BasicMoviesUsecasesModule;
+import com.hackvg.android.di.DaggerAppComponent;
+import com.hackvg.android.di.DaggerMoviesComponent;
+import com.hackvg.android.di.DomainModule;
+import com.hackvg.android.di.MovieUsecasesModule;
+import com.hackvg.android.di.MoviesComponent;
 import com.hackvg.android.mvp.presenters.MoviesPresenter;
 import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
@@ -35,6 +43,8 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -51,9 +61,7 @@ public class MoviesActivity extends ActionBarActivity implements
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
     private MoviesAdapter mMoviesAdapter;
-    private MoviesPresenter mMoviesPresenter;
     private GridLayoutManager mGridLayoutManager;
-
     public float mBackgroundTranslation;
 
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -61,21 +69,27 @@ public class MoviesActivity extends ActionBarActivity implements
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @InjectView(R.id.activity_movies_toolbar)   Toolbar mToolbar;
+
     @InjectView(R.id.activity_movies_progress)  ProgressBar mProgressBar;
     @InjectView(R.id.recycler_popular_movies)   RecyclerView mRecycler;
-
     @Optional
     @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
 
+    @Inject MoviesPresenter mMoviesPresenter;
+
     private ImageView mCoverImage;
+    private MoviesComponent activityComponent;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+
+        initInjector ();
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
@@ -96,15 +110,33 @@ public class MoviesActivity extends ActionBarActivity implements
 
         if (savedInstanceState == null) {
 
-            mMoviesPresenter = new MoviesPresenter(this);
+            mMoviesPresenter.attachView(this);
 
         } else {
 
             MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
                 .getSerializable("movies_wrapper");
 
-            mMoviesPresenter = new MoviesPresenter(this, moviesWrapper);
+            mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
         }
+    }
+
+    private void initInjector() {
+
+        MoviesApp app = (MoviesApp) getApplication();
+
+        DaggerAppComponent.builder()
+            .domainModule(new DomainModule())
+            .applicationModule(new ApplicationModule(app))
+            .build();
+
+        activityComponent = DaggerMoviesComponent.builder()
+            .appComponent(app.getAppComponent())
+            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
+            .movieUsecasesModule(new MovieUsecasesModule("test"))
+            .build();
+
+        activityComponent.inject(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -247,6 +279,8 @@ public class MoviesActivity extends ActionBarActivity implements
                 .show();
         }
     }
+
+
 
     private void startDetailActivityByAnimation(View touchedView,
         int touchedX, int touchedY, Intent movieDetailActivityIntent) {

@@ -4,6 +4,7 @@ package com.hackvg.model.entities;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
+
 public class MovieDetail {
     private String backdrop_path;
     private Belongs_to_collection belongs_to_collection;

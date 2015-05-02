@@ -1,10 +1,10 @@
 package com.hackvg.domain;
 
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.rest.RestDataSource;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 /**
  * This class is an implementation of {@link GetMoviesUsecase}
@@ -21,6 +21,7 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
      * @param uiBus The bus to communicate the domain module and the app module
      * @param dataSource The data source to retrieve the list of movies
      */
+    @Inject
     public GetMoviesUsecaseController(RestDataSource dataSource, Bus uiBus) {
 
         if (dataSource == null)
@@ -32,21 +33,13 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
         mDataSource = dataSource;
         mUiBus = uiBus;
 
-        BusProvider.getRestBusInstance().register(this);
+        mUiBus.register(this);
     }
-
 
     @Override
     public void requestPopularMovies() {
 
         mDataSource.getMoviesByPage(mCurrentPage);
-    }
-
-    @Subscribe
-    @Override
-    public void onPopularMoviesReceived(MoviesWrapper response) {
-
-        sendMoviesToPresenter(response);
     }
 
     @Override
@@ -58,7 +51,7 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
     @Override
     public void unRegister() {
 
-        BusProvider.getRestBusInstance().unregister(this);
+        mUiBus.unregister(this);
     }
 
     @Override
