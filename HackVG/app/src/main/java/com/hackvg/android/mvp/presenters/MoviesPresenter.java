@@ -1,12 +1,11 @@
 package com.hackvg.android.mvp.presenters;
 
 import com.hackvg.android.mvp.views.MoviesView;
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
-import com.hackvg.domain.ConfigurationUsecaseController;
-import com.hackvg.domain.GetMoviesUsecaseController;
+import com.hackvg.domain.ConfigurationUsecase;
+import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.model.entities.MoviesWrapper;
-import com.hackvg.model.rest.RestMovieSource;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -14,30 +13,26 @@ import javax.inject.Inject;
 
 public class MoviesPresenter extends Presenter {
 
+    private final Bus mBus;
+    private ConfigurationUsecase mConfigureUsecase;
+    private GetMoviesUsecase mGetPopularShows;
     private MoviesView mMoviesView;
-    private GetMoviesUsecaseController mGetPopularShows;
-    private ConfigurationUsecaseController mConfigureUsecase;
 
     private boolean isLoading = false;
     private boolean mRegistered;
 
     @Inject
-    public MoviesPresenter() {
+    public MoviesPresenter(ConfigurationUsecase configurationUsecase, GetMoviesUsecase getMoviesUsecase, Bus bus) {
 
-        mGetPopularShows = new GetMoviesUsecaseController(
-            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
-
-        mConfigureUsecase = new ConfigurationUsecaseController(
-            RestMovieSource.getInstance(), BusProvider.getUIBusInstance());
+        mConfigureUsecase   = configurationUsecase;
+        mGetPopularShows    = getMoviesUsecase;
+        mBus = bus;
     }
-
 
     public void attachView (MoviesView moviesView) {
 
         mMoviesView = moviesView;
     }
-
-
 
     @Subscribe
     public void onPopularMoviesReceived(MoviesWrapper moviesWrapper) {
@@ -75,7 +70,7 @@ public class MoviesPresenter extends Presenter {
 
         if (mMoviesView.isTheListEmpty()) {
 
-            BusProvider.getUIBusInstance().register(this);
+            mBus.register(this);
             mRegistered = true;
 
             mMoviesView.showLoading();

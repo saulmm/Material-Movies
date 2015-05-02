@@ -1,13 +1,13 @@
 package com.hackvg.model.rest;
 
 
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.ReviewsWrapper;
+import com.squareup.otto.Bus;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -19,10 +19,10 @@ import retrofit.client.Response;
  */
 public class RestMovieSource implements RestDataSource {
 
-    public static RestMovieSource INSTANCE;
     private final MovieDatabaseAPI moviesDBApi;
+    private final Bus bus;
 
-    private RestMovieSource() {
+    public RestMovieSource(Bus bus) {
 
         RestAdapter movieAPIRest = new RestAdapter.Builder()
             .setEndpoint(Constants.MOVIE_DB_HOST)
@@ -30,14 +30,7 @@ public class RestMovieSource implements RestDataSource {
             .build();
 
         moviesDBApi = movieAPIRest.create(MovieDatabaseAPI.class);
-    }
-
-    public static RestMovieSource getInstance() {
-
-        if (INSTANCE == null)
-            INSTANCE = new RestMovieSource();
-
-        return INSTANCE;
+        this.bus = bus;
     }
 
     @Override
@@ -86,38 +79,27 @@ public class RestMovieSource implements RestDataSource {
             if (o instanceof MovieDetail) {
 
                 MovieDetail detailResponse = (MovieDetail) o;
-                BusProvider.getRestBusInstance().post(detailResponse);
+                bus.post(detailResponse);
 
             } else if (o instanceof MoviesWrapper) {
 
                 MoviesWrapper moviesApiResponse = (MoviesWrapper) o;
-
-                BusProvider.getRestBusInstance().post(
-                    moviesApiResponse);
+                bus.post(moviesApiResponse);
 
             } else if (o instanceof ConfigurationResponse) {
 
                 ConfigurationResponse configurationResponse = (ConfigurationResponse) o;
-
-                BusProvider.getRestBusInstance().post(
-                    configurationResponse
-                );
+                bus.post(configurationResponse);
 
             } else if (o instanceof ReviewsWrapper) {
 
                 ReviewsWrapper reviewsWrapper = (ReviewsWrapper) o;
-
-                BusProvider.getRestBusInstance().post(
-                    reviewsWrapper
-                );
+                bus.post(reviewsWrapper);
 
             } else if (o instanceof ImagesWrapper) {
 
                 ImagesWrapper imagesWrapper = (ImagesWrapper) o;
-
-                BusProvider.getRestBusInstance().post(
-                    imagesWrapper
-                );
+                bus.post(imagesWrapper);
             }
         }
 

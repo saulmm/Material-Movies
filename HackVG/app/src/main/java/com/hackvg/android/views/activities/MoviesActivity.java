@@ -22,9 +22,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
-import com.hackvg.android.di.DaggerMainComponent;
-import com.hackvg.android.di.MainModule;
+import com.hackvg.android.di.ApplicationModule;
+import com.hackvg.android.di.BasicMoviesUsecasesModule;
+import com.hackvg.android.di.DaggerAppComponent;
+import com.hackvg.android.di.DaggerMoviesComponent;
+import com.hackvg.android.di.DomainModule;
+import com.hackvg.android.di.MovieUsecasesModule;
+import com.hackvg.android.di.MoviesComponent;
 import com.hackvg.android.mvp.presenters.MoviesPresenter;
 import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
@@ -72,19 +78,18 @@ public class MoviesActivity extends ActionBarActivity implements
     @Inject MoviesPresenter mMoviesPresenter;
 
     private ImageView mCoverImage;
+    private MoviesComponent activityComponent;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        DaggerMainComponent.builder()
-            .mainModule(new MainModule(this))
-            .build().inject(this);
-
+        initInjector ();
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
@@ -114,7 +119,24 @@ public class MoviesActivity extends ActionBarActivity implements
 
             mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
         }
+    }
 
+    private void initInjector() {
+
+        MoviesApp app = (MoviesApp) getApplication();
+
+        DaggerAppComponent.builder()
+            .domainModule(new DomainModule())
+            .applicationModule(new ApplicationModule(app))
+            .build();
+
+        activityComponent = DaggerMoviesComponent.builder()
+            .appComponent(app.getAppComponent())
+            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
+            .movieUsecasesModule(new MovieUsecasesModule("test"))
+            .build();
+
+        activityComponent.inject(this);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -257,6 +279,8 @@ public class MoviesActivity extends ActionBarActivity implements
                 .show();
         }
     }
+
+
 
     private void startDetailActivityByAnimation(View touchedView,
         int touchedX, int touchedY, Intent movieDetailActivityIntent) {
