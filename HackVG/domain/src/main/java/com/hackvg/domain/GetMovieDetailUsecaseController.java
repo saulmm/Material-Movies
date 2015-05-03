@@ -1,6 +1,5 @@
 package com.hackvg.domain;
 
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetail;
@@ -18,30 +17,15 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
     private final Bus mUiBus;
     private MovieDetail mMovieDetail;
 
-    /**
-     * Constructor of the class.
-     *
-     * @param movieId The id of the movie to retrieve the details
-     * @param uiBus The bus to communicate the domain module and the app module
-     * @param dataSource The data source to retrieve the details of the movie
-     */
-    public GetMovieDetailUsecaseController(String movieId,
-        Bus uiBus, MediaDataSource dataSource) {
 
-        if (movieId == null)
-            throw new IllegalArgumentException("Movie Id cannot be null");
+    public GetMovieDetailUsecaseController(String movieId, Bus uiBus,
+        MediaDataSource dataSource) {
 
-        if (uiBus == null)
-            throw new IllegalArgumentException("UiBus cannot be null");
+        mMovieId        = movieId;
+        mUiBus          = uiBus;
+        mMovieDataSource= dataSource;
 
-        if (dataSource == null)
-            throw  new IllegalArgumentException("MediaData source cannot be null");
-
-        mMovieId = movieId;
-        mUiBus = uiBus;
-        mMovieDataSource = dataSource;
-
-        BusProvider.getRestBusInstance().register(this);
+        mUiBus.register(this);
     }
 
     @Override
@@ -65,8 +49,7 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
         sendDetailMovieToPresenter(mMovieDetail);
 
         mUiBus.post(reviewsWrapper);
-        BusProvider.getRestBusInstance().unregister(this);
-
+        mUiBus.unregister(this);
     }
 
     @Subscribe

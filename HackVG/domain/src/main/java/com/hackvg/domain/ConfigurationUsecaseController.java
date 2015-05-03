@@ -1,39 +1,29 @@
 package com.hackvg.domain;
 
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ConfigurationResponse;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-/**
- * This class is an implementation of {@link ConfigurationUsecase}
- */
+import javax.inject.Inject;
+
+
+@SuppressWarnings("FieldCanBeLocal")
 public class ConfigurationUsecaseController implements ConfigurationUsecase {
 
-    private final String DESIRED_QUALITY = "w780";
+    private final String QUALITY_DESIRED    = "w780";
+    private final String QUALITY_ORIGINAL   = "original";
 
     private final MediaDataSource mMediaDataSource;
-    private final Bus mUiBus;
+    private final Bus mMainBus;
 
-    /**
-     * Constructor of the class.
-     *
-     * @param uiBus The bus to communicate the domain module and the app module
-     * @param mediaDataSource The data source to retrieve the  configuariton
-     */
-    public ConfigurationUsecaseController(MediaDataSource mediaDataSource, Bus uiBus) {
+    @Inject
+    public ConfigurationUsecaseController(MediaDataSource mediaDataSource, Bus mainBus) {
 
-        if (mediaDataSource == null)
-            throw new IllegalArgumentException("Media data source cannot be null");
+        mMediaDataSource    = mediaDataSource;
+        mMainBus            = mainBus;
 
-        if (uiBus == null)
-            throw new IllegalArgumentException("Ui bus cannot be null");
-
-        mMediaDataSource = mediaDataSource;
-        mUiBus = uiBus;
-
-        BusProvider.getRestBusInstance().register(this);
+        mMainBus.register(this);
     }
 
     @Override
@@ -52,31 +42,30 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     @Override
     public void onConfigurationReceived(ConfigurationResponse configuration) {
 
-        BusProvider.getRestBusInstance().unregister(this);
+        mMainBus.unregister(this);
         configureImageUrl(configuration);
     }
 
     public void configureImageUrl (ConfigurationResponse configurationResponse) {
 
-        String url = "";
+        String url;
 
         if (configurationResponse.getImages() != null) {
 
-            url = configurationResponse.getImages()
-                .getBase_url();
             String imageQuality = "";
+            url = configurationResponse.getImages().getBase_url();
 
             for (String quality : configurationResponse.getImages().getBackdrop_sizes()) {
 
-                if (quality.equals(DESIRED_QUALITY)) {
+                if (quality.equals(QUALITY_DESIRED)) {
 
-                    imageQuality = DESIRED_QUALITY;
+                    imageQuality = QUALITY_DESIRED;
                     break;
                 }
             }
 
             if (imageQuality.equals(""))
-                imageQuality = "original";
+                imageQuality = QUALITY_ORIGINAL;
 
             url += imageQuality;
             sendConfiguredUrlToPresenter(url);
@@ -87,6 +76,6 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     @Override
     public void sendConfiguredUrlToPresenter (String url) {
 
-        mUiBus.post(url);
+        mMainBus.post(url);
    }
 }

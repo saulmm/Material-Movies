@@ -6,35 +6,39 @@ import android.util.Log;
 
 import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.views.activities.MoviesActivity;
-import com.hackvg.common.utils.BusProvider;
 import com.hackvg.common.utils.Constants;
-import com.hackvg.domain.GetMovieDetailUsecaseController;
+import com.hackvg.domain.GetMovieDetailUsecase;
 import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.Production_companies;
 import com.hackvg.model.entities.ReviewsWrapper;
-import com.hackvg.model.rest.RestMovieSource;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 
 public class MovieDetailPresenter extends Presenter {
 
-    private final DetailView mMovieDetailView;
-    private final String mMovieID;
+    private final Bus mBus;
+    private DetailView mMovieDetailView;
+    private final GetMovieDetailUsecase mMovieDetailUsecase;
 
-    public MovieDetailPresenter(DetailView movieDetailView, String movieID) {
+    @Inject
+    public MovieDetailPresenter(GetMovieDetailUsecase movieDetailUsecase, Bus bus) {
+
+        mMovieDetailUsecase = movieDetailUsecase;
+        mBus = bus;
+    }
+
+    public void attachView (DetailView movieDetailView) {
 
         mMovieDetailView = movieDetailView;
-        mMovieID = movieID;
-
         mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));
-
-        new GetMovieDetailUsecaseController(mMovieID,
-            BusProvider.getUIBusInstance(), RestMovieSource.getInstance())
-        .execute();
+        mMovieDetailUsecase.execute();
     }
 
     public void showDescription(String description) {
@@ -45,13 +49,13 @@ public class MovieDetailPresenter extends Presenter {
     @Override
     public void start() {
 
-        BusProvider.getUIBusInstance().register(this);
+        mBus.register(this);
     }
 
     @Override
     public void stop() {
 
-        BusProvider.getUIBusInstance().unregister(this);
+        mBus.unregister(this);
     }
 
     public void showTagline(String tagLine) {
@@ -94,7 +98,7 @@ public class MovieDetailPresenter extends Presenter {
 
     private void showFilmImage(List<ImagesWrapper.MovieImage> movieImagesList) {
 
-        if (movieImagesList.size() > 0) {
+        if (movieImagesList != null && movieImagesList.size() > 0) {
 
             int randomIndex = new Random().nextInt(movieImagesList.size());
             Log.d("[DEBUG]", "MovieDetailPresenter showFilmImage - Random index: "+randomIndex);
@@ -107,7 +111,7 @@ public class MovieDetailPresenter extends Presenter {
     @Subscribe
     public void onReviewsReceived (final ReviewsWrapper reviewsWrapper) {
 
-        // Wait 300 milliseconds to ensure that Palette generate the colors
+        // Wait 300 milliseconds to ensure that Palette generates the colors
         // before show the reviews
         new Handler().postDelayed(new Runnable() {
             @Override

@@ -30,5 +30,6 @@
     <orderEntry type="module" module-name="common" exported="" />
     <orderEntry type="library" exported="" name="retrofit-1.9.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
+    <orderEntry type="library" exported="" name="model.model" level="project" />
   </component>
 </module>
