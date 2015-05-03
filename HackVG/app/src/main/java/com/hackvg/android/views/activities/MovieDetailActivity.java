@@ -30,9 +30,7 @@ import android.widget.Toast;
 
 import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
-import com.hackvg.android.di.components.DaggerMoviesComponent;
-import com.hackvg.android.di.components.MoviesComponent;
-import com.hackvg.android.di.modules.BasicMoviesUsecasesModule;
+import com.hackvg.android.di.components.DaggerMovieUsecasesComponent;
 import com.hackvg.android.di.modules.MovieUsecasesModule;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.views.DetailView;
@@ -159,16 +157,12 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private void initializeDependencyInjector() {
 
         String movieId = getIntent().getStringExtra(MoviesActivity.EXTRA_MOVIE_ID);
-
         MoviesApp app = (MoviesApp) getApplication();
 
-        MoviesComponent activityComponent = DaggerMoviesComponent.builder()
+        DaggerMovieUsecasesComponent.builder()
             .appComponent(app.getAppComponent())
-            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
             .movieUsecasesModule(new MovieUsecasesModule(movieId))
-            .build();
-
-        activityComponent.inject(this);
+            .build().inject(this);
     }
 
     private void configureEnterAnimation() {
