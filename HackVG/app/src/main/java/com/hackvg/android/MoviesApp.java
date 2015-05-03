@@ -6,9 +6,10 @@ package com.hackvg.android;
 
 import android.app.Application;
 
-import com.hackvg.android.di.AppComponent;
-import com.hackvg.android.di.ApplicationModule;
-import com.hackvg.android.di.DaggerAppComponent;
+import com.hackvg.android.di.components.AppComponent;
+import com.hackvg.android.di.components.DaggerAppComponent;
+import com.hackvg.android.di.modules.ApplicationModule;
+import com.hackvg.android.di.modules.DomainModule;
 
 /**
  * Android Main Application
@@ -26,6 +27,7 @@ public class MoviesApp extends Application {
 
         appComponent = DaggerAppComponent.builder()
             .applicationModule(new ApplicationModule(this))
+            .domainModule(new DomainModule())
             .build();
     }
 

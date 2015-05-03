@@ -1,6 +1,8 @@
-package com.hackvg.android.di;
+package com.hackvg.android.di.components;
 
 
+import com.hackvg.android.di.modules.ApplicationModule;
+import com.hackvg.android.di.modules.DomainModule;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;
 
