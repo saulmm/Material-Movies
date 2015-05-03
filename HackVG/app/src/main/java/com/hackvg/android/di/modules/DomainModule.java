@@ -1,4 +1,4 @@
-package com.hackvg.android.di;
+package com.hackvg.android.di.modules;
 
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;

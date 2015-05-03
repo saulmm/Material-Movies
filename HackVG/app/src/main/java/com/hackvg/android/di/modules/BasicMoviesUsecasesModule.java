@@ -1,4 +1,4 @@
-package com.hackvg.android.di;
+package com.hackvg.android.di.modules;
 
 import com.hackvg.domain.ConfigurationUsecase;
 import com.hackvg.domain.ConfigurationUsecaseController;

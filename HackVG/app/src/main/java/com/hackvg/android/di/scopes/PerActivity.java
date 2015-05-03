@@ -1,5 +1,5 @@
 
-package com.hackvg.android.di;
+package com.hackvg.android.di.scopes;
 
 import java.lang.annotation.Retention;
 import javax.inject.Scope;

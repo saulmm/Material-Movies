@@ -6,31 +6,31 @@ package com.hackvg.android;
 
 import android.app.Application;
 
-import com.hackvg.android.di.AppComponent;
-import com.hackvg.android.di.ApplicationModule;
-import com.hackvg.android.di.DaggerAppComponent;
+import com.hackvg.android.di.components.AppComponent;
+import com.hackvg.android.di.components.DaggerAppComponent;
+import com.hackvg.android.di.modules.ApplicationModule;
+import com.hackvg.android.di.modules.DomainModule;
 
-/**
- * Android Main Application
- */
+
 public class MoviesApp extends Application {
 
-    private AppComponent appComponent;
+    private AppComponent mAppComponent;
 
     @Override public void onCreate() {
         super.onCreate();
-        this.initializeInjector();
+        this.initializeDependencyInjector();
     }
 
-    private void initializeInjector() {
+    private void initializeDependencyInjector() {
 
-        appComponent = DaggerAppComponent.builder()
+        mAppComponent = DaggerAppComponent.builder()
             .applicationModule(new ApplicationModule(this))
+            .domainModule(new DomainModule())
             .build();
     }
 
     public AppComponent getAppComponent() {
 
-        return appComponent;
+        return mAppComponent;
     }
 }

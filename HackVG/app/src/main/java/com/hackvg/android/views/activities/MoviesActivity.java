@@ -23,13 +23,8 @@ import android.widget.Toast;
 
 import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
-import com.hackvg.android.di.ApplicationModule;
-import com.hackvg.android.di.BasicMoviesUsecasesModule;
-import com.hackvg.android.di.DaggerAppComponent;
-import com.hackvg.android.di.DaggerMoviesComponent;
-import com.hackvg.android.di.DomainModule;
-import com.hackvg.android.di.MovieUsecasesModule;
-import com.hackvg.android.di.MoviesComponent;
+import com.hackvg.android.di.components.DaggerBasicMoviesUsecasesComponent;
+import com.hackvg.android.di.modules.BasicMoviesUsecasesModule;
 import com.hackvg.android.mvp.presenters.MoviesPresenter;
 import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
@@ -137,18 +132,10 @@ public class MoviesActivity extends ActionBarActivity implements
 
         MoviesApp app = (MoviesApp) getApplication();
 
-        DaggerAppComponent.builder()
-            .domainModule(new DomainModule())
-            .applicationModule(new ApplicationModule(app))
-            .build();
-
-        MoviesComponent activityComponent = DaggerMoviesComponent.builder()
+        DaggerBasicMoviesUsecasesComponent.builder()
             .appComponent(app.getAppComponent())
             .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
-            .movieUsecasesModule(new MovieUsecasesModule("test"))
-            .build();
-
-        activityComponent.inject(this);
+            .build().inject(this);
     }
 
     @Override
