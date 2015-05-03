@@ -67,7 +67,7 @@ public class MoviesActivityTest extends ActivityInstrumentationTestCase2<MoviesA
         Espresso.onView(withId(R.id.activity_movies_recycler)).perform(
             RecyclerViewActions.actionOnItemAtPosition(2, ViewActions.click()));
 
-        Espresso.onView(withId(R.id.activity_movie_detail_scroll))
+        Espresso.onView(withId(R.id.activity_detail_scroll))
             .check(matches(isDisplayed()));
     }
 }
