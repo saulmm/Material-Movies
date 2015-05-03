@@ -24,12 +24,6 @@ public class GetMoviesUsecaseController implements GetMoviesUsecase {
     @Inject
     public GetMoviesUsecaseController(RestDataSource dataSource, Bus uiBus) {
 
-        if (dataSource == null)
-            throw new IllegalArgumentException("MediaDataSource cannot be null");
-
-        if (uiBus == null)
-            throw new IllegalArgumentException("Bus cannot be null");
-
         mDataSource = dataSource;
         mUiBus = uiBus;
 
