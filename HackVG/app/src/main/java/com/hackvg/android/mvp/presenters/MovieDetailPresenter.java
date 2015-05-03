@@ -98,7 +98,7 @@ public class MovieDetailPresenter extends Presenter {
 
     private void showFilmImage(List<ImagesWrapper.MovieImage> movieImagesList) {
 
-        if (movieImagesList.size() > 0) {
+        if (movieImagesList != null && movieImagesList.size() > 0) {
 
             int randomIndex = new Random().nextInt(movieImagesList.size());
             Log.d("[DEBUG]", "MovieDetailPresenter showFilmImage - Random index: "+randomIndex);
@@ -111,7 +111,7 @@ public class MovieDetailPresenter extends Presenter {
     @Subscribe
     public void onReviewsReceived (final ReviewsWrapper reviewsWrapper) {
 
-        // Wait 300 milliseconds to ensure that Palette generate the colors
+        // Wait 300 milliseconds to ensure that Palette generates the colors
         // before show the reviews
         new Handler().postDelayed(new Runnable() {
             @Override

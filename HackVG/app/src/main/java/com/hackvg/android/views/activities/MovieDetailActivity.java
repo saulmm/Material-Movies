@@ -28,7 +28,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
+import com.hackvg.android.di.ApplicationModule;
+import com.hackvg.android.di.BasicMoviesUsecasesModule;
+import com.hackvg.android.di.DaggerAppComponent;
+import com.hackvg.android.di.DaggerMoviesComponent;
+import com.hackvg.android.di.DomainModule;
+import com.hackvg.android.di.MovieUsecasesModule;
+import com.hackvg.android.di.MoviesComponent;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.utils.GUIUtils;
@@ -78,7 +86,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     private Swatch mBrightSwatch;
 
-    @InjectView(R.id.activity_detail_title)                 TextView    mTitle;
 
     @InjectViews({
         R.id.activity_detail_content,
@@ -96,17 +103,16 @@ public class MovieDetailActivity extends Activity implements DetailView,
     })
     List<TextView> movieHeaders;
 
-    @InjectView(R.id.activity_detail_book_info)             LinearLayout mMovieDescriptionContainer;
-    @InjectView(R.id.activity_detail_fab)                   ImageView mFabButton;
-    @InjectView(R.id.item_movie_cover)                      ImageView mCoverImageView;
-    @InjectView(R.id.activity_detail_confirmation_image)    ImageView mConfirmationView;
-    @InjectView(R.id.activity_detail_confirmation_container)FrameLayout mConfirmationContainer;
+    @InjectView(R.id.activity_detail_title)             TextView  mTitle;
+    @InjectView(R.id.activity_detail_fab)               ImageView mFabButton;
+    @InjectView(R.id.activity_detail_container)         View mInformationContainer;
+    @InjectView(R.id.item_movie_cover)                  ImageView mCoverImageView;
+    @InjectView(R.id.activity_detail_conf_image)        ImageView mConfirmationView;
+    @Optional @InjectView(R.id.activity_detail_image)   ImageView mMovieImageView;
+    @InjectView(R.id.activity_detail_conf_container)    FrameLayout mConfirmationContainer;
+    @InjectView(R.id.activity_detail_book_info)         LinearLayout mMovieDescriptionContainer;
 
-    @InjectView(R.id.activity_movie_detail_scroll)          ObservableScrollView mObservableScrollView;
-    @InjectView(R.id.activity_detail_information_container) View mInformationContainer;
-
-    @Optional
-    @InjectView(R.id.activity_detail_image)                 ImageView mMovieImageView;
+    @InjectView(R.id.activity_detail_scroll)            ObservableScrollView mObservableScrollView;
     private int[] mViewLastLocation;
 
 
@@ -120,7 +126,19 @@ public class MovieDetailActivity extends Activity implements DetailView,
         mIsTablet = getContext().getResources().getBoolean(
             R.bool.is_tablet);
 
-        initInjector();
+        initializeDependencyInjector();
+        initializeStartAnimation();
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        mDetailPresenter.attachView(this);
+        mDetailPresenter.start();
+    }
+
+    private void initializeStartAnimation() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -134,14 +152,31 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         } else {
 
-            mViewLastLocation = getIntent().getIntArrayExtra("view_location");
+            mViewLastLocation = getIntent().getIntArrayExtra(
+                MoviesActivity.EXTRA_MOVIE_LOCATION);
+
             configureEnterAnimation ();
         }
     }
 
-    private void initInjector() {
+    private void initializeDependencyInjector() {
 
-        // TODO INIT INJECTOR
+        String movieId = getIntent().getStringExtra(MoviesActivity.EXTRA_MOVIE_ID);
+
+        MoviesApp app = (MoviesApp) getApplication();
+
+        DaggerAppComponent.builder()
+            .domainModule(new DomainModule())
+            .applicationModule(new ApplicationModule(app))
+            .build();
+
+        MoviesComponent activityComponent = DaggerMoviesComponent.builder()
+            .appComponent(app.getAppComponent())
+            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
+            .movieUsecasesModule(new MovieUsecasesModule(movieId))
+            .build();
+
+        activityComponent.inject(this);
     }
 
     private void configureEnterAnimation() {
@@ -173,9 +208,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         postponeEnterTransition();
 
-        int moviePosition = getIntent().getIntExtra("movie_position", 0);
+        int moviePosition = getIntent().getIntExtra(
+            MoviesActivity.EXTRA_MOVIE_POSITION, 0);
 
-        mCoverImageView.setTransitionName("cover" + moviePosition);
+        mCoverImageView.setTransitionName(MoviesActivity.SHARED_ELEMENT_COVER + moviePosition);
         mObservableScrollView.getViewTreeObserver().addOnPreDrawListener(
             new ViewTreeObserver.OnPreDrawListener() {
 
@@ -216,20 +252,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 GUIUtils.showViewByScale(mMovieDescriptionContainer);
             }
         });
-    }
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-        mDetailPresenter.stop();
-    }
-
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-        mDetailPresenter.start();
     }
 
     @Override
@@ -309,10 +331,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         for (Review result : reviewList) {
 
-            // Creates a TextView from programmatically
+            // Creates a TextView
             TextView reviewTextView = new TextView(this);
-            reviewTextView.setTextAppearance(this,
-                R.style.MaterialMoviesReviewTextView);
+            reviewTextView.setTextAppearance(this, R.style
+                .MaterialMoviesReviewTextView);
 
             if (mReviewsColor != -1)
                 reviewTextView.setTextColor(mReviewsColor);
@@ -329,8 +351,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
             reviewTextView.setText(spanColorString);
 
-            mMovieDescriptionContainer.addView(reviewTextView,
-                layoutParams);
+            mMovieDescriptionContainer.addView(reviewTextView, layoutParams);
         }
     }
 
@@ -338,13 +359,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
     public Context getContext() {
 
         return this;
-    }
-
-    @Override
-    public void finish(String cause) {
-
-        Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
-        this.finish();
     }
 
     /**
@@ -434,14 +448,11 @@ public class MovieDetailActivity extends Activity implements DetailView,
             mInformationContainer.setBackgroundColor(swatch.getRgb());
             mConfirmationContainer.setBackgroundColor(swatch.getRgb());
 
-
-
             mTitle.setTextColor(swatch.getRgb());
 
             ButterKnife.apply(mMovieInfoTextViews, GUIUtils.setter,
                 swatch.getTitleTextColor());
-
-        } // else use colors of the layout
+        }
     }
 
     public void setHeadersTitlColors(Swatch swatch) {
@@ -553,5 +564,19 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 isTranslucent = false;
             }
         }
+    }
+
+    @Override
+    public void finish(String cause) {
+
+        Toast.makeText(this, cause, Toast.LENGTH_SHORT).show();
+        this.finish();
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+        mDetailPresenter.stop();
     }
 }

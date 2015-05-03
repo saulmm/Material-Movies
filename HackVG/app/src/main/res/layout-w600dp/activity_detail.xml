@@ -3,13 +3,13 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_detail_information_container"
+    android:id="@+id/activity_detail_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
 
     <com.hackvg.android.views.custom_views.ObservableScrollView
-        android:id="@+id/activity_movie_detail_scroll"
+        android:id="@+id/activity_detail_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -173,7 +173,7 @@
     </com.hackvg.android.views.custom_views.ObservableScrollView>
 
     <FrameLayout
-        android:id="@+id/activity_detail_confirmation_container"
+        android:id="@+id/activity_detail_conf_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/theme_primary"

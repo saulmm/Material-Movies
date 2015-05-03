@@ -1,5 +1,6 @@
 package com.hackvg.android.di;
 
+import com.hackvg.android.views.activities.MovieDetailActivity;
 import com.hackvg.android.views.activities.MoviesActivity;
 
 import dagger.Component;
@@ -12,6 +13,5 @@ public interface MoviesComponent {
 
     void inject (MoviesActivity moviesActivity);
 
-//    void inject (MovieDetailActivity movieDetailActivity);
-
+    void inject (MovieDetailActivity movieDetailActivity);
 }
