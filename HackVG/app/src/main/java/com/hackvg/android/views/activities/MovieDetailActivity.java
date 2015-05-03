@@ -199,7 +199,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
         postponeEnterTransition();
 
-        int moviePosition = getIntent().getIntExtra("movie_position", 0);
+        int moviePosition = getIntent().getIntExtra(
+            MoviesActivity.EXTRA_MOVIE_POSITION, 0);
 
         mCoverImageView.setTransitionName("cover" + moviePosition);
         mObservableScrollView.getViewTreeObserver().addOnPreDrawListener(

@@ -55,29 +55,23 @@ public class MoviesActivity extends ActionBarActivity implements
 
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
-    private final static String BUNDLE_MOVIES_WRAPPER   = "movies_wrapper";
-    private final static String BUNDLE_BACK_TRANSLATION = "background_translation";
-    public final static String EXTRA_MOVIE_ID          = "movie_id";
-    public final static String EXTRA_MOVIE_POSITION = "view_location";
-
-    private MoviesAdapter mMoviesAdapter;
-    public float mBackgroundTranslation;
-
-    int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private final static String BUNDLE_MOVIES_WRAPPER       = "movies_wrapper";
+    private final static String BUNDLE_BACK_TRANSLATION     = "background_translation";
+    public final static String EXTRA_MOVIE_ID               = "movie_id";
+    public final static String EXTRA_MOVIE_LOCATION         = "view_location";
+    public final static String EXTRA_MOVIE_POSITION         = "movie_position";
+    public final static String SHARED_ELEMENT_COVER         = "cover";
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private MoviesAdapter mMoviesAdapter;
 
+    public float mBackgroundTranslation;
+
+    @Optional @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
     @InjectView(R.id.activity_movies_toolbar)                   Toolbar mToolbar;
     @InjectView(R.id.activity_movies_progress)                  ProgressBar mProgressBar;
     @InjectView(R.id.activity_movies_recycler)                  RecyclerView mRecycler;
-
-    @Optional @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
-
     @Inject MoviesPresenter mMoviesPresenter;
-
-    private ImageView mCoverImage;
-    private MoviesComponent activityComponent;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,7 +142,7 @@ public class MoviesActivity extends ActionBarActivity implements
             .applicationModule(new ApplicationModule(app))
             .build();
 
-        activityComponent = DaggerMoviesComponent.builder()
+        MoviesComponent activityComponent = DaggerMoviesComponent.builder()
             .appComponent(app.getAppComponent())
             .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
             .movieUsecasesModule(new MovieUsecasesModule("test"))
@@ -201,8 +195,8 @@ public class MoviesActivity extends ActionBarActivity implements
     public void showLoadingLabel() {
 
         Snackbar loadingSnackBar = Snackbar.with(this)
-            .text("Loading more films")
-            .actionLabel("Cancel")
+            .text(getString(R.string.activity_movies_message_more_films))
+            .actionLabel(getString(R.string.action_cancel))
             .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
             .color(getResources().getColor(R.color.theme_primary))
             .actionColor(getResources().getColor(R.color.theme_accent));
@@ -228,7 +222,6 @@ public class MoviesActivity extends ActionBarActivity implements
         mMoviesAdapter.appendMovies(movieList);
     }
 
-
     @Override
     public void onClick(View touchedView, int moviePosition, float touchedX, float touchedY) {
 
@@ -239,30 +232,26 @@ public class MoviesActivity extends ActionBarActivity implements
         movieDetailActivityIntent.putExtra(EXTRA_MOVIE_ID, movieID);
         movieDetailActivityIntent.putExtra(EXTRA_MOVIE_POSITION, moviePosition);
 
-        mCoverImage = (ImageView) touchedView.findViewById(R.id.item_movie_cover);
+        ImageView mCoverImage = (ImageView) touchedView.findViewById(R.id.item_movie_cover);
         BitmapDrawable bitmapDrawable = (BitmapDrawable) mCoverImage.getDrawable();
 
         if (mMoviesAdapter.isMovieReady(moviePosition) || bitmapDrawable != null) {
 
             sPhotoCache.put(0, bitmapDrawable.getBitmap());
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                startSharedElementPosition(touchedView,
-                    moviePosition, movieDetailActivityIntent);
-            }
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                startDetailActivityBySharedElements(touchedView, moviePosition,
+                    movieDetailActivityIntent);
             else
-                startDetailActivityByAnimation(touchedView,
-                    (int) touchedX, (int) touchedY, movieDetailActivityIntent);
+                startDetailActivityByAnimation(touchedView, (int) touchedX,
+                    (int) touchedY, movieDetailActivityIntent);
 
         } else {
 
-            Toast.makeText(this, "Movie loading, please wait", Toast.LENGTH_SHORT)
-                .show();
+            Toast.makeText(this, getString(R.string.activity_movies_message_loading_film),
+                Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
     private void startDetailActivityByAnimation(View touchedView,
         int touchedX, int touchedY, Intent movieDetailActivityIntent) {
@@ -275,18 +264,19 @@ public class MoviesActivity extends ActionBarActivity implements
         int finalLocationY = locationAtScreen[1] + touchedLocation[1];
 
         int [] finalLocation = {finalLocationX, finalLocationY};
-        movieDetailActivityIntent.putExtra("view_location",
+        movieDetailActivityIntent.putExtra(EXTRA_MOVIE_LOCATION,
             finalLocation);
 
         startActivity(movieDetailActivityIntent);
     }
 
+    @SuppressWarnings("unchecked")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void startSharedElementPosition(View touchedView,
-        int moviePosition, Intent movieDetailActivityIntent) {
+    private void startDetailActivityBySharedElements(View touchedView,
+                                                     int moviePosition, Intent movieDetailActivityIntent) {
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-            this, new Pair<>(touchedView, "cover" + moviePosition));
+            this, new Pair<>(touchedView, SHARED_ELEMENT_COVER + moviePosition));
 
         startActivity(movieDetailActivityIntent, options.toBundle());
     }
@@ -299,11 +289,12 @@ public class MoviesActivity extends ActionBarActivity implements
 
             super.onScrolled(recyclerView, dx, dy);
 
-            visibleItemCount = mRecycler.getLayoutManager().getChildCount();
-            totalItemCount = mRecycler.getLayoutManager().getItemCount();
-            pastVisiblesItems = ((GridLayoutManager) mRecycler.getLayoutManager()).findFirstVisibleItemPosition();
+            int visibleItemCount    = mRecycler.getLayoutManager().getChildCount();
+            int totalItemCount      = mRecycler.getLayoutManager().getItemCount();
+            int pastVisibleItems    = ((GridLayoutManager) mRecycler.getLayoutManager())
+                .findFirstVisibleItemPosition();
 
-            if((visibleItemCount+pastVisiblesItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
+            if((visibleItemCount + pastVisibleItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
                 mMoviesPresenter.onEndListReached();
             }
 

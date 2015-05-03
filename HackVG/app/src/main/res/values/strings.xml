@@ -42,4 +42,7 @@
     </string>
     <string name="activity_detail_reviews_description">Reviews</string>
     <string name="activity_detail_confirmation">Saved !!</string>
+    <string name="activity_movies.message.loading_film">Movie loading, please wait</string>
+    <string name="activity_movies.message.more_films">Loading more films</string>
+    <string name="action.cancel">Cancel</string>
 </resources>
