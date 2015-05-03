@@ -34,12 +34,6 @@ public class RestMovieSource implements RestDataSource {
     }
 
     @Override
-    public void getShows() {
-
-//        moviesDBApi.getPopularShows(Constants.API_KEY, moviesResponseCallback);
-    }
-
-    @Override
     public void getMovies() {
 
         moviesDBApi.getPopularMovies(Constants.API_KEY, retrofitCallback);
