@@ -5,5 +5,5 @@ package com.hackvg.domain;
  */
 public interface Usecase {
 
-    public void execute ();
+    void execute ();
 }
