@@ -6,3 +6,5 @@
 /build
 *.class
 *.jar
+HackVG.iml
+/.idea

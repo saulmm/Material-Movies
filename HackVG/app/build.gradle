@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     aaptOptions {
         useNewCruncher false
@@ -20,7 +20,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 2
         versionName "0.6"
     }
@@ -38,19 +38,19 @@ dependencies {
     compile project(':domain')
 
     // Google libraries
-    compile 'com.android.support:cardview-v7:21.0.3'
-    compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'com.android.support:recyclerview-v7:21.0.3'
-    compile 'com.android.support:palette-v7:21.0.0'
-    compile 'com.android.support:support-v13:21.0.3'
-    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:cardview-v7:22.1.1'
+    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:recyclerview-v7:22.1.1'
+    compile 'com.android.support:palette-v7:22.1.1'
+    compile 'com.android.support:support-v13:22.1.1'
+    compile 'com.android.support:support-v4:22.1.1'
 
     // Dagger compiler
     apt 'com.google.dagger:dagger-compiler:2.0'
 
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.0') {
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.0') {
         exclude module: 'support-annotations'
     }
 

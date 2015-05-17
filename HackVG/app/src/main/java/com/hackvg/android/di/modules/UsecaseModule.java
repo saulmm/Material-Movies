@@ -12,7 +12,7 @@ import dagger.Provides;
 public class UsecaseModule {
 
     @Provides
-    ConfigurationUsecase provideConfigurationUsecase (Bus bus, RestMovieSource restMovieSource) {
+    ConfigurationUsecase provideConfigurationUsecase(Bus bus, RestMovieSource restMovieSource) {
         return new ConfigurationUsecaseController(restMovieSource, bus);
     }
 }

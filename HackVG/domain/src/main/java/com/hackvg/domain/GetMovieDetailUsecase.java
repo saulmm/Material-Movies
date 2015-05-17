@@ -17,13 +17,13 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param movieId of the movie
      */
-    void requestMovieDetail (String movieId);
+    void requestMovieDetail(String movieId);
 
     /**
      * Request datasource the reviews written about that movie
      * @param movieId of the film
      */
-    void requestMovieReviews (String movieId);
+    void requestMovieReviews(String movieId);
 
     /**
      * Request datasource the images of the film submited to the API
@@ -38,7 +38,7 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param response the response containing the details of the film
      */
-    void onMovieDetailResponse (MovieDetail response);
+    void onMovieDetailResponse(MovieDetail response);
 
     void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper);
 
@@ -57,5 +57,5 @@ public interface GetMovieDetailUsecase extends Usecase {
      *
      * @param response the response containing the details of the film
      */
-    void sendDetailMovieToPresenter (MovieDetail response);
+    void sendDetailMovieToPresenter(MovieDetail response);
 }

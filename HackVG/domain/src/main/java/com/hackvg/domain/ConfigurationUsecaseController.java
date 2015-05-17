@@ -11,8 +11,8 @@ import javax.inject.Inject;
 @SuppressWarnings("FieldCanBeLocal")
 public class ConfigurationUsecaseController implements ConfigurationUsecase {
 
-    private final String QUALITY_DESIRED    = "w780";
-    private final String QUALITY_ORIGINAL   = "original";
+    private final String QUALITY_DESIRED = "w780";
+    private final String QUALITY_ORIGINAL = "original";
 
     private final MediaDataSource mMediaDataSource;
     private final Bus mMainBus;
@@ -20,8 +20,8 @@ public class ConfigurationUsecaseController implements ConfigurationUsecase {
     @Inject
     public ConfigurationUsecaseController(MediaDataSource mediaDataSource, Bus mainBus) {
 
-        mMediaDataSource    = mediaDataSource;
-        mMainBus            = mainBus;
+        mMediaDataSource = mediaDataSource;
+        mMainBus = mainBus;
 
         mMainBus.register(this);
     }

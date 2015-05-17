@@ -19,11 +19,11 @@ public class GetMovieDetailUsecaseController implements GetMovieDetailUsecase {
 
 
     public GetMovieDetailUsecaseController(String movieId, Bus uiBus,
-        MediaDataSource dataSource) {
+                                           MediaDataSource dataSource) {
 
-        mMovieId        = movieId;
-        mUiBus          = uiBus;
-        mMovieDataSource= dataSource;
+        mMovieId = movieId;
+        mUiBus = uiBus;
+        mMovieDataSource = dataSource;
 
         mUiBus.register(this);
     }

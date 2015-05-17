@@ -4,16 +4,16 @@ public interface MediaDataSource {
 
     void getMovies();
 
-    void getDetailMovie (String id);
+    void getDetailMovie(String id);
 
     /**
      * Get the reviews for a particular movie id.
      *
      * @param id movie id
      */
-    void getReviews (String id);
+    void getReviews(String id);
 
-    void getConfiguration ();
+    void getConfiguration();
 
     /**
      * Get a list of images represented by a MoviesWrapper
@@ -21,5 +21,5 @@ public interface MediaDataSource {
      *
      * @param movieId the movie id
      */
-    void getImages (String movieId);
+    void getImages(String movieId);
 }

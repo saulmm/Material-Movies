@@ -34,7 +34,7 @@ public class MovieDetailPresenter extends Presenter {
         mBus = bus;
     }
 
-    public void attachView (DetailView movieDetailView) {
+    public void attachView(DetailView movieDetailView) {
 
         mMovieDetailView = movieDetailView;
         mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));

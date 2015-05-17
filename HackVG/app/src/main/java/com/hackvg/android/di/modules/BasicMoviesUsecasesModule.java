@@ -13,11 +13,13 @@ import dagger.Provides;
 @Module
 public class BasicMoviesUsecasesModule {
 
-    @Provides ConfigurationUsecase provideConfigurationUsecase (Bus bus, RestMovieSource moviesSource) {
+    @Provides
+    ConfigurationUsecase provideConfigurationUsecase(Bus bus, RestMovieSource moviesSource) {
         return new ConfigurationUsecaseController(moviesSource, bus);
     }
 
-    @Provides GetMoviesUsecase provideMoviesUsecase (Bus bus, RestMovieSource movieSource) {
+    @Provides
+    GetMoviesUsecase provideMoviesUsecase(Bus bus, RestMovieSource movieSource) {
         return new GetMoviesUsecaseController(movieSource, bus);
     }
 }

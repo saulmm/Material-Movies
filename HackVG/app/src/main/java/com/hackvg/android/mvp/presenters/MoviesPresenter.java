@@ -24,12 +24,12 @@ public class MoviesPresenter extends Presenter {
     @Inject
     public MoviesPresenter(ConfigurationUsecase configurationUsecase, GetMoviesUsecase getMoviesUsecase, Bus bus) {
 
-        mConfigureUsecase   = configurationUsecase;
-        mGetPopularShows    = getMoviesUsecase;
+        mConfigureUsecase = configurationUsecase;
+        mGetPopularShows = getMoviesUsecase;
         mBus = bus;
     }
 
-    public void attachView (MoviesView moviesView) {
+    public void attachView(MoviesView moviesView) {
 
         mMoviesView = moviesView;
     }
