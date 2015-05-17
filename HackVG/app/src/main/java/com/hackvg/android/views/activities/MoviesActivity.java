@@ -50,23 +50,29 @@ public class MoviesActivity extends ActionBarActivity implements
 
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
-    private final static String BUNDLE_MOVIES_WRAPPER       = "movies_wrapper";
-    private final static String BUNDLE_BACK_TRANSLATION     = "background_translation";
-    public final static String EXTRA_MOVIE_ID               = "movie_id";
-    public final static String EXTRA_MOVIE_LOCATION         = "view_location";
-    public final static String EXTRA_MOVIE_POSITION         = "movie_position";
-    public final static String SHARED_ELEMENT_COVER         = "cover";
+    private final static String BUNDLE_MOVIES_WRAPPER = "movies_wrapper";
+    private final static String BUNDLE_BACK_TRANSLATION = "background_translation";
+    public final static String EXTRA_MOVIE_ID = "movie_id";
+    public final static String EXTRA_MOVIE_LOCATION = "view_location";
+    public final static String EXTRA_MOVIE_POSITION = "movie_position";
+    public final static String SHARED_ELEMENT_COVER = "cover";
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private MoviesAdapter mMoviesAdapter;
 
     public float mBackgroundTranslation;
 
-    @Optional @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
-    @InjectView(R.id.activity_movies_toolbar)                   Toolbar mToolbar;
-    @InjectView(R.id.activity_movies_progress)                  ProgressBar mProgressBar;
-    @InjectView(R.id.activity_movies_recycler)                  RecyclerView mRecycler;
-    @Inject MoviesPresenter mMoviesPresenter;
+    @Optional
+    @InjectView(R.id.activity_movies_background_view)
+    View mTabletBackground;
+    @InjectView(R.id.activity_movies_toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.activity_movies_progress)
+    ProgressBar mProgressBar;
+    @InjectView(R.id.activity_movies_recycler)
+    RecyclerView mRecycler;
+    @Inject
+    MoviesPresenter mMoviesPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +89,7 @@ public class MoviesActivity extends ActionBarActivity implements
         if (savedInstanceState == null)
             mMoviesPresenter.attachView(this);
 
-         else
+        else
             initializeFromParams(savedInstanceState);
     }
 
@@ -97,7 +103,7 @@ public class MoviesActivity extends ActionBarActivity implements
     private void initializeFromParams(Bundle savedInstanceState) {
 
         MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
-            .getSerializable(BUNDLE_MOVIES_WRAPPER);
+                .getSerializable(BUNDLE_MOVIES_WRAPPER);
 
         mMoviesPresenter.onPopularMoviesReceived(moviesWrapper);
     }
@@ -123,7 +129,7 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setTitle("");
 
         getSupportActionBar().setHomeAsUpIndicator(
-            R.drawable.ic_menu_white_24dp);
+                R.drawable.ic_menu_white_24dp);
 
         mToolbar.setNavigationOnClickListener(this);
     }
@@ -133,9 +139,9 @@ public class MoviesActivity extends ActionBarActivity implements
         MoviesApp app = (MoviesApp) getApplication();
 
         DaggerBasicMoviesUsecasesComponent.builder()
-            .appComponent(app.getAppComponent())
-            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
-            .build().inject(this);
+                .appComponent(app.getAppComponent())
+                .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
+                .build().inject(this);
     }
 
     @Override
@@ -146,7 +152,7 @@ public class MoviesActivity extends ActionBarActivity implements
         if (mMoviesAdapter != null) {
 
             outState.putSerializable(BUNDLE_MOVIES_WRAPPER, new MoviesWrapper(
-                mMoviesAdapter.getMovieList()));
+                    mMoviesAdapter.getMovieList()));
 
             outState.putFloat(BUNDLE_BACK_TRANSLATION, mBackgroundTranslation);
         }
@@ -182,8 +188,8 @@ public class MoviesActivity extends ActionBarActivity implements
     public void showLoadingLabel() {
 
         Snackbar loadingSnackBar = Snackbar.with(this)
-            .text(getString(R.string.activity_movies_message_more_films))
-            .actionLabel(getString(R.string.action_cancel))
+                .text(getString(R.string.activity_movies_message_more_films))
+                .actionLabel(getString(R.string.action_cancel))
             .duration(Snackbar.SnackbarDuration.LENGTH_INDEFINITE)
             .color(getResources().getColor(R.color.theme_primary))
             .actionColor(getResources().getColor(R.color.theme_accent));
@@ -228,15 +234,15 @@ public class MoviesActivity extends ActionBarActivity implements
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 startDetailActivityBySharedElements(touchedView, moviePosition,
-                    movieDetailActivityIntent);
+                        movieDetailActivityIntent);
             else
                 startDetailActivityByAnimation(touchedView, (int) touchedX,
-                    (int) touchedY, movieDetailActivityIntent);
+                        (int) touchedY, movieDetailActivityIntent);
 
         } else {
 
             Toast.makeText(this, getString(R.string.activity_movies_message_loading_film),
-                Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -263,7 +269,7 @@ public class MoviesActivity extends ActionBarActivity implements
                                                      int moviePosition, Intent movieDetailActivityIntent) {
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
-            this, new Pair<>(touchedView, SHARED_ELEMENT_COVER + moviePosition));
+                this, new Pair<>(touchedView, SHARED_ELEMENT_COVER + moviePosition));
 
         startActivity(movieDetailActivityIntent, options.toBundle());
     }
@@ -276,12 +282,12 @@ public class MoviesActivity extends ActionBarActivity implements
 
             super.onScrolled(recyclerView, dx, dy);
 
-            int visibleItemCount    = mRecycler.getLayoutManager().getChildCount();
-            int totalItemCount      = mRecycler.getLayoutManager().getItemCount();
-            int pastVisibleItems    = ((GridLayoutManager) mRecycler.getLayoutManager())
-                .findFirstVisibleItemPosition();
+            int visibleItemCount = mRecycler.getLayoutManager().getChildCount();
+            int totalItemCount = mRecycler.getLayoutManager().getItemCount();
+            int pastVisibleItems = ((GridLayoutManager) mRecycler.getLayoutManager())
+                    .findFirstVisibleItemPosition();
 
-            if((visibleItemCount + pastVisibleItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
+            if ((visibleItemCount + pastVisibleItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
                 mMoviesPresenter.onEndListReached();
             }
 

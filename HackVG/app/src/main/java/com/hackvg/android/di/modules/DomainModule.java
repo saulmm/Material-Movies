@@ -11,10 +11,16 @@ import dagger.Provides;
 @Module
 public class DomainModule {
 
-    @Provides @Singleton Bus provideBus () {
+    @Provides
+    @Singleton
+    Bus provideBus() {
         return new Bus();
     }
 
-    @Provides @Singleton RestMovieSource provideDataSource (Bus bus) { return new RestMovieSource(bus); }
+    @Provides
+    @Singleton
+    RestMovieSource provideDataSource(Bus bus) {
+        return new RestMovieSource(bus);
+    }
 
 }

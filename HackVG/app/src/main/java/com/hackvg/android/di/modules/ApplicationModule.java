@@ -19,7 +19,11 @@ public class ApplicationModule {
         this.application = application;
     }
 
-    @Provides @Singleton Context provideApplicationContext () { return application; }
+    @Provides
+    @Singleton
+    Context provideApplicationContext() {
+        return application;
+    }
 
     public static class MovieUsecasesModule {
     }

@@ -12,7 +12,7 @@ public interface ConfigurationUsecase extends Usecase {
     /**
      * Request data source the configuration data
      */
-    void requestConfiguration ();
+    void requestConfiguration();
 
     /**
      * Callback used to be notified when the configuration data has been received
@@ -20,14 +20,14 @@ public interface ConfigurationUsecase extends Usecase {
      * @param configurationResponse the configuration with the data about the endpoint
      * of the images
      */
-    void onConfigurationReceived (ConfigurationResponse configurationResponse);
+    void onConfigurationReceived(ConfigurationResponse configurationResponse);
 
     /**
      * Configures the endpoint used to retrieve images from the movie database api
      *
      * @param configurationResponse the configuration with the data about the endpoint of the images
      */
-    void configureImageUrl (ConfigurationResponse configurationResponse);
+    void configureImageUrl(ConfigurationResponse configurationResponse);
 
     /**
      * Sends a configured to request images from the movie database api

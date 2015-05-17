@@ -6,8 +6,9 @@ import com.hackvg.android.views.activities.MovieDetailActivity;
 
 import dagger.Component;
 
-@PerActivity @Component(dependencies = AppComponent.class, modules = MovieUsecasesModule.class)
+@PerActivity
+@Component(dependencies = AppComponent.class, modules = MovieUsecasesModule.class)
 public interface MovieUsecasesComponent {
 
-    void inject (MovieDetailActivity movieDetailActivity);
+    void inject(MovieDetailActivity movieDetailActivity);
 }

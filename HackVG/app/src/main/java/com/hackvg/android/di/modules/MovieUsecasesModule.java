@@ -18,7 +18,8 @@ public class MovieUsecasesModule {
         this.movieId = movieId;
     }
 
-    @Provides GetMovieDetailUsecase provideGetMovieDetailUsecase (Bus bus, RestMovieSource movieSource) {
+    @Provides
+    GetMovieDetailUsecase provideGetMovieDetailUsecase(Bus bus, RestMovieSource movieSource) {
         return new GetMovieDetailUsecaseController(movieId, bus, movieSource);
     }
 }

@@ -1,5 +1,6 @@
 /**
  * Copyright (C) 2015 android10.org. All rights reserved.
+ *
  * @author Fernando Cejas (the android10 coder)
  */
 package com.hackvg.android;
@@ -16,7 +17,8 @@ public class MoviesApp extends Application {
 
     private AppComponent mAppComponent;
 
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
         this.initializeDependencyInjector();
     }
@@ -24,9 +26,9 @@ public class MoviesApp extends Application {
     private void initializeDependencyInjector() {
 
         mAppComponent = DaggerAppComponent.builder()
-            .applicationModule(new ApplicationModule(this))
-            .domainModule(new DomainModule())
-            .build();
+                .applicationModule(new ApplicationModule(this))
+                .domainModule(new DomainModule())
+                .build();
     }
 
     public AppComponent getAppComponent() {

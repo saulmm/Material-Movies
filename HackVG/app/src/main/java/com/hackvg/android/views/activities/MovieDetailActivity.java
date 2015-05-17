@@ -77,7 +77,8 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     // The time that the confirmation view will be shown (milliseconds)
     private static final int CONFIRMATION_VIEW_DELAY = 1500;
-    @Inject MovieDetailPresenter mDetailPresenter;
+    @Inject
+    MovieDetailPresenter mDetailPresenter;
 
     private Swatch mBrightSwatch;
 
@@ -98,16 +99,26 @@ public class MovieDetailActivity extends Activity implements DetailView,
     })
     List<TextView> movieHeaders;
 
-    @InjectView(R.id.activity_detail_title)             TextView  mTitle;
-    @InjectView(R.id.activity_detail_fab)               ImageView mFabButton;
-    @InjectView(R.id.activity_detail_container)         View mInformationContainer;
-    @InjectView(R.id.item_movie_cover)                  ImageView mCoverImageView;
-    @InjectView(R.id.activity_detail_conf_image)        ImageView mConfirmationView;
-    @Optional @InjectView(R.id.activity_detail_image)   ImageView mMovieImageView;
-    @InjectView(R.id.activity_detail_conf_container)    FrameLayout mConfirmationContainer;
-    @InjectView(R.id.activity_detail_book_info)         LinearLayout mMovieDescriptionContainer;
+    @InjectView(R.id.activity_detail_title)
+    TextView mTitle;
+    @InjectView(R.id.activity_detail_fab)
+    ImageView mFabButton;
+    @InjectView(R.id.activity_detail_container)
+    View mInformationContainer;
+    @InjectView(R.id.item_movie_cover)
+    ImageView mCoverImageView;
+    @InjectView(R.id.activity_detail_conf_image)
+    ImageView mConfirmationView;
+    @Optional
+    @InjectView(R.id.activity_detail_image)
+    ImageView mMovieImageView;
+    @InjectView(R.id.activity_detail_conf_container)
+    FrameLayout mConfirmationContainer;
+    @InjectView(R.id.activity_detail_book_info)
+    LinearLayout mMovieDescriptionContainer;
 
-    @InjectView(R.id.activity_detail_scroll)            ObservableScrollView mObservableScrollView;
+    @InjectView(R.id.activity_detail_scroll)
+    ObservableScrollView mObservableScrollView;
     private int[] mViewLastLocation;
 
 
@@ -148,7 +159,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         } else {
 
             mViewLastLocation = getIntent().getIntArrayExtra(
-                MoviesActivity.EXTRA_MOVIE_LOCATION);
+                    MoviesActivity.EXTRA_MOVIE_LOCATION);
 
             configureEnterAnimation ();
         }
@@ -160,9 +171,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
         MoviesApp app = (MoviesApp) getApplication();
 
         DaggerMovieUsecasesComponent.builder()
-            .appComponent(app.getAppComponent())
-            .movieUsecasesModule(new MovieUsecasesModule(movieId))
-            .build().inject(this);
+                .appComponent(app.getAppComponent())
+                .movieUsecasesModule(new MovieUsecasesModule(movieId))
+                .build().inject(this);
     }
 
     private void configureEnterAnimation() {
@@ -195,7 +206,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
         postponeEnterTransition();
 
         int moviePosition = getIntent().getIntExtra(
-            MoviesActivity.EXTRA_MOVIE_POSITION, 0);
+                MoviesActivity.EXTRA_MOVIE_POSITION, 0);
 
         mCoverImageView.setTransitionName(MoviesActivity.SHARED_ELEMENT_COVER + moviePosition);
         mObservableScrollView.getViewTreeObserver().addOnPreDrawListener(
@@ -320,7 +331,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
             // Creates a TextView
             TextView reviewTextView = new TextView(this);
             reviewTextView.setTextAppearance(this, R.style
-                .MaterialMoviesReviewTextView);
+                    .MaterialMoviesReviewTextView);
 
             if (mReviewsColor != -1)
                 reviewTextView.setTextColor(mReviewsColor);

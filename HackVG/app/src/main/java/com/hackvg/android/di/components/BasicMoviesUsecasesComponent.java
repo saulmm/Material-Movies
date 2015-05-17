@@ -10,5 +10,5 @@ import dagger.Component;
 @Component(dependencies = AppComponent.class, modules = BasicMoviesUsecasesModule.class)
 public interface BasicMoviesUsecasesComponent {
 
-    void inject (MoviesActivity moviesActivity);
+    void inject(MoviesActivity moviesActivity);
 }

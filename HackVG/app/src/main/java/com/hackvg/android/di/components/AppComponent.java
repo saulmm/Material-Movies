@@ -12,12 +12,13 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = {
-    ApplicationModule.class,
-    DomainModule.class,
+        ApplicationModule.class,
+        DomainModule.class,
 })
 
 public interface AppComponent {
-    
+
     Bus bus();
+
     RestMovieSource restMovieSource();
 }
