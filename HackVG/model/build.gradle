@@ -1,0 +1,19 @@
+apply plugin: 'java'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+dependencies {
+    compile project(':common')
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    provided 'com.google.dagger:dagger-compiler:2.0'
+}

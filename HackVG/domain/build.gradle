@@ -1,0 +1,24 @@
+apply plugin: 'java'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+}
+
+dependencies {
+    compile project (':common')
+    compile project (':model')
+
+    provided 'com.google.dagger:dagger-compiler:2.0'
+
+    //test dependencies
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+}

@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="activity_movies_margins">10dp</dimen>
+
+    <dimen name="item_movie_width">190dp</dimen>
+    <dimen name="item_movie_height">295dp</dimen>
+
+</resources>

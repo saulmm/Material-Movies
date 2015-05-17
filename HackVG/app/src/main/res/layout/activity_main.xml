@@ -1,0 +1,64 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hackvg.android.views.activities.DrawerActivity"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity"
+        >
+
+        <com.hackvg.android.views.custom_views.AutofitRecyclerView
+            android:id="@+id/activity_movies_recycler"
+            android:layout_width="match_parent"
+            android:paddingTop="?android:attr/actionBarSize"
+            android:columnWidth="@dimen/item_movie_width"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_movies_toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/theme_primary"
+            >
+
+            <com.hackvg.android.views.custom_views.LobsterTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="22sp"
+                android:textColor="#FFF"
+                />
+        </android.support.v7.widget.Toolbar>
+
+        <ProgressBar
+            android:id="@+id/activity_movies_progress"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyleLarge"
+            />
+
+    </FrameLayout>
+
+    <fragment
+        android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.hackvg.android.views.fragments.NavigationDrawerFragment"
+        tools:layout="@layout/fragment_navigation_drawer"
+        />
+
+</android.support.v4.widget.DrawerLayout>

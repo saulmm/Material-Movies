@@ -1,0 +1,30 @@
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/decelerate_interpolator"
+    android:ordering="sequentially"
+    >
+
+    <set
+        android:ordering="together"
+        >
+
+        <objectAnimator
+            android:duration="300"
+            android:propertyName="scaleX"
+            android:valueFrom="0.0"
+            android:valueTo="1.0"/>
+
+        <objectAnimator
+            android:duration="300"
+            android:propertyName="scaleY"
+            android:valueFrom="0.0"
+            android:valueTo="1.0"/>
+    </set>
+
+    <objectAnimator
+        android:propertyName="rotation"
+        android:duration="500"
+        android:valueFrom="0"
+        android:valueTo="360"
+        android:valueType="floatType"/>
+</set>

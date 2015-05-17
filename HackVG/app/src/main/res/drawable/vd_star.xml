@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="400"
+    android:viewportHeight="400"
+    android:width="300px"
+    android:height="300px">
+
+    <group android:name="star_group"
+        android:pivotX="200"
+        android:pivotY="200"
+        android:scaleX="0.0"
+        android:scaleY="0.0">
+
+        <path
+            android:name="star"
+            android:fillColor="#FFFFFF"
+            android:pathData="@string/star_data"/>
+    </group>
+</vector>
