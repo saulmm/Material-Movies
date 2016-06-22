@@ -534,12 +534,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
     }
 
     private void setVibrantElements(Swatch vibrantSwatch) {
-
-        mFabButton.getBackground().setColorFilter(vibrantSwatch.getRgb(),
-            PorterDuff.Mode.MULTIPLY);
-
-
-
+        if (vibrantSwatch != null) {
+            mFabButton.getBackground().setColorFilter(vibrantSwatch.getRgb(),
+                PorterDuff.Mode.MULTIPLY);
+        }
     }
 
     @OnClick(R.id.activity_detail_fab)
