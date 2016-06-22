@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,7 +44,6 @@ import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
 import com.hackvg.android.utils.RecyclerViewClickListener;
 import com.hackvg.android.views.adapters.MoviesAdapter;
-import com.hackvg.android.views.fragments.NavigationDrawerFragment;
 import com.hackvg.model.entities.Movie;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.nispok.snackbar.Snackbar;
@@ -58,8 +58,8 @@ import butterknife.InjectView;
 import butterknife.Optional;
 
 
-public class MoviesActivity extends ActionBarActivity implements
-    MoviesView, RecyclerViewClickListener, View.OnClickListener {
+public class MoviesActivity extends AppCompatActivity implements
+    MoviesView, RecyclerViewClickListener {
 
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
@@ -70,7 +70,6 @@ public class MoviesActivity extends ActionBarActivity implements
     public final static String EXTRA_MOVIE_POSITION         = "movie_position";
     public final static String SHARED_ELEMENT_COVER         = "cover";
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
     private MoviesAdapter mMoviesAdapter;
 
     public float mBackgroundTranslation;
@@ -91,7 +90,6 @@ public class MoviesActivity extends ActionBarActivity implements
         initializeDependencyInjector();
         initializeToolbar();
         initializeRecycler();
-        initializeDrawer();
 
         if (savedInstanceState == null)
             mMoviesPresenter.attachView(this);
@@ -121,15 +119,6 @@ public class MoviesActivity extends ActionBarActivity implements
         mRecycler.setOnScrollListener(recyclerScrollListener);
     }
 
-    private void initializeDrawer() {
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-            getFragmentManager().findFragmentById(R.id.navigation_drawer);
-
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-            (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
-
     private void initializeToolbar() {
 
         setSupportActionBar(mToolbar);
@@ -138,7 +127,6 @@ public class MoviesActivity extends ActionBarActivity implements
         getSupportActionBar().setHomeAsUpIndicator(
             R.drawable.ic_menu_white_24dp);
 
-        mToolbar.setNavigationOnClickListener(this);
     }
 
     private void initializeDependencyInjector() {
@@ -339,11 +327,6 @@ public class MoviesActivity extends ActionBarActivity implements
             R.anim.translate_up_on));
     }
 
-    @Override
-    public void onClick(View v) {
-
-        mNavigationDrawerFragment.openFragment();
-    }
 
     @Override
     protected void onStop() {
