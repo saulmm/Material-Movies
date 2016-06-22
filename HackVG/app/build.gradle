@@ -56,9 +56,10 @@ dependencies {
         exclude module: 'support-annotations'
     }
 
-    // Square libraries
     compile 'com.squareup.picasso:picasso:2.4.0'
-    compile 'com.jakewharton:butterknife:6.0.0'
+
+    compile 'com.jakewharton:butterknife:8.1.0'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     // Third party libraries
     compile 'com.nispok:snackbar:2.9.1'

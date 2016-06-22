@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -53,8 +54,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.Optional;
 
 
@@ -63,29 +64,39 @@ public class MoviesActivity extends AppCompatActivity implements
 
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
-    private final static String BUNDLE_MOVIES_WRAPPER       = "movies_wrapper";
-    private final static String BUNDLE_BACK_TRANSLATION     = "background_translation";
-    public final static String EXTRA_MOVIE_ID               = "movie_id";
-    public final static String EXTRA_MOVIE_LOCATION         = "view_location";
-    public final static String EXTRA_MOVIE_POSITION         = "movie_position";
-    public final static String SHARED_ELEMENT_COVER         = "cover";
+    private final static String BUNDLE_MOVIES_WRAPPER = "movies_wrapper";
+    private final static String BUNDLE_BACK_TRANSLATION = "background_translation";
+    public final static String EXTRA_MOVIE_ID = "movie_id";
+    public final static String EXTRA_MOVIE_LOCATION = "view_location";
+    public final static String EXTRA_MOVIE_POSITION = "movie_position";
+    public final static String SHARED_ELEMENT_COVER = "cover";
 
     private MoviesAdapter mMoviesAdapter;
 
     public float mBackgroundTranslation;
 
-    @Optional @InjectView(R.id.activity_movies_background_view) View mTabletBackground;
-    @InjectView(R.id.activity_movies_toolbar)                   Toolbar mToolbar;
-    @InjectView(R.id.activity_movies_progress)                  ProgressBar mProgressBar;
-    @InjectView(R.id.activity_movies_recycler)                  RecyclerView mRecycler;
-    @Inject MoviesPresenter mMoviesPresenter;
+
+    @BindView(R.id.activity_movies_background_view) @Nullable
+    View mTabletBackground;
+
+    @BindView(R.id.activity_movies_toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.activity_movies_progress)
+    ProgressBar mProgressBar;
+
+    @BindView(R.id.activity_movies_recycler)
+    RecyclerView mRecycler;
+
+    @Inject
+    MoviesPresenter mMoviesPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         initializeDependencyInjector();
         initializeToolbar();
@@ -94,7 +105,7 @@ public class MoviesActivity extends AppCompatActivity implements
         if (savedInstanceState == null)
             mMoviesPresenter.attachView(this);
 
-         else
+        else
             initializeFromParams(savedInstanceState);
     }
 
@@ -213,7 +224,7 @@ public class MoviesActivity extends AppCompatActivity implements
     @Override
     public void onClick(View touchedView, int moviePosition, float touchedX, float touchedY) {
 
-        Intent movieDetailActivityIntent = new Intent (
+        Intent movieDetailActivityIntent = new Intent(
             MoviesActivity.this, MovieDetailActivity.class);
 
         String movieID = mMoviesAdapter.getMovieList().get(moviePosition).getId();
@@ -242,16 +253,16 @@ public class MoviesActivity extends AppCompatActivity implements
     }
 
     private void startDetailActivityByAnimation(View touchedView,
-        int touchedX, int touchedY, Intent movieDetailActivityIntent) {
+                                                int touchedX, int touchedY, Intent movieDetailActivityIntent) {
 
         int[] touchedLocation = {touchedX, touchedY};
-        int[] locationAtScreen = new int [2];
+        int[] locationAtScreen = new int[2];
         touchedView.getLocationOnScreen(locationAtScreen);
 
         int finalLocationX = locationAtScreen[0] + touchedLocation[0];
         int finalLocationY = locationAtScreen[1] + touchedLocation[1];
 
-        int [] finalLocation = {finalLocationX, finalLocationY};
+        int[] finalLocation = {finalLocationX, finalLocationY};
         movieDetailActivityIntent.putExtra(EXTRA_MOVIE_LOCATION,
             finalLocation);
 
@@ -277,12 +288,12 @@ public class MoviesActivity extends AppCompatActivity implements
 
             super.onScrolled(recyclerView, dx, dy);
 
-            int visibleItemCount    = mRecycler.getLayoutManager().getChildCount();
-            int totalItemCount      = mRecycler.getLayoutManager().getItemCount();
-            int pastVisibleItems    = ((GridLayoutManager) mRecycler.getLayoutManager())
+            int visibleItemCount = mRecycler.getLayoutManager().getChildCount();
+            int totalItemCount = mRecycler.getLayoutManager().getItemCount();
+            int pastVisibleItems = ((GridLayoutManager) mRecycler.getLayoutManager())
                 .findFirstVisibleItemPosition();
 
-            if((visibleItemCount + pastVisibleItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
+            if ((visibleItemCount + pastVisibleItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
                 mMoviesPresenter.onEndListReached();
             }
 
@@ -301,7 +312,7 @@ public class MoviesActivity extends AppCompatActivity implements
                     flag = true;
                 }
 
-            // Is scrolling down
+                // Is scrolling down
             } else if (dy < -10) {
 
                 if (flag) {
