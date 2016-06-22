@@ -8,16 +8,6 @@
     tools:context=".MainActivity"
     >
 
-    <com.hackvg.android.views.custom_views.AutofitRecyclerView
-        android:id="@+id/activity_movies_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:columnWidth="@dimen/item_movie_width"
-        android:paddingTop="?android:attr/actionBarSize"
-        tools:listitem="@layout/item_movie"
-        />
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/activity_movies_toolbar"
         android:layout_width="match_parent"
@@ -43,6 +33,16 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:visibility="gone"
+        />
+
+    <com.hackvg.android.views.custom_views.AutofitRecyclerView
+        android:id="@+id/activity_movies_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:columnWidth="@dimen/item_movie_width"
+        android:paddingTop="?android:attr/actionBarSize"
+        tools:listitem="@layout/item_movie"
         />
 </FrameLayout>
 

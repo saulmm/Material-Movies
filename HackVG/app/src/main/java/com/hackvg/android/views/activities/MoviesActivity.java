@@ -75,8 +75,8 @@ public class MoviesActivity extends AppCompatActivity implements
 
     public float mBackgroundTranslation;
 
-
-    @BindView(R.id.activity_movies_background_view) @Nullable
+    @Nullable
+    @BindView(R.id.activity_movies_background_view)
     View mTabletBackground;
 
     @BindView(R.id.activity_movies_toolbar)
@@ -93,7 +93,6 @@ public class MoviesActivity extends AppCompatActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -111,13 +110,11 @@ public class MoviesActivity extends AppCompatActivity implements
 
     @Override
     protected void onStart() {
-
         super.onStart();
         mMoviesPresenter.start();
     }
 
     private void initializeFromParams(Bundle savedInstanceState) {
-
         MoviesWrapper moviesWrapper = (MoviesWrapper) savedInstanceState
             .getSerializable(BUNDLE_MOVIES_WRAPPER);
 
@@ -125,23 +122,15 @@ public class MoviesActivity extends AppCompatActivity implements
     }
 
     private void initializeRecycler() {
-
         mRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
-        mRecycler.setOnScrollListener(recyclerScrollListener);
     }
 
     private void initializeToolbar() {
-
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
-
-        getSupportActionBar().setHomeAsUpIndicator(
-            R.drawable.ic_menu_white_24dp);
-
     }
 
     private void initializeDependencyInjector() {
-
         MoviesApp app = (MoviesApp) getApplication();
 
         DaggerBasicMoviesUsecasesComponent.builder()
@@ -152,13 +141,11 @@ public class MoviesActivity extends AppCompatActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
         super.onSaveInstanceState(outState);
 
         if (mMoviesAdapter != null) {
-
-            outState.putSerializable(BUNDLE_MOVIES_WRAPPER, new MoviesWrapper(
-                mMoviesAdapter.getMovieList()));
+            outState.putSerializable(BUNDLE_MOVIES_WRAPPER,
+                new MoviesWrapper(mMoviesAdapter.getMovieList()));
 
             outState.putFloat(BUNDLE_BACK_TRANSLATION, mBackgroundTranslation);
         }
@@ -166,13 +153,11 @@ public class MoviesActivity extends AppCompatActivity implements
 
     @Override
     public Context getContext() {
-
         return this;
     }
 
     @Override
     public void showMovies(List<Movie> movieList) {
-
         mMoviesAdapter = new MoviesAdapter(movieList);
         mMoviesAdapter.setRecyclerListListener(this);
         mRecycler.setAdapter(mMoviesAdapter);
@@ -180,19 +165,16 @@ public class MoviesActivity extends AppCompatActivity implements
 
     @Override
     public void showLoading() {
-
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-
         mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showLoadingLabel() {
-
         Snackbar loadingSnackBar = Snackbar.with(this)
             .text(getString(R.string.activity_movies_message_more_films))
             .actionLabel(getString(R.string.action_cancel))
@@ -205,25 +187,22 @@ public class MoviesActivity extends AppCompatActivity implements
 
     @Override
     public void hideActionLabel() {
-
         SnackbarManager.dismiss();
     }
 
     @Override
     public boolean isTheListEmpty() {
-
-        return (mMoviesAdapter == null) || mMoviesAdapter.getMovieList().isEmpty();
+        return (mMoviesAdapter == null) ||
+            mMoviesAdapter.getMovieList().isEmpty();
     }
 
     @Override
     public void appendMovies(List<Movie> movieList) {
-
         mMoviesAdapter.appendMovies(movieList);
     }
 
     @Override
     public void onClick(View touchedView, int moviePosition, float touchedX, float touchedY) {
-
         Intent movieDetailActivityIntent = new Intent(
             MoviesActivity.this, MovieDetailActivity.class);
 
@@ -246,14 +225,13 @@ public class MoviesActivity extends AppCompatActivity implements
                     (int) touchedY, movieDetailActivityIntent);
 
         } else {
-
             Toast.makeText(this, getString(R.string.activity_movies_message_loading_film),
                 Toast.LENGTH_SHORT).show();
         }
     }
 
     private void startDetailActivityByAnimation(View touchedView,
-                                                int touchedX, int touchedY, Intent movieDetailActivityIntent) {
+        int touchedX, int touchedY, Intent movieDetailActivityIntent) {
 
         int[] touchedLocation = {touchedX, touchedY};
         int[] locationAtScreen = new int[2];
@@ -272,7 +250,7 @@ public class MoviesActivity extends AppCompatActivity implements
     @SuppressWarnings("unchecked")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void startDetailActivityBySharedElements(View touchedView,
-                                                     int moviePosition, Intent movieDetailActivityIntent) {
+        int moviePosition, Intent movieDetailActivityIntent) {
 
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
             this, new Pair<>(touchedView, SHARED_ELEMENT_COVER + moviePosition));
@@ -280,68 +258,18 @@ public class MoviesActivity extends AppCompatActivity implements
         startActivity(movieDetailActivityIntent, options.toBundle());
     }
 
-    private RecyclerView.OnScrollListener recyclerScrollListener = new RecyclerView.OnScrollListener() {
-        public boolean flag;
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-            super.onScrolled(recyclerView, dx, dy);
-
-            int visibleItemCount = mRecycler.getLayoutManager().getChildCount();
-            int totalItemCount = mRecycler.getLayoutManager().getItemCount();
-            int pastVisibleItems = ((GridLayoutManager) mRecycler.getLayoutManager())
-                .findFirstVisibleItemPosition();
-
-            if ((visibleItemCount + pastVisibleItems) >= totalItemCount && !mMoviesPresenter.isLoading()) {
-                mMoviesPresenter.onEndListReached();
-            }
-
-            if (mTabletBackground != null) {
-
-                mBackgroundTranslation = mTabletBackground.getY() - (dy / 2);
-                mTabletBackground.setTranslationY(mBackgroundTranslation);
-            }
-
-            // Is scrolling up
-            if (dy > 10) {
-
-                if (!flag) {
-
-                    showToolbar();
-                    flag = true;
-                }
-
-                // Is scrolling down
-            } else if (dy < -10) {
-
-                if (flag) {
-
-                    hideToolbar();
-                    flag = false;
-                }
-            }
-
-        }
-    };
-
-
     private void showToolbar() {
-
         mToolbar.startAnimation(AnimationUtils.loadAnimation(this,
             R.anim.translate_up_off));
     }
 
     private void hideToolbar() {
-
         mToolbar.startAnimation(AnimationUtils.loadAnimation(this,
             R.anim.translate_up_on));
     }
 
-
     @Override
     protected void onStop() {
-
         super.onStop();
         mMoviesPresenter.stop();
     }

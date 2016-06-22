@@ -356,7 +356,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 reviewTextView.setTextColor(mReviewsColor);
 
             // Configure the review text
-            String reviewCredit = "Review written by " + result.getAuthor();
+            String reviewCredit = getString(R.string.message_review_credit, result.getAuthor());
 
             String reviewText = String.format("%s - %s",
                 reviewCredit, result.getContent());
