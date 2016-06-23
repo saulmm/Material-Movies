@@ -23,8 +23,8 @@ public interface MovieDatabaseAPI {
 
     @GET("/3/movie/{id}")
     Call<MovieDetail> getMovieDetail (
-        @Query("api_key") String apiKey,
-        @Path("id") String id
+        @Path("id") String id,
+        @Query("api_key") String apiKey
     );
 
     @GET("/3/movie/popular")
@@ -40,13 +40,14 @@ public interface MovieDatabaseAPI {
 
     @GET("/3/movie/{id}/reviews")
     Call<ReviewsWrapper> getReviews (
-        @Query("api_key") String apiKey,
-        @Path("id") String id
+        @Path("id") String id,
+        @Query("api_key") String apiKey
+
     );
 
     @GET("/3/movie/{id}/images")
     Call<ImagesWrapper> getImages (
-        @Query("api_key") String apiKey,
-        @Path("id") String movieId
+        @Path("id") String movieId,
+        @Query("api_key") String apiKey
     );
 }

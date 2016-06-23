@@ -59,7 +59,7 @@ public class RestMovieSource {
     }
 
     public void getDetailMovie(String id) {
-        moviesDBApi.getMovieDetail(Constants.API_KEY, id).enqueue(new Callback<MovieDetail>() {
+        moviesDBApi.getMovieDetail(id, Constants.API_KEY).enqueue(new Callback<MovieDetail>() {
             @Override
             public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
                 MovieDetail detailResponse = response.body();
@@ -74,7 +74,7 @@ public class RestMovieSource {
     }
 
     public void getReviews(String id) {
-        moviesDBApi.getReviews(Constants.API_KEY, id).enqueue(new Callback<ReviewsWrapper>() {
+        moviesDBApi.getReviews(id, Constants.API_KEY).enqueue(new Callback<ReviewsWrapper>() {
             @Override
             public void onResponse(Call<ReviewsWrapper> call, Response<ReviewsWrapper> response) {
                 ReviewsWrapper reviewsWrapper = response.body();
@@ -104,7 +104,7 @@ public class RestMovieSource {
     }
 
     public void getImages(String movieId) {
-        moviesDBApi.getImages(Constants.API_KEY, movieId).enqueue(new Callback<ImagesWrapper>() {
+        moviesDBApi.getImages(movieId, Constants.API_KEY).enqueue(new Callback<ImagesWrapper>() {
             @Override
             public void onResponse(Call<ImagesWrapper> call, Response<ImagesWrapper> response) {
                 ImagesWrapper imagesWrapper = response.body();
