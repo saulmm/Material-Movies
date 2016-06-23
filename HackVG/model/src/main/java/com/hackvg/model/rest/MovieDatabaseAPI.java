@@ -6,53 +6,47 @@ import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.ReviewsWrapper;
 
-import retrofit.Callback;
-import retrofit.http.GET;
-import retrofit.http.Path;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+
 
 /**
  * Interface representing the MovieDatabaseAPI endpoints
  * used by retrofit
  */
 public interface MovieDatabaseAPI {
+    @GET("/3/movie/popular")
+    Call<MoviesWrapper> getPopularMovies(
+        @Query("api_key") String apiKey);
 
-    @GET("/movie/popular")
-    void getPopularMovies(
-        @Query("api_key") String apiKey,
-        Callback<MoviesWrapper> callback);
-
-    @GET("/movie/{id}")
-    void getMovieDetail (
-        @Query("api_key") String apiKey,
+    @GET("/3/movie/{id}")
+    Call<MovieDetail> getMovieDetail(
         @Path("id") String id,
-        Callback<MovieDetail> callback
+        @Query("api_key") String apiKey
     );
 
-    @GET("/movie/popular")
-    void getPopularMoviesByPage(
+    @GET("/3/movie/popular")
+    Call<MoviesWrapper> getPopularMoviesByPage(
         @Query("api_key") String apiKey,
-        @Query("page") String page,
-        Callback<MoviesWrapper> callback
+        @Query("page") String page
     );
 
-    @GET("/configuration")
-    void getConfiguration (
-        @Query("api_key") String apiKey,
-        Callback<ConfigurationResponse> response
+    @GET("/3/configuration")
+    Call<ConfigurationResponse> getConfiguration(
+        @Query("api_key") String apiKey
     );
 
-    @GET("/movie/{id}/reviews")
-    void getReviews (
-        @Query("api_key") String apiKey,
+    @GET("/3/movie/{id}/reviews")
+    Call<ReviewsWrapper> getReviews(
         @Path("id") String id,
-        Callback<ReviewsWrapper> response
+        @Query("api_key") String apiKey
     );
 
-    @GET("/movie/{id}/images")
-    void getImages (
-        @Query("api_key") String apiKey,
+    @GET("/3/movie/{id}/images")
+    Call<ImagesWrapper> getImages(
         @Path("id") String movieId,
-        Callback<ImagesWrapper> response
+        @Query("api_key") String apiKey
     );
 }
