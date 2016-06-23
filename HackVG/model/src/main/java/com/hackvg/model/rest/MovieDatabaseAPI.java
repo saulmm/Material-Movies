@@ -22,7 +22,7 @@ public interface MovieDatabaseAPI {
         @Query("api_key") String apiKey);
 
     @GET("/3/movie/{id}")
-    Call<MovieDetail> getMovieDetail (
+    Call<MovieDetail> getMovieDetail(
         @Path("id") String id,
         @Query("api_key") String apiKey
     );
@@ -34,19 +34,18 @@ public interface MovieDatabaseAPI {
     );
 
     @GET("/3/configuration")
-    Call<ConfigurationResponse> getConfiguration (
+    Call<ConfigurationResponse> getConfiguration(
         @Query("api_key") String apiKey
     );
 
     @GET("/3/movie/{id}/reviews")
-    Call<ReviewsWrapper> getReviews (
+    Call<ReviewsWrapper> getReviews(
         @Path("id") String id,
         @Query("api_key") String apiKey
-
     );
 
     @GET("/3/movie/{id}/images")
-    Call<ImagesWrapper> getImages (
+    Call<ImagesWrapper> getImages(
         @Path("id") String movieId,
         @Query("api_key") String apiKey
     );
