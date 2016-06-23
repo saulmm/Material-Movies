@@ -17,7 +17,9 @@ package com.hackvg.android.di.components;
 
 
 import com.hackvg.android.di.modules.ApplicationModule;
-import com.hackvg.android.di.modules.DomainModule;
+import com.hackvg.android.di.modules.DataModule;
+import com.hackvg.domain.ConfigurationUsecase;
+import com.hackvg.domain.GetMoviesUsecase;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;
 
@@ -28,11 +30,12 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
     ApplicationModule.class,
-    DomainModule.class,
+    DataModule.class
 })
 
 public interface AppComponent {
-    
     Bus bus();
+    ConfigurationUsecase conigurationUsecase();
+    GetMoviesUsecase getMoviesUsecase();
     RestMovieSource restMovieSource();
 }

@@ -45,4 +45,5 @@
     <string name="activity_movies.message.loading_film">Movie loading, please wait</string>
     <string name="activity_movies.message.more_films">Loading more films</string>
     <string name="action.cancel">Cancel</string>
+    <string name="message_review_credit">Review written by %1$s</string>
 </resources>

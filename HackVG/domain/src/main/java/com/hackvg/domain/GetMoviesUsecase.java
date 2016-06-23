@@ -14,26 +14,41 @@
 package com.hackvg.domain;
 
 import com.hackvg.model.entities.MoviesWrapper;
+import com.hackvg.model.rest.RestMovieSource;
+import com.squareup.otto.Bus;
 
-/**
- * Representation of an use case to get the most popular movies
- */
-@SuppressWarnings("UnusedDeclaration")
-public interface GetMoviesUsecase extends Usecase {
+import javax.inject.Inject;
 
 
-    /**
-     * Request datasource the most popular movies
-     */
-    public void requestPopularMovies();
+public class GetMoviesUsecase {
+    private final RestMovieSource mDataSource;
+    private final Bus mUiBus;
+    private int mCurrentPage = 1;
 
-    /**
-     * Sends the PopularMoviesApiResponse thought the communication system
-     * to be received by the presenter in another module
-     *
-     * @param response the response containing a list with movies
-     */
-    public void sendMoviesToPresenter (MoviesWrapper response);
+    @Inject
+    public GetMoviesUsecase(RestMovieSource dataSource, Bus uiBus) {
+        mDataSource = dataSource;
+        mUiBus = uiBus;
+        mUiBus.register(this);
+    }
 
-    public void unRegister ();
+    public void requestPopularMovies() {
+
+        mDataSource.getMoviesByPage(mCurrentPage);
+    }
+
+    public void sendMoviesToPresenter (MoviesWrapper response) {
+
+        mUiBus.post(response);
+    }
+
+    public void unRegister() {
+        mUiBus.unregister(this);
+    }
+
+    public void execute() {
+
+        requestPopularMovies();
+        mCurrentPage++;
+    }
 }

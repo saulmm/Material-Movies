@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -45,8 +46,9 @@ import android.widget.Toast;
 
 import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
-import com.hackvg.android.di.components.DaggerMovieUsecasesComponent;
-import com.hackvg.android.di.modules.MovieUsecasesModule;
+import com.hackvg.android.di.components.DaggerMoviesComponent;
+import com.hackvg.android.di.components.DaggerMoviesDetailComponent;
+import com.hackvg.android.di.modules.MoviesDetailModule;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.utils.GUIUtils;
@@ -62,11 +64,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindBool;
+import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.InjectViews;
 import butterknife.OnClick;
-import butterknife.Optional;
 
 import static android.support.v7.graphics.Palette.Swatch;
 import static android.widget.LinearLayout.LayoutParams;
@@ -87,17 +89,13 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private int mReviewsColor                       = -1;
     private int mReviewsAuthorColor                 = -1;
 
-    // Boolean that indicates if the activity is shown in a tablet or not
-    boolean mIsTablet;
 
-    // The time that the confirmation view will be shown (milliseconds)
     private static final int CONFIRMATION_VIEW_DELAY = 1500;
     @Inject MovieDetailPresenter mDetailPresenter;
 
     private Swatch mBrightSwatch;
 
-
-    @InjectViews({
+    @BindViews({
         R.id.activity_detail_content,
         R.id.activity_detail_homepage,
         R.id.activity_detail_company,
@@ -106,35 +104,51 @@ public class MovieDetailActivity extends Activity implements DetailView,
     })
     List<TextView> mMovieInfoTextViews;
 
-    @InjectViews({
+    @BindViews({
         R.id.activity_detail_header_tagline,
         R.id.activity_detail_header_description,
         R.id.activity_detail_header_reviews
     })
     List<TextView> movieHeaders;
 
-    @InjectView(R.id.activity_detail_title)             TextView  mTitle;
-    @InjectView(R.id.activity_detail_fab)               ImageView mFabButton;
-    @InjectView(R.id.activity_detail_container)         View mInformationContainer;
-    @InjectView(R.id.item_movie_cover)                  ImageView mCoverImageView;
-    @InjectView(R.id.activity_detail_conf_image)        ImageView mConfirmationView;
-    @Optional @InjectView(R.id.activity_detail_image)   ImageView mMovieImageView;
-    @InjectView(R.id.activity_detail_conf_container)    FrameLayout mConfirmationContainer;
-    @InjectView(R.id.activity_detail_book_info)         LinearLayout mMovieDescriptionContainer;
+    @BindView(R.id.activity_detail_title)
+    TextView  mTitle;
 
-    @InjectView(R.id.activity_detail_scroll)            ObservableScrollView mObservableScrollView;
+    @BindView(R.id.activity_detail_fab)
+    ImageView mFabButton;
+
+    @BindView(R.id.activity_detail_container)
+    View mInformationContainer;
+
+    @BindView(R.id.item_movie_cover)
+    ImageView mCoverImageView;
+
+    @BindView(R.id.activity_detail_conf_image)
+    ImageView mConfirmationView;
+
+    @Nullable @BindView(R.id.activity_detail_image)
+    ImageView mMovieImageView;
+
+    @BindView(R.id.activity_detail_conf_container)
+    FrameLayout mConfirmationContainer;
+
+    @BindView(R.id.activity_detail_book_info)
+    LinearLayout mMovieDescriptionContainer;
+
+    @BindView(R.id.activity_detail_scroll)
+    ObservableScrollView mObservableScrollView;
+
+    @BindBool(R.bool.is_tablet)
+    boolean mIsTablet;
+
     private int[] mViewLastLocation;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ButterKnife.inject(this);
-
-        mIsTablet = getContext().getResources().getBoolean(
-            R.bool.is_tablet);
+        ButterKnife.bind(this);
 
         initializeDependencyInjector();
         initializeStartAnimation();
@@ -142,18 +156,13 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     @Override
     protected void onStart() {
-
         super.onStart();
-        mDetailPresenter.attachView(this);
         mDetailPresenter.start();
     }
 
     private void initializeStartAnimation() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             if (!mIsTablet) {
-
                 GUIUtils.makeTheStatusbarTranslucent(this);
                 mObservableScrollView.setScrollViewListener(this);
             }
@@ -174,9 +183,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
         String movieId = getIntent().getStringExtra(MoviesActivity.EXTRA_MOVIE_ID);
         MoviesApp app = (MoviesApp) getApplication();
 
-        DaggerMovieUsecasesComponent.builder()
+        DaggerMoviesDetailComponent.builder()
             .appComponent(app.getAppComponent())
-            .movieUsecasesModule(new MovieUsecasesModule(movieId))
+            .moviesDetailModule(new MoviesDetailModule(movieId, this))
             .build().inject(this);
     }
 
@@ -341,7 +350,7 @@ public class MovieDetailActivity extends Activity implements DetailView,
                 reviewTextView.setTextColor(mReviewsColor);
 
             // Configure the review text
-            String reviewCredit = "Review written by " + result.getAuthor();
+            String reviewCredit = getString(R.string.message_review_credit, result.getAuthor());
 
             String reviewText = String.format("%s - %s",
                 reviewCredit, result.getContent());
@@ -356,11 +365,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
         }
     }
 
-    @Override
-    public Context getContext() {
-
-        return this;
-    }
 
     /**
      * Show a confirmation view with a reveal animation if the android version
@@ -519,12 +523,10 @@ public class MovieDetailActivity extends Activity implements DetailView,
     }
 
     private void setVibrantElements(Swatch vibrantSwatch) {
-
-        mFabButton.getBackground().setColorFilter(vibrantSwatch.getRgb(),
-            PorterDuff.Mode.MULTIPLY);
-
-
-
+        if (vibrantSwatch != null) {
+            mFabButton.getBackground().setColorFilter(vibrantSwatch.getRgb(),
+                PorterDuff.Mode.MULTIPLY);
+        }
     }
 
     @OnClick(R.id.activity_detail_fab)

@@ -15,10 +15,8 @@
  */
 package com.hackvg.android.di.modules;
 
-import com.hackvg.domain.ConfigurationUsecase;
-import com.hackvg.domain.ConfigurationUsecaseController;
-import com.hackvg.domain.GetMoviesUsecase;
-import com.hackvg.domain.GetMoviesUsecaseController;
+import com.hackvg.android.mvp.views.DetailView;
+import com.hackvg.domain.GetMovieDetailUsecase;
 import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;
 
@@ -26,13 +24,22 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class BasicMoviesUsecasesModule {
+public class MoviesDetailModule {
+    private final String mMovieId;
+    private final DetailView mDetailView;
 
-    @Provides ConfigurationUsecase provideConfigurationUsecase (Bus bus, RestMovieSource moviesSource) {
-        return new ConfigurationUsecaseController(moviesSource, bus);
+    public MoviesDetailModule(String movieId, DetailView detailView) {
+        mMovieId = movieId;
+        mDetailView = detailView;
     }
 
-    @Provides GetMoviesUsecase provideMoviesUsecase (Bus bus, RestMovieSource movieSource) {
-        return new GetMoviesUsecaseController(movieSource, bus);
+    @Provides
+    GetMovieDetailUsecase provideGetMovieDetailUsecase (Bus bus, RestMovieSource movieSource) {
+        return new GetMovieDetailUsecase(mMovieId, bus, movieSource);
+    }
+
+    @Provides
+    DetailView provideDetailView () {
+        return mDetailView;
     }
 }

@@ -36,55 +36,43 @@ import java.util.Random;
 import javax.inject.Inject;
 
 
-public class MovieDetailPresenter extends Presenter {
-
+public class MovieDetailPresenter implements BasePresenter {
     private final Bus mBus;
     private DetailView mMovieDetailView;
     private final GetMovieDetailUsecase mMovieDetailUsecase;
 
     @Inject
-    public MovieDetailPresenter(GetMovieDetailUsecase movieDetailUsecase, Bus bus) {
-
-        mMovieDetailUsecase = movieDetailUsecase;
+    public MovieDetailPresenter(GetMovieDetailUsecase movieDetailUsecase, Bus bus, DetailView movieDetailView) {
         mBus = bus;
-    }
-
-    public void attachView (DetailView movieDetailView) {
-
         mMovieDetailView = movieDetailView;
-        mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));
-        mMovieDetailUsecase.execute();
+        mMovieDetailUsecase = movieDetailUsecase;
     }
 
     public void showDescription(String description) {
-
         mMovieDetailView.setDescription(description);
     }
 
     @Override
     public void start() {
-
         mBus.register(this);
+        mMovieDetailView.showFilmCover(MoviesActivity.sPhotoCache.get(0));
+        mMovieDetailUsecase.execute();
     }
 
     @Override
     public void stop() {
-
         mBus.unregister(this);
     }
 
     public void showTagline(String tagLine) {
-
         mMovieDetailView.setTagline(tagLine);
     }
 
     public void showTitle(String title) {
-
         mMovieDetailView.setName(title);
     }
 
     public void showCompanies(List<Production_companies> companies) {
-
         String companiesString = "";
 
         for (int i = 0; i < companies.size(); i++) {

@@ -2,10 +2,9 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/item_movie_width"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/item_movie_height"
     android:clipChildren="false"
-
     >
 
     <ImageView
@@ -33,5 +32,4 @@
         tools:text="Avengers"
         android:textSize="20sp"
         />
-
 </FrameLayout>

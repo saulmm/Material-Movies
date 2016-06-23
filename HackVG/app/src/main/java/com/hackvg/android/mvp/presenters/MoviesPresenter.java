@@ -26,7 +26,7 @@ import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
 
-public class MoviesPresenter extends Presenter {
+public class MoviesPresenter implements BasePresenter {
 
     private final Bus mBus;
     private ConfigurationUsecase mConfigureUsecase;
@@ -37,28 +37,21 @@ public class MoviesPresenter extends Presenter {
     private boolean mRegistered;
 
     @Inject
-    public MoviesPresenter(ConfigurationUsecase configurationUsecase, GetMoviesUsecase getMoviesUsecase, Bus bus) {
-
-        mConfigureUsecase   = configurationUsecase;
-        mGetPopularShows    = getMoviesUsecase;
+    public MoviesPresenter(ConfigurationUsecase configurationUsecase,
+                           GetMoviesUsecase getMoviesUsecase, Bus bus, MoviesView moviesView) {
         mBus = bus;
-    }
-
-    public void attachView (MoviesView moviesView) {
-
         mMoviesView = moviesView;
+        mGetPopularShows = getMoviesUsecase;
+        mConfigureUsecase = configurationUsecase;
     }
 
     @Subscribe
     public void onPopularMoviesReceived(MoviesWrapper moviesWrapper) {
-
         if (mMoviesView.isTheListEmpty()) {
-
             mMoviesView.hideLoading();
             mMoviesView.showMovies(moviesWrapper.getResults());
 
         } else {
-
             mMoviesView.hideActionLabel();
             mMoviesView.appendMovies(moviesWrapper.getResults());
         }
@@ -68,7 +61,6 @@ public class MoviesPresenter extends Presenter {
 
     @Subscribe
     public void onConfigurationFinished (String baseImageUrl) {
-
         Constants.BASIC_STATIC_URL = baseImageUrl;
         mGetPopularShows.execute();
     }
