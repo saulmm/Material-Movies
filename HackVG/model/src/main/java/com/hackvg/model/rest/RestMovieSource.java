@@ -17,11 +17,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class RestMovieSource implements RestDataSource {
+public class RestMovieSource {
     private final MovieDatabaseAPI moviesDBApi;
     private final Bus bus;
 
-    @Inject
     public RestMovieSource(Bus bus) {
         RestAdapter movieAPIRest = new RestAdapter.Builder()
             .setEndpoint(Constants.MOVIE_DB_HOST)
@@ -32,33 +31,25 @@ public class RestMovieSource implements RestDataSource {
         this.bus = bus;
     }
 
-    @Override
     public void getMovies() {
-
         moviesDBApi.getPopularMovies(Constants.API_KEY, retrofitCallback);
     }
 
-    @Override
     public void getDetailMovie(String id) {
-
         moviesDBApi.getMovieDetail(Constants.API_KEY, id,
             retrofitCallback);
     }
 
-    @Override
     public void getReviews(String id) {
-
         moviesDBApi.getReviews(Constants.API_KEY, id,
             retrofitCallback);
     }
 
-    @Override
     public void getConfiguration() {
 
         moviesDBApi.getConfiguration(Constants.API_KEY, retrofitCallback);
     }
 
-    @Override
     public void getImages(String movieId) {
 
         moviesDBApi.getImages(Constants.API_KEY, movieId,
@@ -98,12 +89,10 @@ public class RestMovieSource implements RestDataSource {
 
         @Override
         public void failure(RetrofitError error) {
-
             System.out.printf("[DEBUG] RestMovieSource failure - " + error.getMessage());
         }
     };
 
-    @Override
     public void getMoviesByPage(int page) {
 
         moviesDBApi.getPopularMoviesByPage(

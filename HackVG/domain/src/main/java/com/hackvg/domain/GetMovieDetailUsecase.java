@@ -13,10 +13,10 @@
  */
 package com.hackvg.domain;
 
-import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.ReviewsWrapper;
+import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -24,14 +24,14 @@ import com.squareup.otto.Subscribe;
  * This class is an implementation of {@link com.hackvg.domain.GetMovieDetailUsecase}
  */
 public class GetMovieDetailUsecase implements Usecase {
-    private final MediaDataSource mMovieDataSource;
+    private final RestMovieSource mMovieDataSource;
     private final String mMovieId;
     private final Bus mUiBus;
     private MovieDetail mMovieDetail;
 
 
     public GetMovieDetailUsecase(String movieId, Bus uiBus,
-                                 MediaDataSource dataSource) {
+                                 RestMovieSource dataSource) {
 
         mMovieId        = movieId;
         mUiBus          = uiBus;

@@ -35,7 +35,7 @@ import dagger.Component;
 
 public interface AppComponent {
     Bus bus();
-    RestMovieSource restMovieSource();
     ConfigurationUsecase conigurationUsecase();
     GetMoviesUsecase getMoviesUsecase();
+    RestMovieSource restMovieSource();
 }

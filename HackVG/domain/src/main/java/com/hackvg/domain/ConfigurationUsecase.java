@@ -2,9 +2,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,8 +13,8 @@
  */
 package com.hackvg.domain;
 
-import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ConfigurationResponse;
+import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -23,40 +23,35 @@ import javax.inject.Inject;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class ConfigurationUsecase implements Usecase {
-    private final String QUALITY_DESIRED    = "w780";
-    private final String QUALITY_ORIGINAL   = "original";
+    private final String QUALITY_DESIRED = "w780";
+    private final String QUALITY_ORIGINAL = "original";
 
-    private final MediaDataSource mMediaDataSource;
+    private final RestMovieSource mMediaDataSource;
     private final Bus mMainBus;
 
     @Inject
-    public ConfigurationUsecase(MediaDataSource mediaDataSource, Bus mainBus) {
-
-        mMediaDataSource    = mediaDataSource;
-        mMainBus            = mainBus;
-
+    public ConfigurationUsecase(RestMovieSource mediaDataSource, Bus mainBus) {
+        mMediaDataSource = mediaDataSource;
+        mMainBus = mainBus;
         mMainBus.register(this);
     }
 
-    public void requestConfiguration () {
+    public void requestConfiguration() {
         mMediaDataSource.getConfiguration();
     }
 
     @Override
     public void execute() {
-
         requestConfiguration();
     }
 
     @Subscribe
     public void onConfigurationReceived(ConfigurationResponse configuration) {
-
         mMainBus.unregister(this);
         configureImageUrl(configuration);
     }
 
-    public void configureImageUrl (ConfigurationResponse configurationResponse) {
-
+    public void configureImageUrl(ConfigurationResponse configurationResponse) {
         String url;
 
         if (configurationResponse.getImages() != null) {
@@ -67,7 +62,6 @@ public class ConfigurationUsecase implements Usecase {
             for (String quality : configurationResponse.getImages().getBackdrop_sizes()) {
 
                 if (quality.equals(QUALITY_DESIRED)) {
-
                     imageQuality = QUALITY_DESIRED;
                     break;
                 }
@@ -81,8 +75,7 @@ public class ConfigurationUsecase implements Usecase {
         }
     }
 
-
-    public void sendConfiguredUrlToPresenter (String url) {
+    public void sendConfiguredUrlToPresenter(String url) {
         mMainBus.post(url);
-   }
+    }
 }

@@ -14,19 +14,19 @@
 package com.hackvg.domain;
 
 import com.hackvg.model.entities.MoviesWrapper;
-import com.hackvg.model.rest.RestDataSource;
+import com.hackvg.model.rest.RestMovieSource;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
 
 public class GetMoviesUsecase {
-    private final RestDataSource mDataSource;
+    private final RestMovieSource mDataSource;
     private final Bus mUiBus;
     private int mCurrentPage = 1;
 
     @Inject
-    public GetMoviesUsecase(RestDataSource dataSource, Bus uiBus) {
+    public GetMoviesUsecase(RestMovieSource dataSource, Bus uiBus) {
         mDataSource = dataSource;
         mUiBus = uiBus;
         mUiBus.register(this);
