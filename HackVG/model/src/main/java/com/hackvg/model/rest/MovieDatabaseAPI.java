@@ -17,34 +17,34 @@ import retrofit2.http.Query;
  * used by retrofit
  */
 public interface MovieDatabaseAPI {
-    @GET("/movie/popular")
+    @GET("/3/movie/popular")
     Call<MoviesWrapper> getPopularMovies(
         @Query("api_key") String apiKey);
 
-    @GET("/movie/{id}")
+    @GET("/3/movie/{id}")
     Call<MovieDetail> getMovieDetail (
         @Query("api_key") String apiKey,
         @Path("id") String id
     );
 
-    @GET("/movie/popular")
+    @GET("/3/movie/popular")
     Call<MoviesWrapper> getPopularMoviesByPage(
         @Query("api_key") String apiKey,
         @Query("page") String page
     );
 
-    @GET("/configuration")
+    @GET("/3/configuration")
     Call<ConfigurationResponse> getConfiguration (
         @Query("api_key") String apiKey
     );
 
-    @GET("/movie/{id}/reviews")
+    @GET("/3/movie/{id}/reviews")
     Call<ReviewsWrapper> getReviews (
         @Query("api_key") String apiKey,
         @Path("id") String id
     );
 
-    @GET("/movie/{id}/images")
+    @GET("/3/movie/{id}/images")
     Call<ImagesWrapper> getImages (
         @Query("api_key") String apiKey,
         @Path("id") String movieId
