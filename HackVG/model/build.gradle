@@ -13,7 +13,17 @@ sourceSets {
 }
 
 dependencies {
+    def RETROFIT = "2.0.2"
+    def OKHTTP = "3.2.0"
+
     compile project(':common')
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
+
+    compile "com.squareup.retrofit2:retrofit:$RETROFIT"
+    compile "com.squareup.retrofit2:converter-gson:$RETROFIT"
+    compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT"
+
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+
     provided 'com.google.dagger:dagger-compiler:2.0'
 }

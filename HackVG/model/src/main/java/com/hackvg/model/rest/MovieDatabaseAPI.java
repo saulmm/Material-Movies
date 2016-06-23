@@ -6,53 +6,47 @@ import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.ReviewsWrapper;
 
-import retrofit.Callback;
-import retrofit.http.GET;
-import retrofit.http.Path;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+
 
 /**
  * Interface representing the MovieDatabaseAPI endpoints
  * used by retrofit
  */
 public interface MovieDatabaseAPI {
-
     @GET("/movie/popular")
-    void getPopularMovies(
-        @Query("api_key") String apiKey,
-        Callback<MoviesWrapper> callback);
+    Call<MoviesWrapper> getPopularMovies(
+        @Query("api_key") String apiKey);
 
     @GET("/movie/{id}")
-    void getMovieDetail (
+    Call<MovieDetail> getMovieDetail (
         @Query("api_key") String apiKey,
-        @Path("id") String id,
-        Callback<MovieDetail> callback
+        @Path("id") String id
     );
 
     @GET("/movie/popular")
-    void getPopularMoviesByPage(
+    Call<MoviesWrapper> getPopularMoviesByPage(
         @Query("api_key") String apiKey,
-        @Query("page") String page,
-        Callback<MoviesWrapper> callback
+        @Query("page") String page
     );
 
     @GET("/configuration")
-    void getConfiguration (
-        @Query("api_key") String apiKey,
-        Callback<ConfigurationResponse> response
+    Call<ConfigurationResponse> getConfiguration (
+        @Query("api_key") String apiKey
     );
 
     @GET("/movie/{id}/reviews")
-    void getReviews (
+    Call<ReviewsWrapper> getReviews (
         @Query("api_key") String apiKey,
-        @Path("id") String id,
-        Callback<ReviewsWrapper> response
+        @Path("id") String id
     );
 
     @GET("/movie/{id}/images")
-    void getImages (
+    Call<ImagesWrapper> getImages (
         @Query("api_key") String apiKey,
-        @Path("id") String movieId,
-        Callback<ImagesWrapper> response
+        @Path("id") String movieId
     );
 }
