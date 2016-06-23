@@ -13,16 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hackvg.android.di.components;
+package com.hackvg.android.mvp.views;
 
-import com.hackvg.android.di.modules.MovieUsecasesModule;
-import com.hackvg.android.di.scopes.PerActivity;
-import com.hackvg.android.views.activities.MovieDetailActivity;
 
-import dagger.Component;
+import com.hackvg.android.mvp.presenters.BasePresenter;
 
-@PerActivity @Component(dependencies = AppComponent.class, modules = MovieUsecasesModule.class)
-public interface MovieUsecasesComponent {
-
-    void inject (MovieDetailActivity movieDetailActivity);
+public interface BaseView<T extends BasePresenter> {
 }

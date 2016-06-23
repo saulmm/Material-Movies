@@ -15,11 +15,12 @@
  */
 package com.hackvg.android.mvp.views;
 
+import com.hackvg.android.mvp.presenters.MoviesPresenter;
 import com.hackvg.model.entities.Movie;
 
 import java.util.List;
 
-public interface MoviesView extends MVPView {
+public interface MoviesView extends BaseView<MoviesPresenter> {
 
     void showMovies(List<Movie> movieList);
 

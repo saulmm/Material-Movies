@@ -20,7 +20,6 @@ import android.app.Application;
 import com.hackvg.android.di.components.AppComponent;
 import com.hackvg.android.di.components.DaggerAppComponent;
 import com.hackvg.android.di.modules.ApplicationModule;
-import com.hackvg.android.di.modules.DomainModule;
 
 
 public class MoviesApp extends Application {
@@ -33,15 +32,12 @@ public class MoviesApp extends Application {
     }
 
     private void initializeDependencyInjector() {
-
         mAppComponent = DaggerAppComponent.builder()
             .applicationModule(new ApplicationModule(this))
-            .domainModule(new DomainModule())
             .build();
     }
 
     public AppComponent getAppComponent() {
-
         return mAppComponent;
     }
 }

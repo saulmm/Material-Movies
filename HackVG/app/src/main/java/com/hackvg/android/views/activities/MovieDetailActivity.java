@@ -46,8 +46,9 @@ import android.widget.Toast;
 
 import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
-import com.hackvg.android.di.components.DaggerMovieUsecasesComponent;
-import com.hackvg.android.di.modules.MovieUsecasesModule;
+import com.hackvg.android.di.components.DaggerMoviesComponent;
+import com.hackvg.android.di.components.DaggerMoviesDetailComponent;
+import com.hackvg.android.di.modules.MoviesDetailModule;
 import com.hackvg.android.mvp.presenters.MovieDetailPresenter;
 import com.hackvg.android.mvp.views.DetailView;
 import com.hackvg.android.utils.GUIUtils;
@@ -63,6 +64,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
@@ -87,8 +89,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
     private int mReviewsColor                       = -1;
     private int mReviewsAuthorColor                 = -1;
 
-    // Boolean that indicates if the activity is shown in a tablet or not
-    boolean mIsTablet;
 
     private static final int CONFIRMATION_VIEW_DELAY = 1500;
     @Inject MovieDetailPresenter mDetailPresenter;
@@ -138,18 +138,17 @@ public class MovieDetailActivity extends Activity implements DetailView,
     @BindView(R.id.activity_detail_scroll)
     ObservableScrollView mObservableScrollView;
 
+    @BindBool(R.bool.is_tablet)
+    boolean mIsTablet;
+
     private int[] mViewLastLocation;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-
-        mIsTablet = getContext().getResources().getBoolean(
-            R.bool.is_tablet);
 
         initializeDependencyInjector();
         initializeStartAnimation();
@@ -157,18 +156,13 @@ public class MovieDetailActivity extends Activity implements DetailView,
 
     @Override
     protected void onStart() {
-
         super.onStart();
-        mDetailPresenter.attachView(this);
         mDetailPresenter.start();
     }
 
     private void initializeStartAnimation() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             if (!mIsTablet) {
-
                 GUIUtils.makeTheStatusbarTranslucent(this);
                 mObservableScrollView.setScrollViewListener(this);
             }
@@ -189,9 +183,9 @@ public class MovieDetailActivity extends Activity implements DetailView,
         String movieId = getIntent().getStringExtra(MoviesActivity.EXTRA_MOVIE_ID);
         MoviesApp app = (MoviesApp) getApplication();
 
-        DaggerMovieUsecasesComponent.builder()
+        DaggerMoviesDetailComponent.builder()
             .appComponent(app.getAppComponent())
-            .movieUsecasesModule(new MovieUsecasesModule(movieId))
+            .moviesDetailModule(new MoviesDetailModule(movieId, this))
             .build().inject(this);
     }
 
@@ -371,11 +365,6 @@ public class MovieDetailActivity extends Activity implements DetailView,
         }
     }
 
-    @Override
-    public Context getContext() {
-
-        return this;
-    }
 
     /**
      * Show a confirmation view with a reveal animation if the android version

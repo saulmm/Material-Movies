@@ -13,39 +13,76 @@
  */
 package com.hackvg.domain;
 
+import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ConfigurationResponse;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
-/**
- * Representation of an use case to get the configuration parameters
- * to use with the MovieDatabase api, such as the image endpoint
- */
-@SuppressWarnings("UnusedDeclaration")
-public interface ConfigurationUsecase extends Usecase {
+import javax.inject.Inject;
 
-    /**
-     * Request data source the configuration data
-     */
-    void requestConfiguration ();
 
-    /**
-     * Callback used to be notified when the configuration data has been received
-     *
-     * @param configurationResponse the configuration with the data about the endpoint
-     * of the images
-     */
-    void onConfigurationReceived (ConfigurationResponse configurationResponse);
+@SuppressWarnings("FieldCanBeLocal")
+public class ConfigurationUsecase implements Usecase {
+    private final String QUALITY_DESIRED    = "w780";
+    private final String QUALITY_ORIGINAL   = "original";
 
-    /**
-     * Configures the endpoint used to retrieve images from the movie database api
-     *
-     * @param configurationResponse the configuration with the data about the endpoint of the images
-     */
-    void configureImageUrl (ConfigurationResponse configurationResponse);
+    private final MediaDataSource mMediaDataSource;
+    private final Bus mMainBus;
 
-    /**
-     * Sends a configured to request images from the movie database api
-     *
-     * @param url configurated url
-     */
-    void sendConfiguredUrlToPresenter(String url);
+    @Inject
+    public ConfigurationUsecase(MediaDataSource mediaDataSource, Bus mainBus) {
+
+        mMediaDataSource    = mediaDataSource;
+        mMainBus            = mainBus;
+
+        mMainBus.register(this);
+    }
+
+    public void requestConfiguration () {
+        mMediaDataSource.getConfiguration();
+    }
+
+    @Override
+    public void execute() {
+
+        requestConfiguration();
+    }
+
+    @Subscribe
+    public void onConfigurationReceived(ConfigurationResponse configuration) {
+
+        mMainBus.unregister(this);
+        configureImageUrl(configuration);
+    }
+
+    public void configureImageUrl (ConfigurationResponse configurationResponse) {
+
+        String url;
+
+        if (configurationResponse.getImages() != null) {
+
+            String imageQuality = "";
+            url = configurationResponse.getImages().getBase_url();
+
+            for (String quality : configurationResponse.getImages().getBackdrop_sizes()) {
+
+                if (quality.equals(QUALITY_DESIRED)) {
+
+                    imageQuality = QUALITY_DESIRED;
+                    break;
+                }
+            }
+
+            if (imageQuality.equals(""))
+                imageQuality = QUALITY_ORIGINAL;
+
+            url += imageQuality;
+            sendConfiguredUrlToPresenter(url);
+        }
+    }
+
+
+    public void sendConfiguredUrlToPresenter (String url) {
+        mMainBus.post(url);
+   }
 }

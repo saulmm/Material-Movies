@@ -23,7 +23,7 @@ import com.hackvg.model.entities.Review;
 import java.util.List;
 
 
-public interface DetailView extends MVPView {
+public interface DetailView extends BaseView {
 
     void showFilmCover(Bitmap bitmap);
 

@@ -15,17 +15,13 @@ package com.hackvg.android.views.activities;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
@@ -38,8 +34,8 @@ import android.widget.Toast;
 
 import com.hackvg.android.MoviesApp;
 import com.hackvg.android.R;
-import com.hackvg.android.di.components.DaggerBasicMoviesUsecasesComponent;
-import com.hackvg.android.di.modules.BasicMoviesUsecasesModule;
+import com.hackvg.android.di.components.DaggerMoviesComponent;
+import com.hackvg.android.di.modules.MoviesModule;
 import com.hackvg.android.mvp.presenters.MoviesPresenter;
 import com.hackvg.android.mvp.views.MoviesView;
 import com.hackvg.android.utils.RecyclerInsetsDecoration;
@@ -56,11 +52,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 
 
-public class MoviesActivity extends AppCompatActivity implements
-    MoviesView, RecyclerViewClickListener {
+public class MoviesActivity extends AppCompatActivity implements MoviesView, RecyclerViewClickListener {
 
     public static SparseArray<Bitmap> sPhotoCache = new SparseArray<Bitmap>(1);
 
@@ -101,10 +95,7 @@ public class MoviesActivity extends AppCompatActivity implements
         initializeToolbar();
         initializeRecycler();
 
-        if (savedInstanceState == null)
-            mMoviesPresenter.attachView(this);
-
-        else
+        if (savedInstanceState != null)
             initializeFromParams(savedInstanceState);
     }
 
@@ -133,9 +124,9 @@ public class MoviesActivity extends AppCompatActivity implements
     private void initializeDependencyInjector() {
         MoviesApp app = (MoviesApp) getApplication();
 
-        DaggerBasicMoviesUsecasesComponent.builder()
+        DaggerMoviesComponent.builder()
             .appComponent(app.getAppComponent())
-            .basicMoviesUsecasesModule(new BasicMoviesUsecasesModule())
+            .moviesModule(new MoviesModule(this))
             .build().inject(this);
     }
 
@@ -149,11 +140,6 @@ public class MoviesActivity extends AppCompatActivity implements
 
             outState.putFloat(BUNDLE_BACK_TRANSLATION, mBackgroundTranslation);
         }
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
     }
 
     @Override

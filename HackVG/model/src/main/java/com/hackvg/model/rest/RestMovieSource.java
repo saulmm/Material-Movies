@@ -9,21 +9,20 @@ import com.hackvg.model.entities.MoviesWrapper;
 import com.hackvg.model.entities.ReviewsWrapper;
 import com.squareup.otto.Bus;
 
+import javax.inject.Inject;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by saulmm on 31/01/15.
- */
-public class RestMovieSource implements RestDataSource {
 
+public class RestMovieSource implements RestDataSource {
     private final MovieDatabaseAPI moviesDBApi;
     private final Bus bus;
 
+    @Inject
     public RestMovieSource(Bus bus) {
-
         RestAdapter movieAPIRest = new RestAdapter.Builder()
             .setEndpoint(Constants.MOVIE_DB_HOST)
             .setLogLevel(RestAdapter.LogLevel.HEADERS_AND_ARGS)

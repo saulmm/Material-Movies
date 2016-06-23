@@ -13,62 +13,72 @@
  */
 package com.hackvg.domain;
 
-
+import com.hackvg.model.MediaDataSource;
 import com.hackvg.model.entities.ImagesWrapper;
 import com.hackvg.model.entities.MovieDetail;
 import com.hackvg.model.entities.ReviewsWrapper;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 /**
- * Representation of an use case to get the details of a specific film
+ * This class is an implementation of {@link com.hackvg.domain.GetMovieDetailUsecase}
  */
-@SuppressWarnings("UnusedDeclaration")
-public interface GetMovieDetailUsecase extends Usecase {
+public class GetMovieDetailUsecase implements Usecase {
+    private final MediaDataSource mMovieDataSource;
+    private final String mMovieId;
+    private final Bus mUiBus;
+    private MovieDetail mMovieDetail;
 
-    /**
-     * Request datasource the details of a
-     * movie.
-     *
-     * @param movieId of the movie
-     */
-    void requestMovieDetail (String movieId);
 
-    /**
-     * Request datasource the reviews written about that movie
-     * @param movieId of the film
-     */
-    void requestMovieReviews (String movieId);
+    public GetMovieDetailUsecase(String movieId, Bus uiBus,
+                                 MediaDataSource dataSource) {
 
-    /**
-     * Request datasource the images of the film submited to the API
-     *
-     * @param movieId the id of the film
-     */
-    void requestMovieImages(String movieId);
+        mMovieId        = movieId;
+        mUiBus          = uiBus;
+        mMovieDataSource= dataSource;
 
-    /**
-     * Callback used to be notified when the MovieDetail has been
-     * received
-     *
-     * @param response the response containing the details of the film
-     */
-    void onMovieDetailResponse (MovieDetail response);
+        mUiBus.register(this);
+    }
 
-    void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper);
+    public void requestMovieDetail(String movieId) {
 
-    /**
-     * Callback used to be notified when the request to obtain a list
-     * of images about a film is end
-     *
-     * @param imageWrapper the response containing the information
-     *                     about the images
-     */
-    void onMovieImagesResponse (ImagesWrapper imageWrapper);
+        mMovieDataSource.getDetailMovie(movieId);
+    }
 
-    /**
-     * Sends the MovieDetailResponse thought the communication system
-     * to be received by the presenter
-     *
-     * @param response the response containing the details of the film
-     */
-    void sendDetailMovieToPresenter (MovieDetail response);
+    @Subscribe
+    public void onMovieDetailResponse(MovieDetail movieDetail) {
+        mMovieDetail = movieDetail;
+        requestMovieImages(mMovieId);
+    }
+
+    @Subscribe
+    public void onMovieReviewsResponse (ReviewsWrapper reviewsWrapper) {
+        sendDetailMovieToPresenter(mMovieDetail);
+        mUiBus.post(reviewsWrapper);
+        mUiBus.unregister(this);
+    }
+
+    @Subscribe
+    public void onMovieImagesResponse(ImagesWrapper imageWrapper) {
+        mMovieDetail.setMovieImagesList(imageWrapper.getBackdrops());
+        requestMovieReviews(mMovieId);
+    }
+
+    public void sendDetailMovieToPresenter(MovieDetail response) {
+        mUiBus.post(response);
+    }
+
+    public void requestMovieReviews(String movieId) {
+        mMovieDataSource.getReviews(movieId);
+    }
+
+    public void requestMovieImages(String movieId) {
+        mMovieDataSource.getImages(movieId);
+    }
+
+    @Override
+    public void execute() {
+
+        requestMovieDetail(mMovieId);
+    }
 }
