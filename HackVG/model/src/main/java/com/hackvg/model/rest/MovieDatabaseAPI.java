@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 
 /**
@@ -18,34 +19,34 @@ import retrofit2.http.Query;
  */
 public interface MovieDatabaseAPI {
     @GET("/3/movie/popular")
-    Call<MoviesWrapper> getPopularMovies(
+    Observable<MoviesWrapper> getPopularMovies(
         @Query("api_key") String apiKey);
 
     @GET("/3/movie/{id}")
-    Call<MovieDetail> getMovieDetail(
+    Observable<MovieDetail> getMovieDetail(
         @Path("id") String id,
         @Query("api_key") String apiKey
     );
 
     @GET("/3/movie/popular")
-    Call<MoviesWrapper> getPopularMoviesByPage(
+    Observable<MoviesWrapper> getPopularMoviesByPage(
         @Query("api_key") String apiKey,
-        @Query("page") String page
+        @Query("page") int page
     );
 
     @GET("/3/configuration")
-    Call<ConfigurationResponse> getConfiguration(
+    Observable<ConfigurationResponse> getConfiguration(
         @Query("api_key") String apiKey
     );
 
     @GET("/3/movie/{id}/reviews")
-    Call<ReviewsWrapper> getReviews(
+    Observable<ReviewsWrapper> getReviews(
         @Path("id") String id,
         @Query("api_key") String apiKey
     );
 
     @GET("/3/movie/{id}/images")
-    Call<ImagesWrapper> getImages(
+    Observable<ImagesWrapper> getImages(
         @Path("id") String movieId,
         @Query("api_key") String apiKey
     );
